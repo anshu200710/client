@@ -77,7 +77,7 @@ export default function DashboardLayout() {
             <Tabs.Screen
                 name="home"
                 options={{
-                    title: 'Hub',
+                    title: 'Home',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="home" size={22} color={color} />
                     ),
@@ -86,9 +86,9 @@ export default function DashboardLayout() {
             <Tabs.Screen
                 name="services"
                 options={{
-                    title: 'Services',
+                    title: 'Docs',
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="briefcase" size={22} color={color} />
+                        <Ionicons name="document-text" size={22} color={color} />
                     ),
                 }}
             />
@@ -106,9 +106,9 @@ export default function DashboardLayout() {
             <Tabs.Screen
                 name="chat"
                 options={{
-                    title: 'Chat',
+                    title: 'Sales',
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="chatbubbles" size={22} color={color} />
+                        <Ionicons name="stats-chart" size={22} color={color} />
                     ),
                 }}
             />
@@ -119,6 +119,12 @@ export default function DashboardLayout() {
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="person" size={22} color={color} />
                     ),
+                }}
+            />
+            <Tabs.Screen
+                name="profile-pages"
+                options={{
+                    href: null,
                 }}
             />
         </Tabs>
