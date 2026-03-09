@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, FlatList, Dimensions, TouchableOpacity, Image } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
@@ -158,6 +158,7 @@ export default function OnboardingScreen() {
         {/* Bottom Actions */}
         <View className="px-6 space-y-4 pb-4">
           <TouchableOpacity
+            onPress={() => router.push("/signup")}
             className="w-full py-4 rounded-xl items-center justify-center mb-4 bg-primary"
           >
             <Text className="text-white text-[17px]" style={{ fontWeight: '600' }}>
@@ -165,7 +166,7 @@ export default function OnboardingScreen() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity className="items-center py-2">
+          <TouchableOpacity onPress={() => router.push("/login")} className="items-center py-2">
             <Text className="text-[16px] text-gray-500">
               Have an account? <Text className="text-primary" style={{ fontWeight: '600' }}>Login</Text>
             </Text>
