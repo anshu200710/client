@@ -10,7 +10,8 @@ export default function LoginScreen() {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = () => {
-        // Handle login action
+        // Navigate to dashboard after successful login
+        router.replace("/(dashboard)/home");
     };
 
     return (
@@ -85,7 +86,7 @@ export default function LoginScreen() {
                         <TouchableOpacity
                             onPress={handleLogin}
                             className="w-full py-4 rounded-xl items-center justify-center mb-4"
-                            style={{ backgroundColor: "#0066CC", shadowColor: "#0066CC", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 5 }}
+                            style={{ backgroundColor: "#0066CC", boxShadow: "0 4px 8px rgba(0, 102, 204, 0.2)", elevation: 5 }}
                         >
                             <Text className="text-white text-[16px] font-semibold">Login</Text>
                         </TouchableOpacity>

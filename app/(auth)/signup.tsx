@@ -78,7 +78,7 @@ export default function SignupScreen() {
                         <TouchableOpacity
                             onPress={handleSignup}
                             className="w-full py-4 rounded-xl items-center justify-center mb-4"
-                            style={{ backgroundColor: "#0066CC", shadowColor: "#0066CC", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 8, elevation: 5 }}
+                            style={{ backgroundColor: "#0066CC", boxShadow: "0 4px 8px rgba(0, 102, 204, 0.2)", elevation: 5 }}
                         >
                             <Text className="text-white text-[16px] font-semibold">Sign Up</Text>
                         </TouchableOpacity>
