@@ -106,9 +106,9 @@ export default function DashboardLayout() {
             <Tabs.Screen
                 name="chat"
                 options={{
-                    title: 'Sales',
+                    title: 'Offers',
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="stats-chart" size={22} color={color} />
+                        <Ionicons name="gift" size={22} color={color} />
                     ),
                 }}
             />
