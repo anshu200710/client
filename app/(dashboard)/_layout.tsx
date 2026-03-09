@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import { TouchableOpacity, Platform, View } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -8,7 +8,8 @@ const AddButton = ({ onPress }: { onPress?: () => void }) => (
     <TouchableOpacity
         onPress={onPress}
         style={{
-            top: -20,
+            top: -22,
+            width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
         }}
@@ -20,10 +21,13 @@ const AddButton = ({ onPress }: { onPress?: () => void }) => (
                 height: 60,
                 borderRadius: 30,
                 backgroundColor: '#0066CC',
-                justifyContent: 'center', // Centers the icon inside the circle
+                justifyContent: 'center',
                 alignItems: 'center',
-                boxShadow: '0 4px 8px rgba(0, 102, 204, 0.4)',
-                elevation: 5,
+                elevation: 8,
+                shadowColor: '#0066CC',
+                shadowOffset: { width: 0, height: 4 },
+                shadowOpacity: 0.35,
+                shadowRadius: 8,
             }}
         >
             <Ionicons name="add" size={32} color="#fff" />
@@ -48,16 +52,26 @@ export default function DashboardLayout() {
                     backgroundColor: '#ffffff',
                     borderTopColor: '#f1f5f9',
                     borderTopWidth: 1,
-                    height: Platform.OS === 'ios' ? 85 : 70, // Adjust height for safe area
+                    height: Platform.OS === 'ios' ? 86 : 72,
                     paddingBottom: Platform.OS === 'ios' ? 20 : 10,
                     paddingTop: 8,
-                    boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)',
+                    shadowColor: '#000000',
+                    shadowOffset: { width: 0, height: -2 },
+                    shadowOpacity: 0.06,
+                    shadowRadius: 8,
                 },
                 tabBarLabelStyle: {
                     fontSize: 10,
                     fontWeight: '500',
-                    marginTop: 4,
-                }
+                    marginTop: 3,
+                },
+                tabBarIconStyle: {
+                    marginTop: 1,
+                },
+                tabBarItemStyle: {
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                },
             }}
         >
             <Tabs.Screen
@@ -81,12 +95,11 @@ export default function DashboardLayout() {
             <Tabs.Screen
                 name="action"
                 options={{
-                    title: '', // Empty title for center button
-                    tabBarIcon: () => null, // Icon is now hardcoded in AddButton
+                    title: '',
+                    tabBarIcon: () => null,
+                    tabBarLabel: () => null,
                     tabBarButton: (props: any) => (
-                        <View style={{ width: '20%', alignItems: 'center' }}>
-                            <AddButton onPress={props.onPress} />
-                        </View>
+                        <AddButton onPress={props.onPress} />
                     ),
                 }}
             />
