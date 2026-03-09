@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -13,6 +13,14 @@ export default function ServicePaymentScreen() {
     const fee = params.fee ?? '999';
     const docs = params.docs ?? '0';
     const [method, setMethod] = useState('UPI');
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
+    const requestId = `#VS-${Math.floor(9000 + Math.random() * 1000)}`;
+    const formattedDate = new Date().toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
 
     return (
         <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
@@ -58,16 +66,75 @@ export default function ServicePaymentScreen() {
 
                 <TouchableOpacity
                     className="bg-[#0066CC] rounded-2xl py-4 items-center"
-                    onPress={() =>
-                        router.push({
-                            pathname: '/(dashboard)/service-pages/success',
-                            params: { service, fee, method },
-                        })
-                    }
+                    onPress={() => setShowSuccessPopup(true)}
                 >
                     <Text className="text-white text-sm font-bold">Pay Rs{fee} and Submit</Text>
                 </TouchableOpacity>
             </ScrollView>
+
+            <Modal visible={showSuccessPopup} transparent animationType="fade" onRequestClose={() => setShowSuccessPopup(false)}>
+                <View className="flex-1 bg-black/30 items-center justify-center px-5">
+                    <View className="w-full max-w-[360px] bg-white rounded-3xl border border-[#DCE5EF] p-4 overflow-hidden">
+                        <View className="items-center pt-2">
+                            <View className="w-24 h-24 rounded-full bg-[#DDF6FF] items-center justify-center">
+                                <View className="w-16 h-16 rounded-full bg-[#22C1E6] items-center justify-center">
+                                    <Ionicons name="checkmark" size={34} color="#FFFFFF" />
+                                </View>
+                            </View>
+
+                            <Text className="text-2xl text-center font-bold text-[#0F172A] mt-4">Request Submitted</Text>
+                            <Text className="text-2xl text-center font-bold text-[#0F172A]">Successfully!</Text>
+                            <Text className="text-xs text-center text-[#64748B] mt-2 px-4">
+                                We have received your request and our admin team will review it shortly.
+                            </Text>
+                        </View>
+
+                        <View className="mt-5 bg-[#F8FBFF] border border-[#DFE8F2] rounded-2xl p-3.5">
+                            <View className="flex-row items-center justify-between">
+                                <Text className="text-sm font-bold text-[#0F172A]">Request Details</Text>
+                                <View className="bg-[#DCFCE7] px-2 py-1 rounded-full">
+                                    <Text className="text-[10px] font-semibold text-[#15803D]">Submitted</Text>
+                                </View>
+                            </View>
+
+                            <View className="mt-3">
+                                <Text className="text-[11px] text-[#94A3B8]">Request ID</Text>
+                                <Text className="text-sm font-semibold text-[#0F172A] mt-0.5">{requestId}</Text>
+                            </View>
+
+                            <View className="mt-2">
+                                <Text className="text-[11px] text-[#94A3B8]">Service Name</Text>
+                                <Text className="text-sm font-semibold text-[#0F172A] mt-0.5">{service}</Text>
+                            </View>
+
+                            <View className="mt-2">
+                                <Text className="text-[11px] text-[#94A3B8]">Date</Text>
+                                <Text className="text-sm font-semibold text-[#0F172A] mt-0.5">{formattedDate}</Text>
+                            </View>
+                        </View>
+
+                        <TouchableOpacity
+                            className="bg-[#22C1E6] rounded-xl py-3 mt-4 items-center"
+                            onPress={() => {
+                                setShowSuccessPopup(false);
+                                router.replace('/(dashboard)/profile-pages/my-services');
+                            }}
+                        >
+                            <Text className="text-white text-sm font-bold">View My Requests {'->'}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                            className="bg-white border border-[#DCE5EF] rounded-xl py-3 mt-2 items-center"
+                            onPress={() => {
+                                setShowSuccessPopup(false);
+                                router.replace('/(dashboard)/home');
+                            }}
+                        >
+                            <Text className="text-sm font-semibold text-[#334155]">Back to Home</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }
