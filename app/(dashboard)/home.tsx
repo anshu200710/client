@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 
 // Helper Components
 const StatCard = ({ icon, bg, count, label, badge }: any) => (
@@ -51,6 +51,8 @@ const ActivityRow = ({ iconName, iconColor, iconBg, title, subtitle, status, sta
 
 
 export default function DashboardScreen() {
+    const router = useRouter();
+
     return (
         <SafeAreaView className="flex-1 bg-white" edges={['top']}>
             <Stack.Screen options={{ headerShown: false }} />
@@ -65,7 +67,7 @@ export default function DashboardScreen() {
                         <Text className="text-sm text-gray-500 font-medium mb-1">Good Morning,</Text>
                         <Text className="text-2xl font-bold text-gray-900 tracking-tight">Welcome, Rahul</Text>
                     </View>
-                    <TouchableOpacity className="w-10 h-10 items-center justify-center">
+                    <TouchableOpacity className="w-10 h-10 items-center justify-center" onPress={() => router.push('/(dashboard)/notifications')}>
                         <View className="absolute top-2 right-2 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white z-10" />
                         <Ionicons name="notifications-outline" size={26} color="#334155" />
                     </TouchableOpacity>

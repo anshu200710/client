@@ -47,7 +47,7 @@ export default function ProfileScreen() {
 
             <View className="px-5 pt-2 pb-3 flex-row items-center justify-between">
                 <Text className="text-[30px] font-bold text-[#0F172A]">Profile</Text>
-                <TouchableOpacity className="w-9 h-9 rounded-full items-center justify-center">
+                <TouchableOpacity className="w-9 h-9 rounded-full items-center justify-center" onPress={() => router.push('/(dashboard)/notifications')}>
                     <Ionicons name="notifications-outline" size={20} color="#475569" />
                 </TouchableOpacity>
             </View>

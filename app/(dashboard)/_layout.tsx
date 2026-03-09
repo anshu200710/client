@@ -127,6 +127,12 @@ export default function DashboardLayout() {
                     href: null,
                 }}
             />
+            <Tabs.Screen
+                name="notifications"
+                options={{
+                    href: null,
+                }}
+            />
         </Tabs>
     );
 }
