@@ -100,7 +100,15 @@ export default function MyServicesScreen() {
                         </View>
 
                         <View className="flex-row items-center">
-                            <TouchableOpacity className="bg-[#EFF6FF] rounded-xl px-3 py-2 mr-2">
+                            <TouchableOpacity
+                                className="bg-[#EFF6FF] rounded-xl px-3 py-2 mr-2"
+                                onPress={() =>
+                                    router.push({
+                                        pathname: '/(dashboard)/profile-pages/request-details',
+                                        params: { service: item.name, requestId: item.id },
+                                    })
+                                }
+                            >
                                 <Text className="text-xs font-semibold text-[#1D4ED8]">View Details</Text>
                             </TouchableOpacity>
 
