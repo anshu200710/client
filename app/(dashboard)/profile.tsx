@@ -85,6 +85,14 @@ export default function ProfileScreen() {
                 <Text className="text-xs text-[#9AA6B2] font-bold tracking-wide mt-6 mb-2 px-1">ACCOUNT SETTINGS</Text>
                 <View className="bg-white rounded-2xl border border-[#E5EAF0] px-3">
                     <ProfileRow
+                        icon="folder-open-outline"
+                        iconBg="bg-[#E8F8FE]"
+                        title="My Services"
+                        subtitle="Track requests, payments and downloads"
+                        onPress={() => router.push('/(dashboard)/profile-pages/my-services')}
+                    />
+                    <View className="h-[1px] bg-[#EEF2F7]" />
+                    <ProfileRow
                         icon="person-outline"
                         iconBg="bg-[#E8F8FE]"
                         title="Edit Profile"

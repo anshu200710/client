@@ -86,7 +86,7 @@ export default function DashboardLayout() {
             <Tabs.Screen
                 name="services"
                 options={{
-                    title: 'Docs',
+                    title: 'Services',
                     tabBarIcon: ({ color, size }) => (
                         <Ionicons name="document-text" size={22} color={color} />
                     ),
@@ -129,6 +129,12 @@ export default function DashboardLayout() {
             />
             <Tabs.Screen
                 name="notifications"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="service-pages"
                 options={{
                     href: null,
                 }}
