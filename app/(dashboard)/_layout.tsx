@@ -1,7 +1,7 @@
-import React from 'react';
-import { TouchableOpacity, Platform, View } from 'react-native';
-import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import React from 'react';
+import { Platform, TouchableOpacity, View } from 'react-native';
 
 // Custom Add Button Component for the center tab
 const AddButton = ({ onPress }: { onPress?: () => void }) => (
@@ -113,6 +113,15 @@ export default function DashboardLayout() {
                 }}
             />
             <Tabs.Screen
+                name="tools"
+                options={{
+                    title: 'Tools',
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="hammer" size={22} color={color} />
+                    ),
+                }}
+            />
+            <Tabs.Screen
                 name="profile"
                 options={{
                     title: 'Profile',
@@ -135,6 +144,12 @@ export default function DashboardLayout() {
             />
             <Tabs.Screen
                 name="service-pages"
+                options={{
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="tools-pages"
                 options={{
                     href: null,
                 }}
