@@ -1,6 +1,13 @@
-import React, { useState, useRef, useEffect } from "react";
-import { View, Text, FlatList, Dimensions, TouchableOpacity, Image } from "react-native";
 import { Stack, router } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
@@ -8,11 +15,15 @@ const { width } = Dimensions.get("window");
 const SLIDES = [
   {
     id: "1",
-    image: "https://picsum.photos/seed/slide1/800/800",
+    image: require("../assets/images/splash.jpeg"),
     badges: ["RBI Registered", "2 Cr+ Users"],
     text: (
-      <Text className="text-[26px] text-center text-gray-800 leading-[40px] px-2" style={{ fontFamily: "SpaceGrotesk-Regular" }}>
-        Over <Text className="font-bold">68%</Text> of our users have earned more than <Text className="font-bold">20% p.a.</Text>
+      <Text
+        className="text-[26px] text-center text-gray-800 leading-[40px] px-2"
+        style={{ fontFamily: "SpaceGrotesk-Regular" }}
+      >
+        Over <Text className="font-bold">68%</Text> of our users have earned
+        more than <Text className="font-bold">20% p.a.</Text>
       </Text>
     ),
   },
@@ -22,7 +33,8 @@ const SLIDES = [
     badges: ["100% Safe", "Daily Interest"],
     text: (
       <Text className="text-[26px] text-center text-gray-800 leading-[40px] px-2">
-        Join <Text className="font-bold">2 Cr+</Text> users who already trust <Text className="font-bold">our platform</Text>
+        Join <Text className="font-bold">2 Cr+</Text> users who already trust{" "}
+        <Text className="font-bold">our platform</Text>
       </Text>
     ),
   },
@@ -32,20 +44,11 @@ const SLIDES = [
     badges: ["Secure", "Regulated"],
     text: (
       <Text className="text-[26px] text-center text-gray-800 leading-[40px] px-2">
-        Get <Text className="font-bold">Daily</Text> interest credited directly to your <Text className="font-bold">Account</Text>
+        Get <Text className="font-bold">Daily</Text> interest credited directly
+        to your <Text className="font-bold">Account</Text>
       </Text>
     ),
   },
-  {
-    id: "4",
-    image: "https://picsum.photos/seed/slide4/800/800",
-    badges: ["Fast KYC", "Zero Fees"],
-    text: (
-      <Text className="text-[26px] text-center text-gray-800 leading-[40px] px-2">
-        Safe & <Text className="font-bold">Secure</Text> platform regulated by <Text className="font-bold">RBI</Text>
-      </Text>
-    ),
-  }
 ];
 
 export default function OnboardingScreen() {
@@ -84,22 +87,32 @@ export default function OnboardingScreen() {
     index,
   });
 
-  const onScrollToIndexFailed = (info: { index: number; highestMeasuredFrameIndex: number; averageItemLength: number }) => {
-    const wait = new Promise(resolve => setTimeout(resolve, 500));
+  const onScrollToIndexFailed = (info: {
+    index: number;
+    highestMeasuredFrameIndex: number;
+    averageItemLength: number;
+  }) => {
+    const wait = new Promise((resolve) => setTimeout(resolve, 500));
     wait.then(() => {
       flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
     });
   };
 
-  const renderItem = ({ item }: { item: typeof SLIDES[0] }) => {
+  const renderItem = ({ item }: { item: (typeof SLIDES)[0] }) => {
     return (
       <View style={{ width }} className="items-center px-6 pt-4">
         {/* Decorative Top Area / Placeholder for custom image */}
-        <View className="w-full h-[40vh] items-center justify-end mb-8">
+        <View className="w-full h-[50vh] items-center justify-center mb-8">
           <Image
-            source={{ uri: item.image }}
-            style={{ width: width * 0.75, height: width * 0.75, borderRadius: 24 }}
-            resizeMode="cover"
+            source={
+              typeof item.image === "string" ? { uri: item.image } : item.image
+            }
+            style={{
+              width: width * 0.9,
+              height: width * 1.08,
+              borderRadius: 40,
+            }}
+            resizeMode="contain"
             className="bg-gray-100"
           />
         </View>
@@ -108,15 +121,18 @@ export default function OnboardingScreen() {
         <View className="flex-row gap-3 mb-6">
           {item.badges.map((badge, idx) => (
             <View key={idx} className="bg-[#B9E910] px-4 py-2 rounded-lg">
-              <Text className="text-[#333333] text-sm" style={{ fontWeight: '500' }}>{badge}</Text>
+              <Text
+                className="text-[#333333] text-sm"
+                style={{ fontWeight: "500" }}
+              >
+                {badge}
+              </Text>
             </View>
           ))}
         </View>
 
         {/* Dynamic Title */}
-        <View className="w-full px-2">
-          {item.text}
-        </View>
+        <View className="w-full px-2">{item.text}</View>
       </View>
     );
   };
@@ -126,7 +142,6 @@ export default function OnboardingScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       <View className="flex-1 pb-6 pt-4">
-
         {/* Carousel */}
         <View className="flex-1">
           <FlatList
@@ -149,8 +164,11 @@ export default function OnboardingScreen() {
           {SLIDES.map((_, index) => (
             <View
               key={index}
-              className={`h-[10px] rounded-full mx-1 ${currentIndex === index ? "w-[10px] bg-primary" : "w-[10px] bg-gray-300"
-                }`}
+              className={`h-[10px] rounded-full mx-1 ${
+                currentIndex === index
+                  ? "w-[10px] bg-primary"
+                  : "w-[10px] bg-gray-300"
+              }`}
             />
           ))}
         </View>
@@ -161,14 +179,23 @@ export default function OnboardingScreen() {
             onPress={() => router.push("/signup")}
             className="w-full py-4 rounded-xl items-center justify-center mb-4 bg-primary"
           >
-            <Text className="text-white text-[17px]" style={{ fontWeight: '600' }}>
+            <Text
+              className="text-white text-[17px]"
+              style={{ fontWeight: "600" }}
+            >
               Create an Account
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => router.push("/login")} className="items-center py-2">
+          <TouchableOpacity
+            onPress={() => router.push("/login")}
+            className="items-center py-2"
+          >
             <Text className="text-[16px] text-gray-500">
-              Have an account? <Text className="text-primary" style={{ fontWeight: '600' }}>Login</Text>
+              Have an account?{" "}
+              <Text className="text-primary" style={{ fontWeight: "600" }}>
+                Login
+              </Text>
             </Text>
           </TouchableOpacity>
         </View>
