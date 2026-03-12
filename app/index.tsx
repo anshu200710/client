@@ -7,67 +7,75 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StatusBar,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
+
+const COLORS = {
+  primary: "#0066CC", // Royal Blue
+  secondary: "#FF9900", // Saffron
+  background: "#FFF", // White
+  white: "#FFFFFF",
+  success: "#28A745",
+  textDark: "#1A1A1A",
+  textLight: "#666666",
+};
+
+const FONTS = {
+  regular: "PlusJakartaSans_400Regular",
+  medium: "PlusJakartaSans_500Medium",
+  semiBold: "PlusJakartaSans_600SemiBold",
+  bold: "PlusJakartaSans_700Bold",
+  extraBold: "PlusJakartaSans_800ExtraBold",
+};
 
 const SLIDES = [
   {
     id: "1",
-    image: require("../assets/images/splash.jpeg"),
-    badges: ["RBI Registered", "2 Cr+ Users"],
-    text: (
-      <Text
-        className="text-[26px] text-center text-gray-800 leading-[40px] px-2"
-        style={{ fontFamily: "SpaceGrotesk-Regular" }}
-      >
-        Over <Text className="font-bold">68%</Text> of our users have earned
-        more than <Text className="font-bold">20% p.a.</Text>
-      </Text>
-    ),
+    image: require("../assets/images/1.jpeg"),
+    title: "Trusted by Entrepreneurs Across India",
+    description: "Professional support for company registration, GST, and trademark.",
   },
   {
     id: "2",
-    image: "https://picsum.photos/seed/slide2/800/800",
-    badges: ["100% Safe", "Daily Interest"],
-    text: (
-      <Text className="text-[26px] text-center text-gray-800 leading-[40px] px-2">
-        Join <Text className="font-bold">2 Cr+</Text> users who already trust{" "}
-        <Text className="font-bold">our platform</Text>
-      </Text>
-    ),
+    image: require("../assets/images/splash2.avif"),
+    title: "Secure Payments. Complete Transparency.",
+    description: "Pay online with confidence and receive official filing proof.",
   },
   {
     id: "3",
-    image: "https://picsum.photos/seed/slide3/800/800",
-    badges: ["Secure", "Regulated"],
-    text: (
-      <Text className="text-[26px] text-center text-gray-800 leading-[40px] px-2">
-        Get <Text className="font-bold">Daily</Text> interest credited directly
-        to your <Text className="font-bold">Account</Text>
-      </Text>
-    ),
+    image: require("../assets/images/splash3.png"),
+    title: "Your Business Partner for Growth",
+    description: "Compliance, funding, and advisory — all on one platform.",
   },
+];
+
+const TRUST_ELEMENTS = [
+  { icon: "shield-checkmark-outline", text: "Secure Payments" },
+  { icon: "people-outline", text: "Verified Experts" },
+  { icon: "pricetag-outline", text: "Transparent Pricing" },
+  { icon: "headset-outline", text: "Dedicated Support" },
 ];
 
 export default function OnboardingScreen() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
 
-  // Auto slide effect
   useEffect(() => {
     const timer = setInterval(() => {
       let nextIndex = currentIndex + 1;
-      if (nextIndex >= SLIDES.length) {
-        nextIndex = 0;
-      }
+      if (nextIndex >= SLIDES.length) nextIndex = 0;
+
       flatListRef.current?.scrollToIndex({
         index: nextIndex,
         animated: true,
       });
+
       setCurrentIndex(nextIndex);
-    }, 3000);
+    }, 4500);
 
     return () => clearInterval(timer);
   }, [currentIndex]);
@@ -75,7 +83,7 @@ export default function OnboardingScreen() {
   const onScroll = (event: any) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
     const index = Math.round(scrollPosition / width);
-    // Be careful with updating state rapidly onScroll, only update if changed
+
     if (index !== currentIndex && index >= 0 && index < SLIDES.length) {
       setCurrentIndex(index);
     }
@@ -87,118 +95,183 @@ export default function OnboardingScreen() {
     index,
   });
 
-  const onScrollToIndexFailed = (info: {
-    index: number;
-    highestMeasuredFrameIndex: number;
-    averageItemLength: number;
-  }) => {
-    const wait = new Promise((resolve) => setTimeout(resolve, 500));
-    wait.then(() => {
-      flatListRef.current?.scrollToIndex({ index: info.index, animated: true });
-    });
-  };
-
-  const renderItem = ({ item }: { item: (typeof SLIDES)[0] }) => {
+  const renderItem = ({ item }: any) => {
     return (
-      <View style={{ width }} className="items-center px-6 pt-4">
-        {/* Decorative Top Area / Placeholder for custom image */}
-        <View className="w-full h-[50vh] items-center justify-center mb-8">
+      <View style={{ width, paddingHorizontal: 24, alignItems: "center" }}>
+        {/* Illustration */}
+        <View style={{ height: width * 0.7, justifyContent: "center", marginBottom: 20 }}>
           <Image
-            source={
-              typeof item.image === "string" ? { uri: item.image } : item.image
-            }
-            style={{
-              width: width * 0.9,
-              height: width * 1.08,
-              borderRadius: 40,
-            }}
+            source={item.image}
             resizeMode="contain"
-            className="bg-gray-100"
+            style={{
+              width: width * 0.8,
+              height: width * 0.6,
+            }}
           />
         </View>
 
-        {/* Badges */}
-        <View className="flex-row gap-3 mb-6">
-          {item.badges.map((badge, idx) => (
-            <View key={idx} className="bg-[#B9E910] px-4 py-2 rounded-lg">
-              <Text
-                className="text-[#333333] text-sm"
-                style={{ fontWeight: "500" }}
-              >
-                {badge}
+        {/* Title */}
+        <Text style={{
+          color: COLORS.primary,
+          fontSize: 26,
+          fontFamily: FONTS.bold,
+          textAlign: "center",
+          lineHeight: 32
+        }}>
+          {item.title}
+        </Text>
+
+        {/* Description */}
+        <Text style={{
+          color: COLORS.textLight,
+          fontSize: 16,
+          textAlign: "center",
+          marginTop: 12,
+          lineHeight: 24,
+          paddingHorizontal: 10,
+          fontFamily: FONTS.medium
+        }}>
+          {item.description}
+        </Text>
+
+        {/* Trust Elements Grid */}
+        <View style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          marginTop: 24,
+          gap: 12
+        }}>
+          {TRUST_ELEMENTS.map((trust, idx) => (
+            <View key={idx} style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: COLORS.white,
+              paddingVertical: 6,
+              paddingHorizontal: 10,
+              borderRadius: 20,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 1 },
+              shadowOpacity: 0.05,
+              shadowRadius: 2,
+              elevation: 1
+            }}>
+              <Ionicons name={trust.icon as any} size={14} color={COLORS.success} />
+              <Text style={{
+                color: COLORS.textDark,
+                fontSize: 11,
+                marginLeft: 4,
+                fontFamily: FONTS.semiBold
+              }}>
+                {trust.text}
               </Text>
             </View>
           ))}
         </View>
-
-        {/* Dynamic Title */}
-        <View className="w-full px-2">{item.text}</View>
       </View>
     );
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
       <Stack.Screen options={{ headerShown: false }} />
+      <StatusBar barStyle="dark-content" />
 
-      <View className="flex-1 pb-6 pt-4">
-        {/* Carousel */}
-        <View className="flex-1">
-          <FlatList
-            ref={flatListRef}
-            data={SLIDES}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onScroll={onScroll}
-            scrollEventThrottle={16}
-            getItemLayout={getItemLayout}
-            onScrollToIndexFailed={onScrollToIndexFailed}
-          />
-        </View>
+      {/* Header with Tagline */}
+      <View style={{ alignItems: "center", paddingTop: 20, paddingHorizontal: 30 }}>
+        <Text style={{
+          fontSize: 24,
+          fontFamily: FONTS.extraBold,
+          color: COLORS.primary
+        }}>
+          VYAAPAR <Text style={{ color: COLORS.secondary }}>SAATHI</Text>
+        </Text>
+        <Text style={{
+          fontSize: 12,
+          color: COLORS.textLight,
+          textAlign: "center",
+          marginTop: 4,
+          fontStyle: "italic",
+          fontFamily: FONTS.medium
+        }}>
+          India’s Smart Platform for Business Registration, Compliance & Funding.
+        </Text>
+      </View>
 
-        {/* Pagination Dots */}
-        <View className="flex-row justify-center items-center h-8 mb-4 gap-2">
+      {/* Skip Button */}
+      {/* <TouchableOpacity
+        onPress={() => router.push("/login")}
+        style={{ position: "absolute", right: 24, top: 45, zIndex: 10 }}
+      >
+        <Text style={{ color: COLORS.textLight, fontSize: 14, fontWeight: "600" }}>Skip</Text>
+      </TouchableOpacity> */}
+
+      {/* Slides */}
+      <View style={{ flex: 1, marginTop: 20 }}>
+        <FlatList
+          ref={flatListRef}
+          data={SLIDES}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          getItemLayout={getItemLayout}
+        />
+      </View>
+
+      {/* Bottom Section */}
+      <View style={{ paddingHorizontal: 24, paddingBottom: 40 }}>
+        {/* Pagination */}
+        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 24, gap: 8 }}>
           {SLIDES.map((_, index) => (
             <View
               key={index}
-              className={`h-[10px] rounded-full mx-1 ${
-                currentIndex === index
-                  ? "w-[10px] bg-primary"
-                  : "w-[10px] bg-gray-300"
-              }`}
+              style={{
+                height: 6,
+                width: currentIndex === index ? 24 : 6,
+                borderRadius: 3,
+                backgroundColor: currentIndex === index ? COLORS.secondary : "#D1D5DB",
+              }}
             />
           ))}
         </View>
 
-        {/* Bottom Actions */}
-        <View className="px-6 space-y-4 pb-4">
-          <TouchableOpacity
-            onPress={() => router.push("/signup")}
-            className="w-full py-4 rounded-xl items-center justify-center mb-4 bg-primary"
-          >
-            <Text
-              className="text-white text-[17px]"
-              style={{ fontWeight: "600" }}
-            >
-              Create an Account
-            </Text>
-          </TouchableOpacity>
+        {/* Buttons */}
+        <TouchableOpacity
+          onPress={() => router.push("/signup")}
+          style={{
+            backgroundColor: COLORS.primary,
+            paddingVertical: 16,
+            borderRadius: 16,
+            alignItems: "center",
+            shadowColor: COLORS.primary,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.2,
+            shadowRadius: 8,
+            elevation: 4
+          }}
+        >
+          <Text style={{ color: COLORS.white, fontFamily: FONTS.bold, fontSize: 16 }}>
+            Create Account
+          </Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => router.push("/login")}
-            className="items-center py-2"
-          >
-            <Text className="text-[16px] text-gray-500">
-              Have an account?{" "}
-              <Text className="text-primary" style={{ fontWeight: "600" }}>
-                Login
-              </Text>
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => router.push("/login")}
+          style={{ alignItems: "center", marginTop: 20 }}
+        >
+          <Text style={{
+            color: COLORS.textLight,
+            fontSize: 15,
+            fontFamily: FONTS.regular
+          }}>
+            Already have an account?{" "}
+            <Text style={{ color: COLORS.primary, fontFamily: FONTS.bold }}>Login</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
