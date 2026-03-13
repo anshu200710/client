@@ -56,26 +56,56 @@ const DATA = [
   },
 ];
 
+const Paginator = ({ scrollX, width }: { scrollX: any, width: number }) => (
+  <View style={{ flexDirection: "row", alignItems: "center" }}>
+    {DATA.map((_, i) => {
+      const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
+      const dotWidth = scrollX.interpolate({
+        inputRange,
+        outputRange: [8, 20, 8],
+        extrapolate: "clamp",
+      });
+      const opacity = scrollX.interpolate({
+        inputRange,
+        outputRange: [0.35, 1, 0.35],
+        extrapolate: "clamp",
+      });
+      return (
+        <Animated.View
+          key={i.toString()}
+          style={{
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: COLORS.accent,
+            marginHorizontal: 3,
+            width: dotWidth,
+            opacity,
+          }}
+        />
+      );
+    })}
+  </View>
+);
+
 export default function OnboardingScreen() {
   const { width, height } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef<FlatList>(null);
 
-  const viewableItemsChanged = useRef(({ viewableItems }: any) => {
-    if (viewableItems.length > 0) {
-      setCurrentIndex(viewableItems[0].index);
+  // Update index based on scroll position - more robust than onViewableItemsChanged sometimes
+  const handleScroll = (event: any) => {
+    const x = event.nativeEvent.contentOffset.x;
+    const index = Math.round(x / width);
+    if (index !== currentIndex) {
+      setCurrentIndex(index);
     }
-  }).current;
-
-  const viewConfig = useRef({ 
-    viewAreaCoveragePercentThreshold: 50,
-  }).current;
+  };
 
   const scrollTo = () => {
     if (currentIndex < DATA.length - 1) {
-      slidesRef.current?.scrollToOffset({ 
-        offset: (currentIndex + 1) * width, 
+      slidesRef.current?.scrollToIndex({ 
+        index: currentIndex + 1, 
         animated: true 
       });
     } else {
@@ -86,46 +116,14 @@ export default function OnboardingScreen() {
   useEffect(() => {
     const timer = setInterval(() => {
       if (currentIndex < DATA.length - 1) {
-        slidesRef.current?.scrollToOffset({ 
-          offset: (currentIndex + 1) * width, 
+        slidesRef.current?.scrollToIndex({ 
+          index: currentIndex + 1, 
           animated: true 
         });
       }
     }, 4000);
     return () => clearInterval(timer);
-  }, [currentIndex, width]);
-
-  // Dot paginator — red accent, matches reference
-  const Paginator = ({ scrollX, width }: { scrollX: any, width: number }) => (
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
-      {DATA.map((_, i) => {
-        const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
-        const dotWidth = scrollX.interpolate({
-          inputRange,
-          outputRange: [8, 20, 8],
-          extrapolate: "clamp",
-        });
-        const opacity = scrollX.interpolate({
-          inputRange,
-          outputRange: [0.35, 1, 0.35],
-          extrapolate: "clamp",
-        });
-        return (
-          <Animated.View
-            key={i.toString()}
-            style={{
-              height: 8,
-              borderRadius: 4,
-              backgroundColor: COLORS.accent,
-              marginHorizontal: 3,
-              width: dotWidth,
-              opacity,
-            }}
-          />
-        );
-      })}
-    </View>
-  );
+  }, [currentIndex]);
 
   const renderItem = React.useCallback(({ item }: { item: typeof DATA[0] }) => (
     <View style={{ width, height, backgroundColor: COLORS.white }}>
@@ -200,17 +198,18 @@ export default function OnboardingScreen() {
         keyExtractor={(item) => item.id}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false }
+          { 
+            useNativeDriver: false,
+            listener: handleScroll 
+          }
         )}
-        onViewableItemsChanged={viewableItemsChanged}
-        viewabilityConfig={viewConfig}
+        scrollEventThrottle={16}
         ref={slidesRef}
         getItemLayout={(_, index) => ({
           length: width,
           offset: width * index,
           index,
         })}
-        scrollEventThrottle={16}
       />
 
       {/* Fixed Paginator */}
