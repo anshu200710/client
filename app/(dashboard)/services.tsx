@@ -143,7 +143,7 @@ export default function ServicesScreen() {
                                         })
                                     }
                                 >
-                                    <Text className="text-white text-xs font-bold">Request -></Text>
+                                    <Text className="text-white text-xs font-bold">Request</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
