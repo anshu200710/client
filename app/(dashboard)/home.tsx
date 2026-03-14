@@ -87,7 +87,7 @@ export default function DashboardScreen() {
             <Text style={{ fontSize: 16, fontFamily: "Poppins_400Regular", color: COLORS.textGray }}>Good Morning,</Text>
             <Text style={{ fontSize: 28, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginTop: -4 }}>Welcome, Rahul</Text>
           </View>
-          <TouchableOpacity style={{ padding: 8, marginTop: 4 }}>
+          <TouchableOpacity onPress={() => router.push("/(dashboard)/notifications")} style={{ padding: 8, marginTop: 4 }}>
             <View style={{ position: "absolute", top: 8, right: 10, width: 8, height: 8, borderRadius: 4, backgroundColor: COLORS.alertRed, zIndex: 1, borderWidth: 1.5, borderColor: COLORS.white }} />
             <Ionicons name="notifications-outline" size={26} color={COLORS.textDark} />
           </TouchableOpacity>
@@ -135,12 +135,12 @@ export default function DashboardScreen() {
         <View style={{ paddingHorizontal: 24, marginBottom: 8 }}>
           <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 20 }}>Quick Actions</Text>
           <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
-            <ActionButton icon="add-circle-outline" label={"Request\nService"} bg={COLORS.actionBlueBg} color={COLORS.primary} onPress={() => {}} />
-            <ActionButton icon="cloud-upload" label={"Upload\nDocs"} bg={COLORS.actionPurpleBg} color={COLORS.actionPurpleIcon} onPress={() => {}} />
-            <ActionButton icon="calculator" label={"GST\nCalculator"} bg={COLORS.actionGreenBg} color={COLORS.actionGreenIcon} onPress={() => {}} />
-            <ActionButton icon="headset" label={"Help\nSupport"} bg={COLORS.actionRedBg} color={COLORS.actionRedIcon} onPress={() => {}} />
-            <ActionButton icon="bar-chart" label={"My\nReports"} bg={COLORS.actionYellowBg} color={COLORS.actionYellowIcon} onPress={() => {}} />
-            <ActionButton icon="ellipsis-horizontal" label={"View\nMore"} bg={COLORS.actionGreyBg} color={COLORS.actionGreyIcon} onPress={() => {}} />
+            <ActionButton icon="add-circle-outline" label={"Request\nService"} bg={COLORS.actionBlueBg} color={COLORS.primary} onPress={() => router.push("/(dashboard)/services")} />
+            <ActionButton icon="cloud-upload" label={"Upload\nDocs"} bg={COLORS.actionPurpleBg} color={COLORS.actionPurpleIcon} onPress={() => router.push("/(dashboard)/action")} />
+            <ActionButton icon="calculator" label={"GST\nCalculator"} bg={COLORS.actionGreenBg} color={COLORS.actionGreenIcon} onPress={() => router.push("/(dashboard)/tools-pages/gst-calculator")} />
+            <ActionButton icon="headset" label={"Help\nSupport"} bg={COLORS.actionRedBg} color={COLORS.actionRedIcon} onPress={() => router.push("/(dashboard)/profile-pages/help-support")} />
+            <ActionButton icon="bar-chart" label={"My\nReports"} bg={COLORS.actionYellowBg} color={COLORS.actionYellowIcon} onPress={() => router.push("/(dashboard)/tools")} />
+            <ActionButton icon="ellipsis-horizontal" label={"View\nMore"} bg={COLORS.actionGreyBg} color={COLORS.actionGreyIcon} onPress={() => router.push("/(dashboard)/tools")} />
           </View>
         </View>
 
