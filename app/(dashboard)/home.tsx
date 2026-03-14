@@ -76,8 +76,8 @@ const DonutRing = ({
         }}
       />
       <View style={{ alignItems: "center" }}>
-        <Text style={{ fontSize: 18, fontWeight: "800", color: C.textDark }}>{centerLabel}</Text>
-        <Text style={{ fontSize: 9, color: C.textLight, fontWeight: "600", letterSpacing: 0.5 }}>{subLabel}</Text>
+        <Text style={{ fontSize: 18, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>{centerLabel}</Text>
+        <Text style={{ fontSize: 9, color: C.textLight, fontFamily: "Poppins_600SemiBold", letterSpacing: 0.5 }}>{subLabel}</Text>
       </View>
     </View>
   );
@@ -144,7 +144,7 @@ const SegmentFilter = ({
         <Text
           style={{
             fontSize: 11,
-            fontWeight: "700",
+            fontFamily: "Poppins_700Bold",
             color: active === opt ? C.white : C.textMid,
           }}
         >
@@ -188,10 +188,10 @@ const KpiCard = ({
       elevation: 2,
     }}
   >
-    <Text style={{ fontSize: 10, fontWeight: "700", color: C.textLight, letterSpacing: 0.8, marginBottom: 4 }}>
+    <Text style={{ fontSize: 10, fontFamily: "Poppins_700Bold", color: C.textLight, letterSpacing: 0.8, marginBottom: 4 }}>
       {label}
     </Text>
-    <Text style={{ fontSize: 26, fontWeight: "800", color: C.textDark, letterSpacing: -1 }}>{value}</Text>
+    <Text style={{ fontSize: 26, fontFamily: "Poppins_800ExtraBold", color: C.textDark, letterSpacing: -1 }}>{value}</Text>
     <Text style={{ fontSize: 10, color: C.textLight, marginBottom: 10 }}>{sub}</Text>
     <MiniBarChart data={barData} color={color} height={36} />
     <View style={{ flexDirection: "row", alignItems: "center", marginTop: 8 }}>
@@ -200,7 +200,7 @@ const KpiCard = ({
         size={12}
         color={trendUp ? C.success : C.alertRed}
       />
-      <Text style={{ fontSize: 10, color: trendUp ? C.success : C.alertRed, fontWeight: "700", marginLeft: 3 }}>
+      <Text style={{ fontSize: 10, color: trendUp ? C.success : C.alertRed, fontFamily: "Poppins_700Bold", marginLeft: 3 }}>
         {trend}
       </Text>
     </View>
@@ -224,10 +224,10 @@ const TableRow = ({
   <View>
     <View style={{ flexDirection: "row", alignItems: "center", paddingVertical: 11 }}>
       <View style={{ flex: 1 }}>
-        <Text style={{ fontSize: 13, fontWeight: "600", color: C.textDark }}>{label}</Text>
+        <Text style={{ fontSize: 13, fontFamily: "Poppins_600SemiBold", color: C.textDark }}>{label}</Text>
       </View>
       <Text style={{ fontSize: 12, color: C.textMid, width: 50, textAlign: "right" }}>{pct}</Text>
-      <Text style={{ fontSize: 12, fontWeight: "700", color: C.textDark, width: 58, textAlign: "right" }}>{value}</Text>
+      <Text style={{ fontSize: 12, fontFamily: "Poppins_700Bold", color: C.textDark, width: 58, textAlign: "right" }}>{value}</Text>
     </View>
     {/* Progress bar */}
     <View style={{ height: 3, backgroundColor: C.border, borderRadius: 2, marginBottom: 4 }}>
@@ -274,7 +274,7 @@ const QuickBtn = ({
     >
       <Ionicons name={icon} size={22} color={color} />
     </View>
-    <Text style={{ fontSize: 10, color: C.textMid, fontWeight: "600", textAlign: "center", lineHeight: 13 }}>
+    <Text style={{ fontSize: 10, color: C.textMid, fontFamily: "Poppins_600SemiBold", textAlign: "center", lineHeight: 13 }}>
       {label}
     </Text>
   </TouchableOpacity>
@@ -326,8 +326,8 @@ export default function DashboardScreen() {
         >
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <View>
-              <Text style={{ fontSize: 12, color: C.textLight, fontWeight: "500" }}>Good Morning,</Text>
-              <Text style={{ fontSize: 22, fontWeight: "800", color: C.textDark, letterSpacing: -0.5 }}>
+              <Text style={{ fontSize: 12, color: C.textLight, fontFamily: "Poppins_500Medium" }}>Good Morning,</Text>
+              <Text style={{ fontSize: 22, fontFamily: "Poppins_800ExtraBold", color: C.textDark, letterSpacing: -0.5 }}>
                 Rahul 👋
               </Text>
             </View>
@@ -369,7 +369,7 @@ export default function DashboardScreen() {
                   justifyContent: "center",
                 }}
               >
-                <Text style={{ fontSize: 14, fontWeight: "800", color: C.white }}>R</Text>
+                <Text style={{ fontSize: 14, fontFamily: "Poppins_800ExtraBold", color: C.white }}>R</Text>
               </View>
             </View>
           </View>
@@ -421,10 +421,10 @@ export default function DashboardScreen() {
 
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
             <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 11, color: "#ffffffaa", fontWeight: "600", letterSpacing: 1, marginBottom: 4 }}>
+              <Text style={{ fontSize: 11, color: "#ffffffaa", fontFamily: "Poppins_600SemiBold", letterSpacing: 1, marginBottom: 4 }}>
                 TOTAL REVENUE
               </Text>
-              <Text style={{ fontSize: 34, fontWeight: "800", color: C.white, letterSpacing: -1 }}>
+              <Text style={{ fontSize: 34, fontFamily: "Poppins_800ExtraBold", color: C.white, letterSpacing: -1 }}>
                 ₹{revenueByPeriod[period]}
               </Text>
               <View style={{ flexDirection: "row", alignItems: "center", marginTop: 6 }}>
@@ -440,7 +440,7 @@ export default function DashboardScreen() {
                   }}
                 >
                   <Ionicons name="trending-up" size={11} color={C.success} />
-                  <Text style={{ fontSize: 11, color: "#6EE09A", fontWeight: "700" }}>+12.4%</Text>
+                  <Text style={{ fontSize: 11, color: "#6EE09A", fontFamily: "Poppins_700Bold" }}>+12.4%</Text>
                 </View>
                 <Text style={{ fontSize: 11, color: "#ffffff88", marginLeft: 8 }}>vs last {period.toLowerCase()}</Text>
               </View>
@@ -483,8 +483,8 @@ export default function DashboardScreen() {
                 }}
               >
                 <Ionicons name={item.icon} size={14} color="#ffffff88" />
-                <Text style={{ fontSize: 16, fontWeight: "800", color: C.white, marginTop: 3 }}>{item.value}</Text>
-                <Text style={{ fontSize: 9, color: "#ffffff77", fontWeight: "600", letterSpacing: 0.5 }}>
+                <Text style={{ fontSize: 16, fontFamily: "Poppins_800ExtraBold", color: C.white, marginTop: 3 }}>{item.value}</Text>
+                <Text style={{ fontSize: 9, color: "#ffffff77", fontFamily: "Poppins_600SemiBold", letterSpacing: 0.5 }}>
                   {item.label.toUpperCase()}
                 </Text>
               </View>
@@ -526,7 +526,7 @@ export default function DashboardScreen() {
             borderColor: C.border,
           }}
         >
-          <Text style={{ fontSize: 13, fontWeight: "800", color: C.textDark, marginBottom: 14, letterSpacing: 0.2 }}>
+          <Text style={{ fontSize: 13, fontFamily: "Poppins_800ExtraBold", color: C.textDark, marginBottom: 14, letterSpacing: 0.2 }}>
             Quick Actions
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -575,7 +575,7 @@ export default function DashboardScreen() {
         >
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
             <View>
-              <Text style={{ fontSize: 13, fontWeight: "800", color: C.textDark }}>Sales Overview</Text>
+              <Text style={{ fontSize: 13, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>Sales Overview</Text>
               <Text style={{ fontSize: 10, color: C.textLight, marginTop: 1 }}>
                 {period} performance • Live
               </Text>
@@ -583,11 +583,11 @@ export default function DashboardScreen() {
             <View style={{ flexDirection: "row", gap: 6 }}>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                 <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: C.primary }} />
-                <Text style={{ fontSize: 9, color: C.textLight, fontWeight: "600" }}>Sales</Text>
+                <Text style={{ fontSize: 9, color: C.textLight, fontFamily: "Poppins_600SemiBold" }}>Sales</Text>
               </View>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                 <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: C.secondary }} />
-                <Text style={{ fontSize: 9, color: C.textLight, fontWeight: "600" }}>Target</Text>
+                <Text style={{ fontSize: 9, color: C.textLight, fontFamily: "Poppins_600SemiBold" }}>Target</Text>
               </View>
             </View>
           </View>
@@ -618,7 +618,7 @@ export default function DashboardScreen() {
                       }}
                     />
                   </View>
-                  <Text style={{ fontSize: 7, color: C.textLight, fontWeight: "600" }}>{month}</Text>
+                  <Text style={{ fontSize: 7, color: C.textLight, fontFamily: "Poppins_600SemiBold" }}>{month}</Text>
                 </View>
               );
             })}
@@ -638,18 +638,18 @@ export default function DashboardScreen() {
           }}
         >
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-            <Text style={{ fontSize: 13, fontWeight: "800", color: C.textDark }}>Billing & Transactions</Text>
+            <Text style={{ fontSize: 13, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>Billing & Transactions</Text>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
               <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: C.success }} />
-              <Text style={{ fontSize: 9, color: C.textLight, fontWeight: "600" }}>Live • 1h ago</Text>
+              <Text style={{ fontSize: 9, color: C.textLight, fontFamily: "Poppins_600SemiBold" }}>Live • 1h ago</Text>
             </View>
           </View>
 
           {/* Table header */}
           <View style={{ flexDirection: "row", paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: C.border }}>
-            <Text style={{ flex: 1, fontSize: 10, color: C.textLight, fontWeight: "700", letterSpacing: 0.5 }}>FEATURE</Text>
-            <Text style={{ width: 50, fontSize: 10, color: C.textLight, fontWeight: "700", textAlign: "right" }}>%</Text>
-            <Text style={{ width: 58, fontSize: 10, color: C.textLight, fontWeight: "700", textAlign: "right", letterSpacing: 0.5 }}>COUNT</Text>
+            <Text style={{ flex: 1, fontSize: 10, color: C.textLight, fontFamily: "Poppins_700Bold", letterSpacing: 0.5 }}>FEATURE</Text>
+            <Text style={{ width: 50, fontSize: 10, color: C.textLight, fontFamily: "Poppins_700Bold", textAlign: "right" }}>%</Text>
+            <Text style={{ width: 58, fontSize: 10, color: C.textLight, fontFamily: "Poppins_700Bold", textAlign: "right", letterSpacing: 0.5 }}>COUNT</Text>
           </View>
 
           <TableRow label="Payment Received" pct="94%" value="79,615" color={C.success} />
@@ -670,7 +670,7 @@ export default function DashboardScreen() {
           }}
         >
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-            <Text style={{ fontSize: 13, fontWeight: "800", color: C.textDark }}>Customer Retention</Text>
+            <Text style={{ fontSize: 13, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>Customer Retention</Text>
             <TouchableOpacity
               style={{
                 borderWidth: 1,
@@ -683,7 +683,7 @@ export default function DashboardScreen() {
                 gap: 4,
               }}
             >
-              <Text style={{ fontSize: 10, color: C.textMid, fontWeight: "600" }}>Get Report</Text>
+              <Text style={{ fontSize: 10, color: C.textMid, fontFamily: "Poppins_600SemiBold" }}>Get Report</Text>
               <Ionicons name="chevron-down" size={10} color={C.textMid} />
             </TouchableOpacity>
           </View>
@@ -719,7 +719,7 @@ export default function DashboardScreen() {
           </View>
 
           <View style={{ flexDirection: "row", alignItems: "center", gap: 16, marginTop: 12 }}>
-            <Text style={{ fontSize: 26, fontWeight: "800", color: C.textDark }}>40%</Text>
+            <Text style={{ fontSize: 26, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>40%</Text>
             <View>
               <Text style={{ fontSize: 10, color: C.textLight }}>After 8 months</Text>
               <Text style={{ fontSize: 9, color: C.textLight }}>Feb – Sep</Text>
@@ -729,11 +729,11 @@ export default function DashboardScreen() {
           <View style={{ flexDirection: "row", gap: 16, marginTop: 8 }}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
               <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: C.secondary }} />
-              <Text style={{ fontSize: 10, color: C.textMid, fontWeight: "600" }}>First-Time Buyers</Text>
+              <Text style={{ fontSize: 10, color: C.textMid, fontFamily: "Poppins_600SemiBold" }}>First-Time Buyers</Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
               <View style={{ width: 8, height: 8, borderRadius: 2, backgroundColor: C.primary }} />
-              <Text style={{ fontSize: 10, color: C.textMid, fontWeight: "600" }}>Loyal Customers</Text>
+              <Text style={{ fontSize: 10, color: C.textMid, fontFamily: "Poppins_600SemiBold" }}>Loyal Customers</Text>
             </View>
           </View>
         </View>
@@ -766,7 +766,7 @@ export default function DashboardScreen() {
             <Ionicons name="flash" size={22} color={C.alertAmber} />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ fontSize: 13, fontWeight: "800", color: C.textDark }}>Tax Season Sale! 🎉</Text>
+            <Text style={{ fontSize: 13, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>Tax Season Sale! 🎉</Text>
             <Text style={{ fontSize: 11, color: C.textMid, marginTop: 2 }}>
               20% off on premium assisted filing plans.
             </Text>
@@ -779,7 +779,7 @@ export default function DashboardScreen() {
               paddingVertical: 7,
             }}
           >
-            <Text style={{ fontSize: 10, fontWeight: "800", color: C.white }}>Upgrade</Text>
+            <Text style={{ fontSize: 10, fontFamily: "Poppins_800ExtraBold", color: C.white }}>Upgrade</Text>
           </TouchableOpacity>
         </View>
 
@@ -796,9 +796,9 @@ export default function DashboardScreen() {
           }}
         >
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-            <Text style={{ fontSize: 13, fontWeight: "800", color: C.textDark }}>Recent Activity</Text>
+            <Text style={{ fontSize: 13, fontFamily: "Poppins_800ExtraBold", color: C.textDark }}>Recent Activity</Text>
             <TouchableOpacity>
-              <Text style={{ fontSize: 11, color: C.primary, fontWeight: "700" }}>View All</Text>
+              <Text style={{ fontSize: 11, color: C.primary, fontFamily: "Poppins_700Bold" }}>View All</Text>
             </TouchableOpacity>
           </View>
 
@@ -850,7 +850,7 @@ export default function DashboardScreen() {
                   <Ionicons name={item.icon} size={18} color={item.iconColor} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontSize: 13, fontWeight: "700", color: C.textDark }}>{item.title}</Text>
+                  <Text style={{ fontSize: 13, fontFamily: "Poppins_700Bold", color: C.textDark }}>{item.title}</Text>
                   <Text style={{ fontSize: 11, color: C.textLight, marginTop: 1 }}>{item.sub}</Text>
                 </View>
                 <View
@@ -861,7 +861,7 @@ export default function DashboardScreen() {
                     borderRadius: 20,
                   }}
                 >
-                  <Text style={{ fontSize: 10, fontWeight: "700", color: item.statusColor }}>{item.status}</Text>
+                  <Text style={{ fontSize: 10, fontFamily: "Poppins_700Bold", color: item.statusColor }}>{item.status}</Text>
                 </View>
               </View>
               {idx < 2 && <View style={{ height: 1, backgroundColor: C.border }} />}
