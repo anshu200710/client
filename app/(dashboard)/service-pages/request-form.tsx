@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View, Image, Modal } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -34,6 +34,19 @@ const COLORS = {
 
 const docOptions = ['PAN Card', 'Aadhar Card', 'Business Proof', 'Bank Statement'];
 
+const conversionFAQs = [
+  { q: "Can I avoid GST if my business is small?", a: "If you sell online on Amazon/Flipkart or sell outside your state, GST is 100% mandatory from day one! Don't risk heavy penalties." },
+  { q: "Will GST registration help me get business loans?", a: "Yes! Banks trust businesses with a GST number. It works as solid proof of business and helps secure mudra or MSME loans faster." },
+  { q: "Can I claim back the GST I pay on purchases?", a: "Absolutely. With GST registration, you can claim Input Tax Credit (ITC) on goods and services you buy for your business, saving you thousands every month!" },
+  { q: "Does a GST number make me look professional?", a: "Yes. Big companies, B2B clients, and government tenders usually only work with GST-registered vendors." },
+  { q: "Am I losing customers without GST?", a: "Likely yes. B2B buyers prefer GST-registered suppliers so they can claim ITC. Without GST, you are turning away high-value clients." },
+  { q: "I run my business from home. Can I still get GST?", a: "Yes! You can easily register GST using your home address. Just provide your electricity bill and a NOC from the property owner." },
+  { q: "Is GST registration a complicated offline process?", a: "Not at all! With VyaaparSaathi, it is completely online, paperless, and hassle-free. You don't need to visit any government office." },
+  { q: "What if I get GST but have zero sales in some months?", a: "No problem. You simply file a 'Nil Return.' Filing is quick, and having the GST active keeps your business ready for future growth." },
+  { q: "How much penalty can I face for not registering?", a: "Operating without GST when required can attract penalties of 100% of the tax due or a minimum of ₹10,000. It's not worth the risk!" },
+  { q: "I'm not sure if I cross the turnover limit?", a: "Voluntary registration has zero disadvantages and opens up growth opportunities. Registering early is always the safer path." }
+];
+
 export default function ServiceRequestFormScreen() {
     const router = useRouter();
     const params = useLocalSearchParams<{ service?: string; fee?: string }>();
@@ -46,8 +59,24 @@ export default function ServiceRequestFormScreen() {
 
     const canProceed = useMemo(() => businessName.trim().length > 2 && contactNumber.trim().length > 8, [businessName, contactNumber]);
 
-    const toggleDoc = (doc: string) => {
-        setSelectedDocs((prev) => (prev.includes(doc) ? prev.filter((item) => item !== doc) : [...prev, doc]));
+    const [uploadModalVisible, setUploadModalVisible] = useState(false);
+    const [selectedDocForUpload, setSelectedDocForUpload] = useState<string | null>(null);
+    const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+
+    const handleUploadClick = (doc: string) => {
+        if (selectedDocs.includes(doc)) {
+            setSelectedDocs((prev) => prev.filter((item) => item !== doc));
+        } else {
+            setSelectedDocForUpload(doc);
+            setUploadModalVisible(true);
+        }
+    };
+
+    const confirmUpload = () => {
+        if (selectedDocForUpload && !selectedDocs.includes(selectedDocForUpload)) {
+            setSelectedDocs([...selectedDocs, selectedDocForUpload]);
+        }
+        setUploadModalVisible(false);
     };
 
     return (
@@ -82,6 +111,27 @@ export default function ServiceRequestFormScreen() {
                     <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray }}>Your request will be submitted to admin for verification.</Text>
                 </View>
 
+                {/* Why You Need This Box */}
+                <View style={{ backgroundColor: COLORS.actionBlueBg, borderRadius: 20, padding: 20, marginBottom: 16 }}>
+                    <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.primary, marginBottom: 12 }}>Why do you need this?</Text>
+                    <View style={{ flexDirection: "row", marginBottom: 8, alignItems: "flex-start" }}>
+                        <Ionicons name="checkmark-circle" size={18} color={COLORS.primary} style={{ marginRight: 8, marginTop: 2 }} />
+                        <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textDark, flex: 1 }}>Mandatory for selling online (Amazon, Flipkart)</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", marginBottom: 8, alignItems: "flex-start" }}>
+                        <Ionicons name="checkmark-circle" size={18} color={COLORS.primary} style={{ marginRight: 8, marginTop: 2 }} />
+                        <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textDark, flex: 1 }}>Requirement for taking Bank / MSME loans</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", marginBottom: 8, alignItems: "flex-start" }}>
+                        <Ionicons name="checkmark-circle" size={18} color={COLORS.primary} style={{ marginRight: 8, marginTop: 2 }} />
+                        <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textDark, flex: 1 }}>Build trust with B2B clients</Text>
+                    </View>
+                    <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
+                        <Ionicons name="checkmark-circle" size={18} color={COLORS.primary} style={{ marginRight: 8, marginTop: 2 }} />
+                        <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textDark, flex: 1 }}>Claim Input Tax Credit (ITC) to save costs</Text>
+                    </View>
+                </View>
+
                 {/* Form Inputs */}
                 <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
                     <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 8, letterSpacing: 0.5 }}>BUSINESS NAME</Text>
@@ -112,7 +162,7 @@ export default function ServiceRequestFormScreen() {
                         return (
                             <TouchableOpacity
                                 key={doc}
-                                onPress={() => toggleDoc(doc)}
+                                onPress={() => handleUploadClick(doc)}
                                 style={{
                                     borderRadius: 16,
                                     borderWidth: 1,
@@ -139,6 +189,32 @@ export default function ServiceRequestFormScreen() {
                         );
                     })}
                     <Text style={{ fontSize: 12, fontFamily: "Poppins_500Medium", color: COLORS.textLight, marginTop: 4 }}>Selected: {selectedDocs.length} documents</Text>
+                </View>
+
+                {/* FAQ Section */}
+                <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
+                    <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 12 }}>Frequently Asked Questions</Text>
+                    {conversionFAQs.map((faq, index) => (
+                        <TouchableOpacity 
+                            key={index} 
+                            onPress={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                            style={{ 
+                                borderBottomWidth: index === conversionFAQs.length - 1 ? 0 : 1, 
+                                borderBottomColor: COLORS.border, 
+                                paddingVertical: 12 
+                            }}
+                        >
+                            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                                <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, flex: 1, paddingRight: 16 }}>{faq.q}</Text>
+                                <Ionicons name={expandedFaq === index ? "chevron-up" : "chevron-down"} size={18} color={COLORS.textGray} />
+                            </View>
+                            {expandedFaq === index && (
+                                <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray, marginTop: 8, lineHeight: 20 }}>
+                                    {faq.a}
+                                </Text>
+                            )}
+                        </TouchableOpacity>
+                    ))}
                 </View>
 
                 {/* Payment Summary */}
@@ -169,6 +245,52 @@ export default function ServiceRequestFormScreen() {
                     <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: "Poppins_700Bold" }}>Continue to Payment</Text>
                 </TouchableOpacity>
             </ScrollView>
+
+            {/* Upload Modal */}
+            <Modal visible={uploadModalVisible} transparent animationType="fade">
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+                    <View style={{ width: '100%', backgroundColor: COLORS.white, borderRadius: 24, padding: 24 }}>
+                        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+                            <Text style={{ fontSize: 18, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Upload Document</Text>
+                            <TouchableOpacity onPress={() => setUploadModalVisible(false)} style={{ padding: 4 }}>
+                                <Ionicons name="close" size={24} color={COLORS.textGray} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, marginBottom: 4 }}>
+                            {selectedDocForUpload}
+                        </Text>
+                        <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray, marginBottom: 20 }}>
+                            Please upload a clear, readable image of your original document. See the sample below for expected format.
+                        </Text>
+
+                        <View style={{ width: '100%', height: 180, backgroundColor: COLORS.lightGrey, borderRadius: 16, marginBottom: 24, alignItems: "center", justifyContent: "center", overflow: "hidden", borderWidth: 1, borderColor: COLORS.border, borderStyle: "dashed" }}>
+                            {/* Sample Image */}
+                            <Image 
+                                source={require('../../../assets/images/1.jpeg')} 
+                                style={{ width: '100%', height: '100%', opacity: 0.8, resizeMode: "cover" }} 
+                            />
+                            <View style={{ position: "absolute", backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 }}>
+                                <Text style={{ color: COLORS.white, fontSize: 12, fontFamily: "Poppins_600SemiBold", letterSpacing: 0.5 }}>SAMPLE FORMAT</Text>
+                            </View>
+                        </View>
+
+                        <TouchableOpacity
+                            onPress={confirmUpload}
+                            style={{
+                                backgroundColor: COLORS.primary,
+                                borderRadius: 16,
+                                paddingVertical: 16,
+                                alignItems: "center"
+                            }}
+                        >
+                            <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: "Poppins_700Bold" }}>
+                                Select File to Upload
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView>
     );
 }
