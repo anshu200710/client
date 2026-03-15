@@ -6,7 +6,7 @@ export default function ServicePagesLayout() {
         <Stack
             screenOptions={{
                 headerShown: false,
-                contentStyle: { backgroundColor: '#F4F7FB' },
+                contentStyle: { backgroundColor: '#FFFFFF' },
             }}
         />
     );

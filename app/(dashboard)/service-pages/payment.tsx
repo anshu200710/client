@@ -4,6 +4,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 
+// Match Dashboard/Auth Colors
+const COLORS = {
+  primary: "#0066CC",
+  secondary: "#FF9900",
+  success: "#28A745",
+  alertRed: "#DC3545",
+  alertAmber: "#FFC107",
+  lightGrey: "#F8F9FA",
+  white: "#FFFFFF",
+  textDark: "#1A1D2E",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+  
+  // Custom pastels matching home.tsx
+  actionBlueBg: "#EFF6FF",
+  actionPurpleBg: "#F5F3FF",
+  actionPurpleIcon: "#8B5CF6",
+  actionGreenBg: "#ECFDF5",
+  actionGreenIcon: "#10B981",
+  actionRedBg: "#FEF2F2",
+  actionRedIcon: "#EF4444",
+  actionYellowBg: "#FFFBEB",
+  actionYellowIcon: "#F59E0B",
+  actionGreyBg: "#F8FAFC",
+  actionGreyIcon: "#94A3B8",
+};
+
 const paymentMethods = ['UPI', 'Card', 'Net Banking'];
 
 export default function ServicePaymentScreen() {
@@ -23,114 +51,140 @@ export default function ServicePaymentScreen() {
     });
 
     return (
-        <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }} edges={['top']}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            <View className="px-5 pt-2 pb-4 flex-row items-center">
+            {/* Header */}
+            <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity
                     onPress={() => router.back()}
-                    className="w-10 h-10 rounded-full bg-white items-center justify-center border border-[#E5EAF0]"
+                    style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.lightGrey, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: COLORS.border }}
                 >
-                    <Ionicons name="chevron-back" size={20} color="#0F172A" />
+                    <Ionicons name="chevron-back" size={20} color={COLORS.textDark} />
                 </TouchableOpacity>
-                <Text className="text-lg font-bold text-[#0F172A] ml-3">Complete Payment</Text>
+                <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginLeft: 16 }}>Complete Payment</Text>
             </View>
 
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] p-4 mb-4">
-                    <Text className="text-xs text-[#94A3B8] font-semibold mb-2">SERVICE SUMMARY</Text>
-                    <Text className="text-[15px] font-semibold text-[#0F172A]">{service}</Text>
-                    <Text className="text-xs text-[#64748B] mt-1">Documents uploaded: {docs}</Text>
-                    <View className="mt-3 pt-3 border-t border-[#EEF2F7] flex-row items-center justify-between">
-                        <Text className="text-sm text-[#64748B]">Payable Amount</Text>
-                        <Text className="text-xl font-bold text-[#0066CC]">Rs{fee}</Text>
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
+                
+                {/* Summary */}
+                <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 8, letterSpacing: 0.5 }}>SERVICE SUMMARY</Text>
+                    <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 4 }}>{service}</Text>
+                    <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray }}>Documents uploaded: {docs}</Text>
+                    <View style={{ marginTop: 16, paddingTop: 16, borderTopWidth: 1, borderTopColor: COLORS.border, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                        <Text style={{ fontSize: 14, fontFamily: "Poppins_500Medium", color: COLORS.textGray }}>Payable Amount</Text>
+                        <Text style={{ fontSize: 24, fontFamily: "Poppins_700Bold", color: COLORS.primary }}>
+                            {fee === '0' || fee === 'Free' ? 'Free' : `₹${fee}`}
+                        </Text>
                     </View>
                 </View>
 
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] p-4 mb-4">
-                    <Text className="text-xs text-[#94A3B8] font-semibold mb-3">SELECT PAYMENT METHOD</Text>
+                {/* Methods */}
+                <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 24 }}>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 12, letterSpacing: 0.5 }}>SELECT PAYMENT METHOD</Text>
                     {paymentMethods.map((item) => {
                         const selected = item === method;
                         return (
                             <TouchableOpacity
                                 key={item}
                                 onPress={() => setMethod(item)}
-                                className={`rounded-xl border px-3 py-3 mb-2 flex-row items-center justify-between ${selected ? 'border-[#0066CC] bg-[#EFF6FF]' : 'border-[#E5EAF0] bg-white'}`}
+                                style={{
+                                    borderRadius: 16,
+                                    borderWidth: 1,
+                                    paddingHorizontal: 16,
+                                    paddingVertical: 14,
+                                    marginBottom: 12,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    borderColor: selected ? COLORS.primary : COLORS.border,
+                                    backgroundColor: selected ? COLORS.actionBlueBg : COLORS.white
+                                }}
                             >
-                                <Text className={`text-sm ${selected ? 'font-semibold text-[#0F172A]' : 'text-[#334155]'}`}>{item}</Text>
-                                {selected && <Ionicons name="checkmark-circle" size={18} color="#0066CC" />}
+                                <Text style={{ fontSize: 14, fontFamily: selected ? "Poppins_600SemiBold" : "Poppins_500Medium", color: selected ? COLORS.textDark : COLORS.textGray }}>{item}</Text>
+                                {selected && <Ionicons name="checkmark-circle" size={20} color={COLORS.primary} />}
                             </TouchableOpacity>
                         );
                     })}
                 </View>
 
+                {/* Pay Button */}
                 <TouchableOpacity
-                    className="bg-[#0066CC] rounded-2xl py-4 items-center"
+                    style={{
+                        backgroundColor: COLORS.primary,
+                        borderRadius: 20,
+                        paddingVertical: 16,
+                        alignItems: "center"
+                    }}
                     onPress={() => setShowSuccessPopup(true)}
                 >
-                    <Text className="text-white text-sm font-bold">Pay Rs{fee} and Submit</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: "Poppins_700Bold" }}>
+                        Pay {fee === '0' || fee === 'Free' ? 'Free' : `₹${fee}`} and Submit
+                    </Text>
                 </TouchableOpacity>
             </ScrollView>
 
+            {/* Success Modal */}
             <Modal visible={showSuccessPopup} transparent animationType="fade" onRequestClose={() => setShowSuccessPopup(false)}>
-                <View className="flex-1 bg-black/30 items-center justify-center px-5">
-                    <View className="w-full max-w-[360px] bg-white rounded-3xl border border-[#DCE5EF] p-4 overflow-hidden">
-                        <View className="items-center pt-2">
-                            <View className="w-24 h-24 rounded-full bg-[#DDF6FF] items-center justify-center">
-                                <View className="w-16 h-16 rounded-full bg-[#22C1E6] items-center justify-center">
-                                    <Ionicons name="checkmark" size={34} color="#FFFFFF" />
+                <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.4)", alignItems: "center", justifyContent: "center", paddingHorizontal: 24 }}>
+                    <View style={{ width: '100%', maxWidth: 360, backgroundColor: COLORS.white, borderRadius: 24, borderWidth: 1, borderColor: COLORS.border, padding: 24, overflow: "hidden" }}>
+                        <View style={{ alignItems: "center", paddingTop: 8 }}>
+                            <View style={{ width: 88, height: 88, borderRadius: 44, backgroundColor: COLORS.actionGreenBg, alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+                                <View style={{ width: 60, height: 60, borderRadius: 30, backgroundColor: COLORS.actionGreenIcon, alignItems: "center", justifyContent: "center" }}>
+                                    <Ionicons name="checkmark" size={32} color={COLORS.white} />
                                 </View>
                             </View>
 
-                            <Text className="text-2xl text-center font-bold text-[#0F172A] mt-4">Request Submitted</Text>
-                            <Text className="text-2xl text-center font-bold text-[#0F172A]">Successfully!</Text>
-                            <Text className="text-xs text-center text-[#64748B] mt-2 px-4">
+                            <Text style={{ fontSize: 24, textAlign: "center", fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Request Submitted</Text>
+                            <Text style={{ fontSize: 24, textAlign: "center", fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Successfully!</Text>
+                            <Text style={{ fontSize: 13, textAlign: "center", fontFamily: "Poppins_400Regular", color: COLORS.textGray, marginTop: 8, paddingHorizontal: 16, lineHeight: 20 }}>
                                 We have received your request and our admin team will review it shortly.
                             </Text>
                         </View>
 
-                        <View className="mt-5 bg-[#F8FBFF] border border-[#DFE8F2] rounded-2xl p-3.5">
-                            <View className="flex-row items-center justify-between">
-                                <Text className="text-sm font-bold text-[#0F172A]">Request Details</Text>
-                                <View className="bg-[#DCFCE7] px-2 py-1 rounded-full">
-                                    <Text className="text-[10px] font-semibold text-[#15803D]">Submitted</Text>
+                        <View style={{ marginTop: 24, backgroundColor: COLORS.lightGrey, borderRadius: 16, padding: 16 }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                                <Text style={{ fontSize: 14, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Request Details</Text>
+                                <View style={{ backgroundColor: COLORS.actionGreenBg, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 }}>
+                                    <Text style={{ fontSize: 10, fontFamily: "Poppins_600SemiBold", color: COLORS.actionGreenIcon }}>Submitted</Text>
                                 </View>
                             </View>
 
-                            <View className="mt-3">
-                                <Text className="text-[11px] text-[#94A3B8]">Request ID</Text>
-                                <Text className="text-sm font-semibold text-[#0F172A] mt-0.5">{requestId}</Text>
+                            <View style={{ marginBottom: 12 }}>
+                                <Text style={{ fontSize: 12, fontFamily: "Poppins_500Medium", color: COLORS.textLight }}>Request ID</Text>
+                                <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, marginTop: 2 }}>{requestId}</Text>
                             </View>
 
-                            <View className="mt-2">
-                                <Text className="text-[11px] text-[#94A3B8]">Service Name</Text>
-                                <Text className="text-sm font-semibold text-[#0F172A] mt-0.5">{service}</Text>
+                            <View style={{ marginBottom: 12 }}>
+                                <Text style={{ fontSize: 12, fontFamily: "Poppins_500Medium", color: COLORS.textLight }}>Service Name</Text>
+                                <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, marginTop: 2 }}>{service}</Text>
                             </View>
 
-                            <View className="mt-2">
-                                <Text className="text-[11px] text-[#94A3B8]">Date</Text>
-                                <Text className="text-sm font-semibold text-[#0F172A] mt-0.5">{formattedDate}</Text>
+                            <View>
+                                <Text style={{ fontSize: 12, fontFamily: "Poppins_500Medium", color: COLORS.textLight }}>Date</Text>
+                                <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, marginTop: 2 }}>{formattedDate}</Text>
                             </View>
                         </View>
 
                         <TouchableOpacity
-                            className="bg-[#22C1E6] rounded-xl py-3 mt-4 items-center"
+                            style={{ backgroundColor: COLORS.primary, borderRadius: 16, paddingVertical: 14, marginTop: 24, alignItems: "center" }}
                             onPress={() => {
                                 setShowSuccessPopup(false);
                                 router.replace('/(dashboard)/profile-pages/my-services');
                             }}
                         >
-                            <Text className="text-white text-sm font-bold">View My Requests {'->'}</Text>
+                            <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: "Poppins_700Bold" }}>View My Requests {'->'}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            className="bg-white border border-[#DCE5EF] rounded-xl py-3 mt-2 items-center"
+                            style={{ backgroundColor: COLORS.white, borderWidth: 1, borderColor: COLORS.border, borderRadius: 16, paddingVertical: 14, marginTop: 12, alignItems: "center" }}
                             onPress={() => {
                                 setShowSuccessPopup(false);
                                 router.replace('/(dashboard)/home');
                             }}
                         >
-                            <Text className="text-sm font-semibold text-[#334155]">Back to Home</Text>
+                            <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textGray }}>Back to Home</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

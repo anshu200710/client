@@ -1,8 +1,36 @@
 import React, { useMemo, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+
+// Match Dashboard/Auth Colors
+const COLORS = {
+  primary: "#0066CC",
+  secondary: "#FF9900",
+  success: "#28A745",
+  alertRed: "#DC3545",
+  alertAmber: "#FFC107",
+  lightGrey: "#F8F9FA",
+  white: "#FFFFFF",
+  textDark: "#1A1D2E",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+  
+  // Custom pastels matching home.tsx
+  actionBlueBg: "#EFF6FF",
+  actionPurpleBg: "#F5F3FF",
+  actionPurpleIcon: "#8B5CF6",
+  actionGreenBg: "#ECFDF5",
+  actionGreenIcon: "#10B981",
+  actionRedBg: "#FEF2F2",
+  actionRedIcon: "#EF4444",
+  actionYellowBg: "#FFFBEB",
+  actionYellowIcon: "#F59E0B",
+  actionGreyBg: "#F8FAFC",
+  actionGreyIcon: "#94A3B8",
+};
 
 const docOptions = ['PAN Card', 'Aadhar Card', 'Business Proof', 'Bank Statement'];
 
@@ -23,78 +51,106 @@ export default function ServiceRequestFormScreen() {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }} edges={['top']}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            <View className="px-5 pt-2 pb-4 flex-row items-center">
+            {/* Header */}
+            <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: "row", alignItems: "center" }}>
                 <TouchableOpacity
                     onPress={() => router.back()}
-                    className="w-10 h-10 rounded-full bg-white items-center justify-center border border-[#E5EAF0]"
+                    style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.lightGrey, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: COLORS.border }}
                 >
-                    <Ionicons name="chevron-back" size={20} color="#0F172A" />
+                    <Ionicons name="chevron-back" size={20} color={COLORS.textDark} />
                 </TouchableOpacity>
-                <Text className="text-lg font-bold text-[#0F172A] ml-3">Request {service}</Text>
+                <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginLeft: 16 }}>Request {service}</Text>
             </View>
 
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] p-4 mb-4">
-                    <Text className="text-xs text-[#94A3B8] font-semibold mb-2">SERVICE</Text>
-                    <Text className="text-[15px] font-semibold text-[#0F172A]">{service}</Text>
-                    <Text className="text-xs text-[#64748B] mt-1">Your request will be submitted to admin for verification.</Text>
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
+                
+                {/* Image Banner */}
+                <View style={{ width: '100%', height: 160, borderRadius: 20, overflow: 'hidden', marginBottom: 24 }}>
+                    <Image 
+                        source={require('../../../assets/images/splash3.png')} 
+                        style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
+                    />
                 </View>
 
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] p-4 mb-4">
-                    <Text className="text-xs text-[#94A3B8] font-semibold mb-2">BUSINESS NAME</Text>
+                {/* Service Details */}
+                <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 8, letterSpacing: 0.5 }}>SERVICE</Text>
+                    <Text style={{ fontSize: 18, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 4 }}>{service}</Text>
+                    <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray }}>Your request will be submitted to admin for verification.</Text>
+                </View>
+
+                {/* Form Inputs */}
+                <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 8, letterSpacing: 0.5 }}>BUSINESS NAME</Text>
                     <TextInput
-                        className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3 py-3 text-[#0F172A] mb-4"
+                        style={{ backgroundColor: COLORS.lightGrey, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 14, fontSize: 15, fontFamily: "Poppins_400Regular", color: COLORS.textDark, marginBottom: 16, outlineStyle: "none" as any }}
                         value={businessName}
                         onChangeText={setBusinessName}
                         placeholder="Enter business name"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={COLORS.textLight}
                     />
 
-                    <Text className="text-xs text-[#94A3B8] font-semibold mb-2">CONTACT NUMBER</Text>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 8, letterSpacing: 0.5 }}>CONTACT NUMBER</Text>
                     <TextInput
-                        className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3 py-3 text-[#0F172A]"
+                        style={{ backgroundColor: COLORS.lightGrey, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 14, fontSize: 15, fontFamily: "Poppins_400Regular", color: COLORS.textDark, outlineStyle: "none" as any }}
                         value={contactNumber}
                         onChangeText={setContactNumber}
                         keyboardType="phone-pad"
                         placeholder="Enter phone number"
-                        placeholderTextColor="#94A3B8"
+                        placeholderTextColor={COLORS.textLight}
                     />
                 </View>
 
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] p-4 mb-4">
-                    <Text className="text-xs text-[#94A3B8] font-semibold mb-3">UPLOAD REQUIRED DOCUMENTS</Text>
+                {/* Document Uploads */}
+                <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textLight, marginBottom: 12, letterSpacing: 0.5 }}>UPLOAD REQUIRED DOCUMENTS</Text>
                     {docOptions.map((doc) => {
                         const selected = selectedDocs.includes(doc);
                         return (
                             <TouchableOpacity
                                 key={doc}
                                 onPress={() => toggleDoc(doc)}
-                                className={`rounded-xl border px-3 py-3 mb-2 flex-row items-center justify-between ${selected ? 'border-[#0066CC] bg-[#EFF6FF]' : 'border-[#E5EAF0] bg-white'}`}
+                                style={{
+                                    borderRadius: 16,
+                                    borderWidth: 1,
+                                    paddingHorizontal: 16,
+                                    paddingVertical: 14,
+                                    marginBottom: 12,
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    borderColor: selected ? COLORS.primary : COLORS.border,
+                                    backgroundColor: selected ? COLORS.actionBlueBg : COLORS.white
+                                }}
                             >
-                                <View className="flex-row items-center">
-                                    <Ionicons name="document-text-outline" size={16} color={selected ? '#0066CC' : '#64748B'} />
-                                    <Text className={`ml-2 text-sm ${selected ? 'text-[#0F172A] font-semibold' : 'text-[#334155]'}`}>{doc}</Text>
+                                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                    <Ionicons name="document-text-outline" size={18} color={selected ? COLORS.primary : COLORS.textGray} />
+                                    <Text style={{ marginLeft: 12, fontSize: 14, fontFamily: selected ? "Poppins_600SemiBold" : "Poppins_500Medium", color: selected ? COLORS.textDark : COLORS.textGray }}>{doc}</Text>
                                 </View>
-                                <View className={`px-2 py-1 rounded-md ${selected ? 'bg-[#DBEAFE]' : 'bg-[#F1F5F9]'}`}>
-                                    <Text className={`text-[11px] font-semibold ${selected ? 'text-[#1D4ED8]' : 'text-[#64748B]'}`}>
+                                <View style={{ paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, backgroundColor: selected ? "rgba(0, 102, 204, 0.15)" : COLORS.lightGrey }}>
+                                    <Text style={{ fontSize: 11, fontFamily: "Poppins_600SemiBold", color: selected ? COLORS.primary : COLORS.textLight }}>
                                         {selected ? 'Uploaded' : 'Upload'}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
                         );
                     })}
-                    <Text className="text-[11px] text-[#94A3B8] mt-1">Selected: {selectedDocs.length} documents</Text>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_500Medium", color: COLORS.textLight, marginTop: 4 }}>Selected: {selectedDocs.length} documents</Text>
                 </View>
 
-                <View className="bg-[#FFF8EE] rounded-2xl border border-[#F8D8A8] p-4 mb-4">
-                    <Text className="text-xs text-[#B45309] font-semibold">PAYMENT DUE</Text>
-                    <Text className="text-[24px] font-bold text-[#0F172A] mt-1">Rs{fee}</Text>
-                    <Text className="text-xs text-[#92400E] mt-1">Pay now to complete and send request to admin.</Text>
+                {/* Payment Summary */}
+                <View style={{ backgroundColor: COLORS.actionYellowBg, borderRadius: 20, borderWidth: 1, borderColor: COLORS.actionYellowIcon, padding: 20, marginBottom: 24 }}>
+                    <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.actionYellowIcon, marginBottom: 4 }}>PAYMENT DUE</Text>
+                    <Text style={{ fontSize: 28, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 4 }}>
+                        {fee === '0' || fee === 'Free' ? 'Free' : `₹${fee}`}
+                    </Text>
+                    <Text style={{ fontSize: 13, fontFamily: "Poppins_500Medium", color: "#92400E" }}>Pay now to complete and send request to admin.</Text>
                 </View>
 
+                {/* Continue Button */}
                 <TouchableOpacity
                     onPress={() =>
                         router.push({
@@ -103,9 +159,14 @@ export default function ServiceRequestFormScreen() {
                         })
                     }
                     disabled={!canProceed}
-                    className={`rounded-2xl py-4 items-center ${canProceed ? 'bg-[#0066CC]' : 'bg-[#93C5FD]'}`}
+                    style={{
+                        borderRadius: 20,
+                        paddingVertical: 16,
+                        alignItems: "center",
+                        backgroundColor: canProceed ? COLORS.primary : COLORS.textLight
+                    }}
                 >
-                    <Text className="text-white text-sm font-bold">Continue to Payment</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 15, fontFamily: "Poppins_700Bold" }}>Continue to Payment</Text>
                 </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>

@@ -1,8 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
+
+// Match Dashboard/Auth Colors
+const COLORS = {
+  primary: "#0066CC",
+  secondary: "#FF9900",
+  success: "#28A745",
+  alertRed: "#DC3545",
+  alertAmber: "#FFC107",
+  lightGrey: "#F8F9FA",
+  white: "#FFFFFF",
+  textDark: "#1A1D2E",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+  
+  // Custom pastels matching home.tsx
+  actionBlueBg: "#EFF6FF",
+  actionPurpleBg: "#F5F3FF",
+  actionPurpleIcon: "#8B5CF6",
+  actionGreenBg: "#ECFDF5",
+  actionGreenIcon: "#10B981",
+  actionRedBg: "#FEF2F2",
+  actionRedIcon: "#EF4444",
+  actionYellowBg: "#FFFBEB",
+  actionYellowIcon: "#F59E0B",
+  actionGreyBg: "#F8FAFC",
+  actionGreyIcon: "#94A3B8",
+};
 
 type ServiceItem = {
     title: string;
@@ -22,8 +50,8 @@ const services: ServiceItem[] = [
         feeLabel: 'Starting from',
         fee: '999',
         icon: 'document-text',
-        iconBg: 'bg-[#E8F2FF]',
-        iconColor: '#2563EB',
+        iconBg: COLORS.actionBlueBg,
+        iconColor: COLORS.primary,
         popular: true,
     },
     {
@@ -32,8 +60,8 @@ const services: ServiceItem[] = [
         feeLabel: 'Starting from',
         fee: '499',
         icon: 'business',
-        iconBg: 'bg-[#EAFBF2]',
-        iconColor: '#059669',
+        iconBg: COLORS.actionGreenBg,
+        iconColor: COLORS.actionGreenIcon,
     },
     {
         title: 'Udyam Registration',
@@ -41,8 +69,8 @@ const services: ServiceItem[] = [
         feeLabel: 'Government Fee',
         fee: 'Free',
         icon: 'grid',
-        iconBg: 'bg-[#F2EAFE]',
-        iconColor: '#9333EA',
+        iconBg: COLORS.actionPurpleBg,
+        iconColor: COLORS.actionPurpleIcon,
     },
     {
         title: 'Trademark Registration',
@@ -50,8 +78,8 @@ const services: ServiceItem[] = [
         feeLabel: 'Starting from',
         fee: '4,999',
         icon: 'shield-checkmark',
-        iconBg: 'bg-[#FFF5E8]',
-        iconColor: '#EA580C',
+        iconBg: COLORS.actionYellowBg,
+        iconColor: COLORS.actionYellowIcon,
     },
     {
         title: 'Shop Act License',
@@ -59,43 +87,66 @@ const services: ServiceItem[] = [
         feeLabel: 'Starting from',
         fee: '1,499',
         icon: 'storefront',
-        iconBg: 'bg-[#E6FCF5]',
-        iconColor: '#0F766E',
+        iconBg: COLORS.actionGreyBg,
+        iconColor: COLORS.actionGreyIcon,
     },
 ];
 
 const CategoryChip = ({ label, active }: { label: string; active?: boolean }) => (
-    <TouchableOpacity className={`px-4 py-2 rounded-full mr-2 ${active ? 'bg-[#2A83E8]' : 'bg-[#EFF3F8]'}`}>
-        <Text className={`text-xs font-semibold ${active ? 'text-white' : 'text-[#475569]'}`}>{label}</Text>
+    <TouchableOpacity style={{
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 24,
+        marginRight: 12,
+        backgroundColor: active ? COLORS.primary : COLORS.lightGrey,
+    }}>
+        <Text style={{
+            fontSize: 13,
+            fontFamily: "Poppins_600SemiBold",
+            color: active ? COLORS.white : COLORS.textGray
+        }}>
+            {label}
+        </Text>
     </TouchableOpacity>
 );
 
 export default function ServicesScreen() {
     const router = useRouter();
+    const [searchQuery, setSearchQuery] = useState("");
 
     return (
-        <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }} edges={['top']}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            <View className="px-5 pt-2 pb-3 flex-row items-center justify-between bg-white border-b border-[#E8EDF3]">
-                <Text className="text-[30px] font-bold text-[#0F172A]">Services</Text>
-                <TouchableOpacity className="w-9 h-9 rounded-full items-center justify-center" onPress={() => router.push('/(dashboard)/notifications')}>
-                    <Ionicons name="notifications-outline" size={20} color="#475569" />
+            {/* Header */}
+            <View style={{ paddingHorizontal: 24, paddingVertical: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <Text style={{ fontSize: 28, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Services</Text>
+                <TouchableOpacity
+                    onPress={() => router.push('/(dashboard)/notifications')}
+                    style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.lightGrey, alignItems: "center", justifyContent: "center" }}
+                >
+                    <Ionicons name="notifications-outline" size={20} color={COLORS.textDark} />
                 </TouchableOpacity>
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 110 }}>
-                <View className="px-4 py-3 bg-white border-b border-[#E8EDF3]">
-                    <View className="bg-[#F1F5F9] rounded-xl border border-[#DEE6F0] px-3 py-2.5 flex-row items-center">
-                        <Ionicons name="search" size={16} color="#94A3B8" />
+                {/* Search & Filter Header (Sticky-like) */}
+                <View style={{ paddingHorizontal: 24, paddingBottom: 16, backgroundColor: COLORS.white }}>
+                    
+                    {/* Search Bar - Matches Dashboard */}
+                    <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: COLORS.lightGrey, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 14, marginBottom: 16 }}>
+                        <Ionicons name="search" size={20} color={COLORS.textLight} style={{ marginRight: 10 }} />
                         <TextInput
-                            className="ml-2 flex-1 text-sm text-[#334155]"
                             placeholder="Search for GST, ITR, etc."
-                            placeholderTextColor="#94A3B8"
+                            placeholderTextColor={COLORS.textLight}
+                            value={searchQuery}
+                            onChangeText={setSearchQuery}
+                            style={{ flex: 1, fontSize: 15, fontFamily: "Poppins_400Regular", color: COLORS.textDark, outlineStyle: "none" as any }}
                         />
                     </View>
 
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-3">
+                    {/* Chips */}
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingRight: 24 }}>
                         <CategoryChip label="All" active />
                         <CategoryChip label="Tax Filing" />
                         <CategoryChip label="Registration" />
@@ -103,39 +154,49 @@ export default function ServicesScreen() {
                     </ScrollView>
                 </View>
 
-                <View className="px-3 pt-3">
+                {/* Services List */}
+                <View style={{ paddingHorizontal: 24, paddingTop: 8 }}>
                     {services.map((item) => (
-                        <View key={item.title} className="bg-white rounded-2xl border border-[#E5EAF0] px-3.5 py-3.5 mb-3">
-                            <View className="flex-row items-start">
-                                <View className={`w-9 h-9 rounded-lg items-center justify-center mr-3 ${item.iconBg}`}>
-                                    <Ionicons name={item.icon} size={16} color={item.iconColor} />
+                        <View key={item.title} style={{
+                            backgroundColor: COLORS.white,
+                            borderRadius: 20,
+                            padding: 16,
+                            marginBottom: 16,
+                            borderWidth: 1,
+                            borderColor: COLORS.border
+                        }}>
+                            {/* Card Top / Header */}
+                            <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
+                                <View style={{ width: 44, height: 44, borderRadius: 16, backgroundColor: item.iconBg, alignItems: "center", justifyContent: "center", marginRight: 16 }}>
+                                    <Ionicons name={item.icon} size={22} color={item.iconColor} />
                                 </View>
 
-                                <View className="flex-1">
-                                    <View className="flex-row items-center flex-wrap">
-                                        <Text className="text-[15px] font-bold text-[#0F172A]">{item.title}</Text>
+                                <View style={{ flex: 1 }}>
+                                    <View style={{ flexDirection: "row", alignItems: "center", flexWrap: "wrap", marginBottom: 2 }}>
+                                        <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>{item.title}</Text>
                                         {item.popular && (
-                                            <View className="ml-2 bg-[#FFE7C2] rounded-full px-2 py-0.5">
-                                                <Text className="text-[9px] font-bold text-[#C2410C]">POPULAR</Text>
+                                            <View style={{ marginLeft: 8, backgroundColor: COLORS.actionYellowBg, borderRadius: 12, paddingHorizontal: 8, paddingVertical: 2 }}>
+                                                <Text style={{ fontSize: 9, fontFamily: "Poppins_700Bold", color: COLORS.actionYellowIcon, letterSpacing: 0.5 }}>POPULAR</Text>
                                             </View>
                                         )}
                                     </View>
-                                    <Text className="text-xs text-[#64748B] mt-0.5 leading-4">{item.subtitle}</Text>
+                                    <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray, lineHeight: 20 }}>{item.subtitle}</Text>
                                 </View>
                             </View>
 
-                            <View className="h-[1px] bg-[#EEF2F7] my-3" />
+                            <View style={{ height: 1, backgroundColor: COLORS.border, marginVertical: 16 }} />
 
-                            <View className="flex-row items-end justify-between">
+                            {/* Card Bottom / Actions */}
+                            <View style={{ flexDirection: "row", alignItems: "flex-end", justifyContent: "space-between" }}>
                                 <View>
-                                    <Text className="text-[11px] text-[#94A3B8]">{item.feeLabel}</Text>
-                                    <Text className="text-[24px] font-bold text-[#0066CC]">
-                                        {item.fee === 'Free' ? item.fee : `Rs${item.fee}`}
+                                    <Text style={{ fontSize: 12, fontFamily: "Poppins_500Medium", color: COLORS.textLight, marginBottom: 2 }}>{item.feeLabel}</Text>
+                                    <Text style={{ fontSize: 22, fontFamily: "Poppins_700Bold", color: COLORS.primary }}>
+                                        {item.fee === 'Free' ? item.fee : `₹${item.fee}`}
                                     </Text>
                                 </View>
 
                                 <TouchableOpacity
-                                    className="bg-[#2A83E8] rounded-xl px-4 py-2.5"
+                                    style={{ backgroundColor: COLORS.primary, borderRadius: 14, paddingHorizontal: 24, paddingVertical: 12 }}
                                     onPress={() =>
                                         router.push({
                                             pathname: '/(dashboard)/service-pages/request-form',
@@ -143,7 +204,7 @@ export default function ServicesScreen() {
                                         })
                                     }
                                 >
-                                    <Text className="text-white text-xs font-bold">Request</Text>
+                                    <Text style={{ color: COLORS.white, fontSize: 13, fontFamily: "Poppins_700Bold" }}>Request</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
