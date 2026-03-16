@@ -1,0 +1,17 @@
+:root {
+  /* Theme Colors */
+  --color-primary: #1E4FA3;
+  --color-secondary: #2ECC71;
+  
+  --color-gradient-start: #1E4FA3;
+  --color-gradient-end: #2ECC71;
+  
+  --color-background: #F5F7FB;
+  --color-card-background: #FFFFFF;
+  --color-text: #1A1A1A;
+
+  /* Status Colors */
+  --color-success: #22c55e;
+  --color-alert: #ef4444;
+  --color-light-grey: #F9FAFB;
+}

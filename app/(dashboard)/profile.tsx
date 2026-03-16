@@ -6,7 +6,7 @@ import { Stack, useRouter } from 'expo-router';
 
 const StatBlock = ({ value, label, accent }: { value: string; label: string; accent?: string }) => (
     <View className="items-center flex-1">
-        <Text className={`text-2xl font-bold ${accent ?? 'text-[#0F172A]'}`}>{value}</Text>
+        <Text className={`text-textxl font-bold ${accent ?? 'text-[#0F172A]'}`}>{value}</Text>
         <Text className="text-[10px] tracking-wide text-[#94A3B8] font-semibold mt-1">{label}</Text>
     </View>
 );
@@ -56,7 +56,7 @@ export default function ProfileScreen() {
                 <View className="bg-[#EAF8FF] rounded-3xl border border-[#DFECF5] px-4 pt-5 pb-4 shadow-sm">
                     <View className="items-center">
                         <View className="relative">
-                            <View className="w-24 h-24 rounded-full border-2 border-[#7DD3FC] bg-white items-center justify-center overflow-hidden">
+                            <View className="w-24 h-24 rounded-full border-2 border-[#7DD3FC] bg-card items-center justify-center overflow-hidden">
                                 <Image
                                     source={{ uri: 'https://i.pravatar.cc/200?img=32' }}
                                     className="w-full h-full"
@@ -83,7 +83,7 @@ export default function ProfileScreen() {
                 </View>
 
                 <Text className="text-xs text-[#9AA6B2] font-bold tracking-wide mt-6 mb-2 px-1">ACCOUNT SETTINGS</Text>
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] px-3">
+                <View className="bg-card rounded-2xl border border-[#E5EAF0] px-3">
                     <ProfileRow
                         icon="reader-outline"
                         iconBg="bg-[#E8F8FE]"
@@ -126,7 +126,7 @@ export default function ProfileScreen() {
                 </View>
 
                 <Text className="text-xs text-[#9AA6B2] font-bold tracking-wide mt-6 mb-2 px-1">SUPPORT & MORE</Text>
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] px-3">
+                <View className="bg-card rounded-2xl border border-[#E5EAF0] px-3">
                     <ProfileRow
                         icon="help-circle-outline"
                         iconBg="bg-[#EEF5FF]"

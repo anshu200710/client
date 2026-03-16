@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 
 const FilterChip = ({ label, active }: { label: string; active?: boolean }) => (
-    <TouchableOpacity className={`px-4 py-2 rounded-full mr-2 border ${active ? 'bg-[#2A83E8] border-[#2A83E8]' : 'bg-white border-[#D7E0EA]'}`}>
+    <TouchableOpacity className={`px-4 py-2 rounded-full mr-2 border ${active ? 'bg-[#2A83E8] border-[#2A83E8]' : 'bg-card border-[#D7E0EA]'}`}>
         <Text className={`text-xs font-semibold ${active ? 'text-white' : 'text-[#475569]'}`}>{label}</Text>
     </TouchableOpacity>
 );
@@ -17,7 +17,7 @@ export default function OffersScreen() {
         <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            <View className="px-5 pt-2 pb-3 bg-white border-b border-[#E8EDF3]">
+            <View className="px-5 pt-2 pb-3 bg-card border-b border-[#E8EDF3]">
                 <View className="flex-row items-center justify-between">
                     <View>
                         <Text className="text-[30px] font-bold text-[#0F172A]">Offers & Freebies</Text>
@@ -43,7 +43,7 @@ export default function OffersScreen() {
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 10, paddingTop: 10, paddingBottom: 120 }}>
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] overflow-hidden mb-3">
+                <View className="bg-card rounded-2xl border border-[#E5EAF0] overflow-hidden mb-3">
                     <View className="bg-[#E9EEF8] px-3 py-2.5 flex-row items-center justify-between">
                         <View className="flex-row items-center">
                             <View className="w-8 h-8 rounded-lg bg-[#DFE9FF] items-center justify-center mr-2">
@@ -74,7 +74,7 @@ export default function OffersScreen() {
                     </View>
                 </View>
 
-                <View className="bg-white rounded-2xl border border-[#2A83E8] p-3.5 mb-3">
+                <View className="bg-card rounded-2xl border border-[#2A83E8] p-3.5 mb-3">
                     <View className="flex-row items-center justify-between">
                         <View className="flex-row items-center">
                             <View className="w-8 h-8 rounded-full bg-[#DCFCE7] items-center justify-center mr-2">
@@ -108,7 +108,7 @@ export default function OffersScreen() {
                         <View className="bg-[#A78BFA] px-2 py-0.5 rounded">
                             <Text className="text-[9px] font-bold text-white">FREEBIE</Text>
                         </View>
-                        <View className="w-8 h-8 rounded-lg bg-white items-center justify-center">
+                        <View className="w-8 h-8 rounded-lg bg-card items-center justify-center">
                             <Ionicons name="qr-code" size={15} color="#6D28D9" />
                         </View>
                     </View>
@@ -116,7 +116,7 @@ export default function OffersScreen() {
                     <Text className="text-[29px] font-bold text-white mt-4">Free Digital Business Card</Text>
                     <Text className="text-xs text-[#E9D5FF] mt-2">Create a professional digital identity for your business. Shareable on WhatsApp instantly.</Text>
 
-                    <TouchableOpacity className="bg-white rounded-xl py-3 items-center mt-5">
+                    <TouchableOpacity className="bg-card rounded-xl py-3 items-center mt-5">
                         <Text className="text-[#6D28D9] text-xs font-bold">Create Now -></Text>
                     </TouchableOpacity>
 

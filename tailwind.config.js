@@ -6,12 +6,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#0066CC",     // Royal Blue
-        secondary: "#FF9900",   // Saffron
-        success: "#22c55e",     // Green
-        alert: "#ef4444",       // Red
-        amber: "#f59e0b",       // Amber
-        background: "#F9FAFB",  // Light Grey
+        primary: "#1E4FA3",
+        secondary: "#2ECC71",
+        background: "#F5F7FB",
+        card: "#FFFFFF",
+        text: "#1A1A1A",
+        success: "#22c55e",
+        alert: "#ef4444",
+        "light-grey": "#F9FAFB",
       }
     },
   },

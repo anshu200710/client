@@ -53,7 +53,7 @@ const tools: ToolItem[] = [
 const QuickAction = ({ iconName, iconColor, bg, label, onPress }: any) => (
   <TouchableOpacity
     onPress={onPress}
-    className="flex-1 mx-1.5 items-center bg-white rounded-2xl py-5 border border-[#E5EAF0] shadow-sm"
+    className="flex-1 mx-1.5 items-center bg-card rounded-2xl py-5 border border-[#E5EAF0] shadow-sm"
   >
     <View
       className={`w-12 h-12 rounded-full items-center justify-center mb-2 ${bg}`}
@@ -75,10 +75,10 @@ export default function ToolsScreen() {
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* Header */}
-      <View className="px-5 pt-2 pb-3 flex-row items-center justify-between bg-white border-b border-[#E5EAF0]">
+      <View className="px-5 pt-2 pb-3 flex-row items-center justify-between bg-card border-b border-[#E5EAF0]">
         <View>
           <Text className="text-sm text-gray-500 font-medium">Tools &</Text>
-          <Text className="text-2xl font-bold text-gray-900">Utilities</Text>
+          <Text className="text-textxl font-bold text-text">Utilities</Text>
         </View>
         <TouchableOpacity
           className="w-9 h-9 rounded-full items-center justify-center"
@@ -94,7 +94,7 @@ export default function ToolsScreen() {
         contentContainerStyle={{ paddingBottom: 130 }}
       >
         {/* Hero Section */}
-        <View className="px-5 py-6 bg-gradient-to-r from-blue-50 to-blue-100">
+        <View className="px-5 py-6 bg-gradient-to-r from-blue-50 to-primary/10">
           <View className="flex-row items-start">
             <Ionicons
               name="calculator"
@@ -103,7 +103,7 @@ export default function ToolsScreen() {
               style={{ marginRight: 12 }}
             />
             <View className="flex-1">
-              <Text className="text-xl font-bold text-gray-900">
+              <Text className="text-xl font-bold text-text">
                 Calculators
               </Text>
               <Text className="text-sm text-gray-600 mt-1">
@@ -137,7 +137,7 @@ export default function ToolsScreen() {
                 onPress={handlePress}
                 activeOpacity={0.7}
               >
-                <View className="bg-white rounded-2xl border border-[#E5EAF0] px-4 py-4 mb-3 flex-row items-start active:bg-[#F8FAFC]">
+                <View className="bg-card rounded-2xl border border-[#E5EAF0] px-4 py-4 mb-3 flex-row items-start active:bg-[#F8FAFC]">
                   <View
                     className={`w-12 h-12 rounded-xl items-center justify-center mr-4 ${tool.iconBg} flex-shrink-0`}
                   >
@@ -149,7 +149,7 @@ export default function ToolsScreen() {
                   </View>
 
                   <View className="flex-1">
-                    <Text className="text-[15px] font-bold text-gray-900 mb-1">
+                    <Text className="text-[15px] font-bold text-text mb-1">
                       {tool.title}
                     </Text>
                     <Text className="text-xs text-gray-500 leading-4">

@@ -5,9 +5,10 @@ import { Platform, TouchableOpacity, View } from "react-native";
 
 // Custom colors from auth flow / modern dashboard
 const COLORS = {
-  primary: "#2B5AFF", // Bright modern blue from screenshot banner
-  textLight: "#9FA3B1",
-  textDark: "#1A1D2E"
+  primary: "#1E4FA3", // New Primary
+  secondary: "#2ECC71", // New Secondary
+  textLight: "#9FA3B1", // Kept for inactive tabs
+  textDark: "#1A1A1A" // New text
 };
 
 // Custom Add Button Component for the center tab

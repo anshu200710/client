@@ -13,14 +13,14 @@ import { Ionicons } from "@expo/vector-icons";
 
 // Match login.tsx colors
 const COLORS = {
-  primary: "#0066CC",
-  secondary: "#FF9900",
-  success: "#28A745",
-  alertRed: "#DC3545",
+  primary: "#1E4FA3",
+  secondary: "#2ECC71",
+  success: "#22c55e",
+  alertRed: "#ef4444",
   alertAmber: "#FFC107",
-  lightGrey: "#F8F9FA",
+  lightGrey: "#F5F7FB", // Using newly requested Background color for lightGrey to ensure UI adoption
   white: "#FFFFFF",
-  textDark: "#1A1D2E",
+  textDark: "#1A1A1A",
   textGray: "#666666",
   textLight: "#9FA3B1",
   border: "#E4E7EF",
