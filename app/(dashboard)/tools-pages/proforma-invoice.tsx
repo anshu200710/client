@@ -1,5 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
+import React, { useState } from "react";
 import {
     Alert,
     KeyboardAvoidingView,
@@ -9,210 +10,548 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const InputField = ({ label, placeholder, value, onChangeText, keyboardType = 'default' }: any) => (
-    <View className="mb-4">
-        <Text className="text-sm font-semibold text-gray-700 mb-2">{label}</Text>
-        <TextInput
-            placeholder={placeholder}
-            placeholderTextColor="#94A3B8"
-            value={value}
-            onChangeText={onChangeText}
-            keyboardType={keyboardType}
-            className="border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium text-base"
-        />
-    </View>
+const COLORS = {
+  primary: "#1E4FA3",
+  secondary: "#2ECC71",
+  success: "#22c55e",
+  alertRed: "#ef4444",
+  alertAmber: "#FFC107",
+  lightGrey: "#F5F7FB",
+  white: "#FFFFFF",
+  textDark: "#1A1A1A",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+};
+
+const InputField = ({
+  label,
+  placeholder,
+  value,
+  onChangeText,
+  keyboardType = "default",
+}: any) => (
+  <View style={{ marginBottom: 16 }}>
+    <Text
+      style={{
+        fontSize: 14,
+        fontFamily: "Poppins_600SemiBold",
+        color: COLORS.textGray,
+        marginBottom: 8,
+      }}
+    >
+      {label}
+    </Text>
+    <TextInput
+      placeholder={placeholder}
+      placeholderTextColor={COLORS.textLight}
+      value={value}
+      onChangeText={onChangeText}
+      keyboardType={keyboardType}
+      style={{
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        color: COLORS.textDark,
+        fontFamily: "Poppins_500Medium",
+        fontSize: 16,
+      }}
+    />
+  </View>
 );
 
 export default function ProformaInvoiceScreen() {
-    const [formData, setFormData] = useState({
-        clientName: '',
-        clientEmail: '',
-        deliveryDate: '',
-        proformaNo: 'PI-' + Date.now().toString().slice(-6),
-        date: new Date().toISOString().split('T')[0],
-        itemDescription: '',
-        quantity: '1',
-        rate: '',
-        notes: 'Payment terms: 50% advance, 50% on delivery',
-    });
+  const [formData, setFormData] = useState({
+    clientName: "",
+    clientEmail: "",
+    deliveryDate: "",
+    proformaNo: "PI-" + Date.now().toString().slice(-6),
+    date: new Date().toISOString().split("T")[0],
+    itemDescription: "",
+    quantity: "1",
+    rate: "",
+    notes: "Payment terms: 50% advance, 50% on delivery",
+  });
 
-    const calculateTotals = () => {
-        const rate = parseFloat(formData.rate) || 0;
-        const quantity = parseFloat(formData.quantity) || 0;
-        const subtotal = rate * quantity;
-        return {
-            subtotal: subtotal.toFixed(2),
-        };
+  const calculateTotals = () => {
+    const rate = parseFloat(formData.rate) || 0;
+    const quantity = parseFloat(formData.quantity) || 0;
+    const subtotal = rate * quantity;
+    return {
+      subtotal: subtotal.toFixed(2),
     };
+  };
 
-    const handleGenerateProforma = () => {
-        if (!formData.clientName || !formData.itemDescription || !formData.rate) {
-            Alert.alert('Missing Information', 'Please fill all required fields');
-            return;
-        }
-
-        const totals = calculateTotals();
-
-        Alert.alert(
-            'Proforma Invoice Created',
-            `Proforma #${formData.proformaNo}\n\nClient: ${formData.clientName}\nAmount: ₹${totals.subtotal}\n\nProforma invoice generated! Ready to send to customer before delivery.`,
-            [{ text: 'OK', onPress: () => {} }]
-        );
-    };
+  const handleGenerateProforma = () => {
+    if (!formData.clientName || !formData.itemDescription || !formData.rate) {
+      Alert.alert("Missing Information", "Please fill all required fields");
+      return;
+    }
 
     const totals = calculateTotals();
 
-    return (
-        <SafeAreaView className="flex-1 bg-[#F8FAFC]" edges={['bottom']}>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                className="flex-1"
-            >
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
-                    {/* Info Banner */}
-                    <View className="mx-4 mt-4 bg-[#F0FDF4] border border-[#86EFAC] rounded-xl p-3.5 flex-row items-start mb-6">
-                        <Ionicons name="information-circle" size={18} color="#166534" style={{ marginRight: 10, marginTop: 2 }} />
-                        <Text className="text-xs text-[#166534] font-medium leading-4 flex-1">
-                            Create preliminary bills to send to customers before delivery. Great for confirming orders.
-                        </Text>
-                    </View>
-
-                    {/* Form Section */}
-                    <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-                        <Text className="text-lg font-bold text-gray-900 mb-4">Customer Information</Text>
-
-                        <InputField
-                            label="Customer Name *"
-                            placeholder="Enter customer name"
-                            value={formData.clientName}
-                            onChangeText={(text: string) =>
-                                setFormData({ ...formData, clientName: text })
-                            }
-                        />
-
-                        <InputField
-                            label="Customer Email"
-                            placeholder="customer@example.com"
-                            value={formData.clientEmail}
-                            onChangeText={(text: string) =>
-                                setFormData({ ...formData, clientEmail: text })
-                            }
-                        />
-
-                        <InputField
-                            label="Expected Delivery Date"
-                            placeholder="YYYY-MM-DD"
-                            value={formData.deliveryDate}
-                            onChangeText={(text: string) =>
-                                setFormData({ ...formData, deliveryDate: text })
-                            }
-                        />
-
-                        <View className="flex-row gap-3">
-                            <View className="flex-1">
-                                <Text className="text-sm font-semibold text-gray-700 mb-2">Proforma #</Text>
-                                <View className="border border-[#E5EAF0] rounded-xl px-4 py-3 bg-gray-50">
-                                    <Text className="text-gray-600 font-medium">{formData.proformaNo}</Text>
-                                </View>
-                            </View>
-                            <View className="flex-1">
-                                <Text className="text-sm font-semibold text-gray-700 mb-2">Date</Text>
-                                <View className="border border-[#E5EAF0] rounded-xl px-4 py-3 bg-gray-50">
-                                    <Text className="text-gray-600 font-medium">{formData.date}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* Items Section */}
-                    <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-                        <Text className="text-lg font-bold text-gray-900 mb-4">Item Details</Text>
-
-                        <InputField
-                            label="Item Description *"
-                            placeholder="e.g., Custom Furniture Set"
-                            value={formData.itemDescription}
-                            onChangeText={(text: string) =>
-                                setFormData({ ...formData, itemDescription: text })
-                            }
-                        />
-
-                        <View className="flex-row gap-3 mb-4">
-                            <View className="flex-1">
-                                <Text className="text-sm font-semibold text-gray-700 mb-2">Quantity</Text>
-                                <TextInput
-                                    placeholder="1"
-                                    placeholderTextColor="#94A3B8"
-                                    value={formData.quantity}
-                                    onChangeText={(text: string) =>
-                                        setFormData({ ...formData, quantity: text })
-                                    }
-                                    keyboardType="decimal-pad"
-                                    className="border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium"
-                                />
-                            </View>
-                            <View className="flex-1">
-                                <Text className="text-sm font-semibold text-gray-700 mb-2">Rate *</Text>
-                                <TextInput
-                                    placeholder="0.00"
-                                    placeholderTextColor="#94A3B8"
-                                    value={formData.rate}
-                                    onChangeText={(text: string) =>
-                                        setFormData({ ...formData, rate: text })
-                                    }
-                                    keyboardType="decimal-pad"
-                                    className="border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium"
-                                />
-                            </View>
-                        </View>
-                    </View>
-
-                    {/* Terms Section */}
-                    <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-                        <Text className="text-base font-bold text-gray-900 mb-3">Terms & Notes</Text>
-
-                        <TextInput
-                            placeholder="Add payment terms or special notes..."
-                            placeholderTextColor="#94A3B8"
-                            value={formData.notes}
-                            onChangeText={(text: string) =>
-                                setFormData({ ...formData, notes: text })
-                            }
-                            multiline
-                            numberOfLines={3}
-                            className="border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium"
-                        />
-                    </View>
-
-                    {/* Summary Section */}
-                    <View className="px-4 py-5 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl border border-green-200 mx-4 mb-6">
-                        <Text className="text-base font-bold text-gray-900 mb-4">Estimated Amount</Text>
-
-                        <View className="flex-row justify-between items-center">
-                            <Text className="text-sm text-gray-700 font-medium">Total Amount</Text>
-                            <Text className="text-2xl font-bold text-[#059669]">₹{totals.subtotal}</Text>
-                        </View>
-
-                        <View className="mt-4 pt-4 border-t border-green-300">
-                            <Text className="text-xs text-gray-600 font-medium">Status: Preliminary Bill</Text>
-                        </View>
-                    </View>
-
-                    {/* Action Button */}
-                    <View className="px-4 mb-6">
-                        <TouchableOpacity
-                            onPress={handleGenerateProforma}
-                            className="bg-[#059669] rounded-xl py-4 items-center flex-row justify-center"
-                        >
-                            <Ionicons name="document" size={20} color="#fff" style={{ marginRight: 8 }} />
-                            <Text className="text-white font-bold text-base">Generate Proforma</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+    Alert.alert(
+      "Proforma Invoice Created",
+      `Proforma #${formData.proformaNo}\n\nClient: ${formData.clientName}\nAmount: ₹${totals.subtotal}\n\nProforma invoice generated! Ready to send to customer before delivery.`,
+      [{ text: "OK", onPress: () => {} }],
     );
+  };
+
+  const totals = calculateTotals();
+  const router = useRouter();
+
+  return (
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: COLORS.white }}
+      edges={["bottom"]}
+    >
+      <Stack.Screen options={{ headerShown: false }} />
+
+      {/* Header with Back Button */}
+      <View
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderBottomWidth: 1,
+          borderBottomColor: COLORS.border,
+          backgroundColor: COLORS.white,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: 8,
+            paddingVertical: 8,
+          }}
+        >
+          <Ionicons name="chevron-back" size={24} color={COLORS.textDark} />
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: "Poppins_600SemiBold",
+              color: COLORS.textDark,
+              marginLeft: 8,
+            }}
+          >
+            Proforma Invoice
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
+          {/* Info Banner */}
+          <View
+            style={{
+              marginHorizontal: 16,
+              marginTop: 16,
+              backgroundColor: "#F0FDF4",
+              borderWidth: 1,
+              borderColor: "#86EFAC",
+              borderRadius: 12,
+              paddingHorizontal: 14,
+              paddingVertical: 12,
+              flexDirection: "row",
+              alignItems: "flex-start",
+              marginBottom: 24,
+            }}
+          >
+            <Ionicons
+              name="information-circle"
+              size={18}
+              color="#166534"
+              style={{ marginRight: 10, marginTop: 2 }}
+            />
+            <Text
+              style={{
+                fontSize: 12,
+                color: "#166534",
+                fontFamily: "Poppins_500Medium",
+                lineHeight: 18,
+                flex: 1,
+              }}
+            >
+              Create preliminary bills to send to customers before delivery.
+              Great for confirming orders.
+            </Text>
+          </View>
+
+          {/* Form Section */}
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.textDark,
+                marginBottom: 16,
+              }}
+            >
+              Customer Information
+            </Text>
+
+            <InputField
+              label="Customer Name *"
+              placeholder="Enter customer name"
+              value={formData.clientName}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, clientName: text })
+              }
+            />
+
+            <InputField
+              label="Customer Email"
+              placeholder="customer@example.com"
+              value={formData.clientEmail}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, clientEmail: text })
+              }
+            />
+
+            <InputField
+              label="Expected Delivery Date"
+              placeholder="YYYY-MM-DD"
+              value={formData.deliveryDate}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, deliveryDate: text })
+              }
+            />
+
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textGray,
+                    marginBottom: 8,
+                  }}
+                >
+                  Proforma #
+                </Text>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: COLORS.border,
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    backgroundColor: "#F5F7FB",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: COLORS.textGray,
+                      fontFamily: "Poppins_500Medium",
+                    }}
+                  >
+                    {formData.proformaNo}
+                  </Text>
+                </View>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textGray,
+                    marginBottom: 8,
+                  }}
+                >
+                  Date
+                </Text>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    borderColor: COLORS.border,
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    backgroundColor: "#F5F7FB",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: COLORS.textGray,
+                      fontFamily: "Poppins_500Medium",
+                    }}
+                  >
+                    {formData.date}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Items Section */}
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.textDark,
+                marginBottom: 16,
+              }}
+            >
+              Item Details
+            </Text>
+
+            <InputField
+              label="Item Description *"
+              placeholder="e.g., Custom Furniture Set"
+              value={formData.itemDescription}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, itemDescription: text })
+              }
+            />
+
+            <View style={{ flexDirection: "row", gap: 12, marginBottom: 16 }}>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textGray,
+                    marginBottom: 8,
+                  }}
+                >
+                  Quantity
+                </Text>
+                <TextInput
+                  placeholder="1"
+                  placeholderTextColor={COLORS.textLight}
+                  value={formData.quantity}
+                  onChangeText={(text: string) =>
+                    setFormData({ ...formData, quantity: text })
+                  }
+                  keyboardType="decimal-pad"
+                  style={{
+                    borderWidth: 1,
+                    borderColor: COLORS.border,
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    color: COLORS.textDark,
+                    fontFamily: "Poppins_500Medium",
+                    fontSize: 16,
+                  }}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textGray,
+                    marginBottom: 8,
+                  }}
+                >
+                  Rate *
+                </Text>
+                <TextInput
+                  placeholder="0.00"
+                  placeholderTextColor={COLORS.textLight}
+                  value={formData.rate}
+                  onChangeText={(text: string) =>
+                    setFormData({ ...formData, rate: text })
+                  }
+                  keyboardType="decimal-pad"
+                  style={{
+                    borderWidth: 1,
+                    borderColor: COLORS.border,
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    color: COLORS.textDark,
+                    fontFamily: "Poppins_500Medium",
+                    fontSize: 16,
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+
+          {/* Terms Section */}
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.textDark,
+                marginBottom: 16,
+              }}
+            >
+              Terms & Notes
+            </Text>
+
+            <TextInput
+              placeholder="Add payment terms or special notes..."
+              placeholderTextColor={COLORS.textLight}
+              value={formData.notes}
+              onChangeText={(text: string) =>
+                setFormData({ ...formData, notes: text })
+              }
+              multiline
+              numberOfLines={3}
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                borderRadius: 12,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                color: COLORS.textDark,
+                fontFamily: "Poppins_500Medium",
+                fontSize: 14,
+                textAlignVertical: "top",
+              }}
+            />
+          </View>
+
+          {/* Summary Section */}
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: "#F0FDF4",
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "#86EFAC",
+              marginHorizontal: 16,
+              marginBottom: 24,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.textDark,
+                marginBottom: 16,
+              }}
+            >
+              Estimated Amount
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: COLORS.textGray,
+                  fontFamily: "Poppins_500Medium",
+                }}
+              >
+                Total Amount
+              </Text>
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: "Poppins_700Bold",
+                  color: "#059669",
+                }}
+              >
+                ₹{totals.subtotal}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                borderTopWidth: 1,
+                borderTopColor: "#86EFAC",
+                paddingTop: 16,
+                marginTop: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: COLORS.textGray,
+                  fontFamily: "Poppins_500Medium",
+                }}
+              >
+                Status: Preliminary Bill
+              </Text>
+            </View>
+          </View>
+
+          {/* Action Button */}
+          <View style={{ paddingHorizontal: 16, paddingBottom: 24 }}>
+            <TouchableOpacity
+              onPress={handleGenerateProforma}
+              style={{
+                backgroundColor: "#059669",
+                borderRadius: 12,
+                paddingVertical: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+              }}
+            >
+              <Ionicons name="document" size={20} color="#fff" />
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: "Poppins_700Bold",
+                  fontSize: 16,
+                }}
+              >
+                Generate Proforma
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
 }

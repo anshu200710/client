@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
     Alert,
@@ -12,6 +13,20 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const COLORS = {
+  primary: "#1E4FA3",
+  secondary: "#2ECC71",
+  success: "#22c55e",
+  alertRed: "#ef4444",
+  alertAmber: "#FFC107",
+  lightGrey: "#F5F7FB",
+  white: "#FFFFFF",
+  textDark: "#1A1A1A",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+};
+
 const InputField = ({
   label,
   placeholder,
@@ -19,15 +34,33 @@ const InputField = ({
   onChangeText,
   keyboardType = "default",
 }: any) => (
-  <View className="mb-4">
-    <Text className="text-sm font-semibold text-gray-700 mb-2">{label}</Text>
+  <View style={{ marginBottom: 16 }}>
+    <Text
+      style={{
+        fontSize: 14,
+        fontFamily: "Poppins_600SemiBold",
+        color: COLORS.textGray,
+        marginBottom: 8,
+      }}
+    >
+      {label}
+    </Text>
     <TextInput
       placeholder={placeholder}
-      placeholderTextColor="#94A3B8"
+      placeholderTextColor={COLORS.textLight}
       value={value}
       onChangeText={onChangeText}
       keyboardType={keyboardType}
-      className="border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium text-base"
+      style={{
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        color: COLORS.textDark,
+        fontFamily: "Poppins_500Medium",
+        fontSize: 16,
+      }}
     />
   </View>
 );
@@ -37,7 +70,7 @@ export default function GSTCalculatorScreen() {
   const [gstSlab, setGstSlab] = useState(18);
   const [customGst, setCustomGst] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
-  const [discountType, setDiscountType] = useState("flat"); // 'flat' or 'percent'
+  const [discountType, setDiscountType] = useState("flat");
   const [discountValue, setDiscountValue] = useState("0");
 
   const standardSlabs = [5, 12, 18, 28];
@@ -86,59 +119,194 @@ export default function GSTCalculatorScreen() {
     }
   };
 
+  const router = useRouter();
   const result = calculateGST();
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F8FAFC]" edges={["bottom"]}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: COLORS.white }}
+      edges={["bottom"]}
+    >
+      <Stack.Screen options={{ headerShown: false }} />
+
+      {/* Header with Back Button */}
+      <View
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderBottomWidth: 1,
+          borderBottomColor: COLORS.border,
+          backgroundColor: COLORS.white,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: 8,
+            paddingVertical: 8,
+          }}
+        >
+          <Ionicons name="chevron-back" size={24} color={COLORS.textDark} />
+          <Text
+            style={{
+              fontSize: 16,
+              fontFamily: "Poppins_600SemiBold",
+              color: COLORS.textDark,
+              marginLeft: 8,
+            }}
+          >
+            GST Calculator
+          </Text>
+        </TouchableOpacity>
+      </View>
+
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
+        style={{ flex: 1 }}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
           {/* Info Banner */}
-          <View className="mx-4 mt-4 bg-[#F0F9FF] border border-[#0EA5E9] rounded-xl p-3.5 flex-row items-start mb-6">
+          <View
+            style={{
+              marginHorizontal: 16,
+              marginTop: 16,
+              backgroundColor: "#F0F9FF",
+              borderWidth: 1,
+              borderColor: "#0EA5E9",
+              borderRadius: 12,
+              paddingHorizontal: 14,
+              paddingVertical: 12,
+              flexDirection: "row",
+              alignItems: "flex-start",
+              marginBottom: 24,
+            }}
+          >
             <Ionicons
               name="information-circle"
               size={18}
               color="#0369A1"
               style={{ marginRight: 10, marginTop: 2 }}
             />
-            <Text className="text-xs text-[#0369A1] font-medium leading-4 flex-1">
+            <Text
+              style={{
+                fontSize: 12,
+                color: "#0369A1",
+                fontFamily: "Poppins_500Medium",
+                lineHeight: 18,
+                flex: 1,
+              }}
+            >
               Calculate GST instantly for your invoices. Enter the taxable value
               below.
             </Text>
           </View>
 
           {/* Taxable Amount Section */}
-          <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-            <View className="flex-row items-center mb-4">
-              <Text className="text-lg font-bold text-gray-900 flex-1">
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                  flex: 1,
+                }}
+              >
                 Taxable Value (Base Amount)
               </Text>
-              <Text className="text-2xl font-bold text-gray-900">₹</Text>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                }}
+              >
+                ₹
+              </Text>
             </View>
 
             <TextInput
               placeholder="Enter amount without tax"
-              placeholderTextColor="#94A3B8"
+              placeholderTextColor={COLORS.textLight}
               value={taxableAmount}
               onChangeText={setTaxableAmount}
               keyboardType="decimal-pad"
-              className="border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium text-base text-right"
+              style={{
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                borderRadius: 12,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                color: COLORS.textDark,
+                fontFamily: "Poppins_500Medium",
+                fontSize: 16,
+                textAlign: "right",
+              }}
             />
 
-            <Text className="text-xs text-gray-500 mt-2 text-right">
+            <Text
+              style={{
+                fontSize: 11,
+                color: COLORS.textLight,
+                marginTop: 8,
+                textAlign: "right",
+                fontFamily: "Poppins_400Regular",
+              }}
+            >
               Enter amount without tax
             </Text>
           </View>
 
           {/* GST Slab Selection */}
-          <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-            <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-lg font-bold text-gray-900">
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                }}
+              >
                 GST Slab (%)
               </Text>
               {!showCustomInput && (
@@ -147,9 +315,20 @@ export default function GSTCalculatorScreen() {
                     setShowCustomInput(true);
                     setCustomGst("");
                   }}
-                  className="px-3 py-1.5 bg-[#0EA5E9] rounded-lg"
+                  style={{
+                    paddingHorizontal: 12,
+                    paddingVertical: 8,
+                    backgroundColor: "#0EA5E9",
+                    borderRadius: 8,
+                  }}
                 >
-                  <Text className="text-xs font-semibold text-white">
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.white,
+                    }}
+                  >
                     Custom
                   </Text>
                 </TouchableOpacity>
@@ -158,36 +337,80 @@ export default function GSTCalculatorScreen() {
 
             {!showCustomInput ? (
               <>
-                <View className="flex-row gap-2 mb-3 flex-wrap">
+                <View
+                  style={{
+                    flexDirection: "row",
+                    gap: 8,
+                    marginBottom: 12,
+                    flexWrap: "wrap",
+                  }}
+                >
                   {standardSlabs.map((slab) => (
                     <TouchableOpacity
                       key={slab}
                       onPress={() => setGstSlab(slab)}
-                      className={`flex-1 min-w-[48%] py-3 rounded-xl border-2 ${
-                        gstSlab === slab
-                          ? "bg-[#0066CC] border-[#0066CC]"
-                          : "bg-white border-[#E5EAF0]"
-                      }`}
+                      style={{
+                        flex: 1,
+                        minWidth: "48%",
+                        paddingVertical: 12,
+                        borderRadius: 12,
+                        borderWidth: 2,
+                        borderColor:
+                          gstSlab === slab ? "#0066CC" : COLORS.border,
+                        backgroundColor:
+                          gstSlab === slab ? "#0066CC" : COLORS.white,
+                      }}
                     >
                       <Text
-                        className={`font-bold text-center text-base ${
-                          gstSlab === slab ? "text-white" : "text-gray-900"
-                        }`}
+                        style={{
+                          fontFamily: "Poppins_700Bold",
+                          textAlign: "center",
+                          fontSize: 16,
+                          color:
+                            gstSlab === slab ? COLORS.white : COLORS.textDark,
+                        }}
                       >
                         {slab}%
                       </Text>
                     </TouchableOpacity>
                   ))}
                 </View>
-                <View className="border-b border-[#E5EAF0] mb-3" />
-                <Text className="text-xs text-center text-gray-500 font-medium">
+                <View
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.border,
+                    marginBottom: 12,
+                  }}
+                />
+                <Text
+                  style={{
+                    fontSize: 11,
+                    textAlign: "center",
+                    color: COLORS.textLight,
+                    fontFamily: "Poppins_600SemiBold",
+                  }}
+                >
                   STANDARD SLABS
                 </Text>
               </>
             ) : (
               <View>
-                <View className="flex-row items-center gap-2 mb-3">
-                  <Text className="text-sm font-semibold text-gray-700 flex-1">
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 8,
+                    marginBottom: 12,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.textGray,
+                      flex: 1,
+                    }}
+                  >
                     Enter custom %
                   </Text>
                   <TouchableOpacity
@@ -195,67 +418,144 @@ export default function GSTCalculatorScreen() {
                       setShowCustomInput(false);
                       setCustomGst("");
                     }}
-                    className="px-3 py-1.5 bg-gray-200 rounded-lg"
+                    style={{
+                      paddingHorizontal: 12,
+                      paddingVertical: 8,
+                      backgroundColor: COLORS.lightGrey,
+                      borderRadius: 8,
+                    }}
                   >
-                    <Text className="text-xs font-semibold text-gray-700">
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        fontFamily: "Poppins_600SemiBold",
+                        color: COLORS.textGray,
+                      }}
+                    >
                       Back
                     </Text>
                   </TouchableOpacity>
                 </View>
-                <View className="flex-row items-center gap-2">
+                <View
+                  style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+                >
                   <TextInput
                     placeholder="Enter custom %"
-                    placeholderTextColor="#94A3B8"
+                    placeholderTextColor={COLORS.textLight}
                     value={customGst}
                     onChangeText={setCustomGst}
                     keyboardType="decimal-pad"
-                    className="flex-1 border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium text-base"
+                    style={{
+                      flex: 1,
+                      borderWidth: 1,
+                      borderColor: COLORS.border,
+                      borderRadius: 12,
+                      paddingHorizontal: 16,
+                      paddingVertical: 12,
+                      color: COLORS.textDark,
+                      fontFamily: "Poppins_500Medium",
+                      fontSize: 16,
+                    }}
                   />
-                  <Text className="text-lg font-semibold text-gray-900">%</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: "Poppins_700Bold",
+                      color: COLORS.textDark,
+                    }}
+                  >
+                    %
+                  </Text>
                 </View>
               </View>
             )}
           </View>
 
           {/* Discount Section */}
-          <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-            <View className="flex-row justify-between items-center mb-4">
-              <Text className="text-lg font-bold text-gray-900">
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                }}
+              >
                 Discount (Optional)
               </Text>
-              <View className="flex-row gap-2 bg-gray-100 rounded-lg p-1">
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 8,
+                  backgroundColor: COLORS.lightGrey,
+                  borderRadius: 8,
+                  padding: 4,
+                }}
+              >
                 <TouchableOpacity
                   onPress={() => setDiscountType("flat")}
-                  className={`px-3 py-1.5 rounded-md ${
-                    discountType === "flat"
-                      ? "bg-white border border-[#E5EAF0]"
-                      : ""
-                  }`}
+                  style={{
+                    paddingHorizontal: 12,
+                    paddingVertical: 8,
+                    borderRadius: 6,
+                    backgroundColor:
+                      discountType === "flat" ? COLORS.white : "transparent",
+                    borderWidth: discountType === "flat" ? 1 : 0,
+                    borderColor: COLORS.border,
+                  }}
                 >
                   <Text
-                    className={`text-xs font-semibold ${
-                      discountType === "flat"
-                        ? "text-gray-900"
-                        : "text-gray-600"
-                    }`}
+                    style={{
+                      fontSize: 11,
+                      fontFamily: "Poppins_600SemiBold",
+                      color:
+                        discountType === "flat"
+                          ? COLORS.textDark
+                          : COLORS.textGray,
+                    }}
                   >
                     ₹ Flat
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => setDiscountType("percent")}
-                  className={`px-3 py-1.5 rounded-md ${
-                    discountType === "percent"
-                      ? "bg-white border border-[#E5EAF0]"
-                      : ""
-                  }`}
+                  style={{
+                    paddingHorizontal: 12,
+                    paddingVertical: 8,
+                    borderRadius: 6,
+                    backgroundColor:
+                      discountType === "percent" ? COLORS.white : "transparent",
+                    borderWidth: discountType === "percent" ? 1 : 0,
+                    borderColor: COLORS.border,
+                  }}
                 >
                   <Text
-                    className={`text-xs font-semibold ${
-                      discountType === "percent"
-                        ? "text-gray-900"
-                        : "text-gray-600"
-                    }`}
+                    style={{
+                      fontSize: 11,
+                      fontFamily: "Poppins_600SemiBold",
+                      color:
+                        discountType === "percent"
+                          ? COLORS.textDark
+                          : COLORS.textGray,
+                    }}
                   >
                     Percent %
                   </Text>
@@ -263,16 +563,36 @@ export default function GSTCalculatorScreen() {
               </View>
             </View>
 
-            <View className="flex-row items-center gap-2">
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
               <TextInput
                 placeholder="0.00"
-                placeholderTextColor="#94A3B8"
+                placeholderTextColor={COLORS.textLight}
                 value={discountValue}
                 onChangeText={setDiscountValue}
                 keyboardType="decimal-pad"
-                className="flex-1 border border-[#E5EAF0] rounded-xl px-4 py-3 text-gray-900 font-medium text-base"
+                style={{
+                  flex: 1,
+                  borderWidth: 1,
+                  borderColor: COLORS.border,
+                  borderRadius: 12,
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  color: COLORS.textDark,
+                  fontFamily: "Poppins_500Medium",
+                  fontSize: 16,
+                }}
               />
-              <Text className="text-lg font-semibold text-gray-900 w-8 text-center">
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                  width: 32,
+                  textAlign: "center",
+                }}
+              >
                 {discountType === "flat" ? "₹" : "%"}
               </Text>
             </View>
@@ -280,51 +600,176 @@ export default function GSTCalculatorScreen() {
 
           {/* Results Section */}
           {result && taxableAmount && (
-            <View className="px-4 py-5 bg-white rounded-2xl border border-[#E5EAF0] mx-4 mb-4">
-              <Text className="text-lg font-bold text-gray-900 mb-4">
+            <View
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 20,
+                backgroundColor: COLORS.white,
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: COLORS.border,
+                marginHorizontal: 16,
+                marginBottom: 16,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                  marginBottom: 16,
+                }}
+              >
                 Summary
               </Text>
 
-              <View className="space-y-3">
-                <View className="flex-row justify-between items-center pb-3 border-b border-[#E5EAF0]">
-                  <Text className="text-sm text-gray-600">Base Amount</Text>
-                  <Text className="text-sm font-semibold text-gray-900">
+              <View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingBottom: 12,
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.border,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: COLORS.textGray,
+                      fontFamily: "Poppins_400Regular",
+                    }}
+                  >
+                    Base Amount
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.textDark,
+                    }}
+                  >
                     ₹{result.baseAmount}
                   </Text>
                 </View>
 
                 {parseFloat(result.discount) > 0 && (
-                  <View className="flex-row justify-between items-center pb-3 border-b border-[#E5EAF0]">
-                    <Text className="text-sm text-gray-600">Discount</Text>
-                    <Text className="text-sm font-semibold text-red-600">
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      paddingVertical: 12,
+                      borderBottomWidth: 1,
+                      borderBottomColor: COLORS.border,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        color: COLORS.textGray,
+                        fontFamily: "Poppins_400Regular",
+                      }}
+                    >
+                      Discount
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontFamily: "Poppins_600SemiBold",
+                        color: COLORS.alertRed,
+                      }}
+                    >
                       - ₹{result.discount}
                     </Text>
                   </View>
                 )}
 
-                <View className="flex-row justify-between items-center pb-3 border-b border-[#E5EAF0]">
-                  <Text className="text-sm text-gray-600">
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingVertical: 12,
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.border,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: COLORS.textGray,
+                      fontFamily: "Poppins_400Regular",
+                    }}
+                  >
                     Amount After Discount
                   </Text>
-                  <Text className="text-sm font-semibold text-gray-900">
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.textDark,
+                    }}
+                  >
                     ₹{result.amountAfterDiscount}
                   </Text>
                 </View>
 
-                <View className="flex-row justify-between items-center pb-3 border-b border-[#E5EAF0]">
-                  <Text className="text-sm text-gray-600">
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingVertical: 12,
+                    borderBottomWidth: 1,
+                    borderBottomColor: COLORS.border,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: COLORS.textGray,
+                      fontFamily: "Poppins_400Regular",
+                    }}
+                  >
                     GST ({result.gstRate}%)
                   </Text>
-                  <Text className="text-sm font-semibold text-blue-600">
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: "#0EA5E9",
+                    }}
+                  >
                     + ₹{result.gstAmount}
                   </Text>
                 </View>
 
-                <View className="flex-row justify-between items-center pt-2">
-                  <Text className="text-base font-bold text-gray-900">
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    paddingTop: 12,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontFamily: "Poppins_700Bold",
+                      color: COLORS.textDark,
+                    }}
+                  >
                     Total Payable
                   </Text>
-                  <Text className="text-2xl font-bold text-[#0066CC]">
+                  <Text
+                    style={{
+                      fontSize: 24,
+                      fontFamily: "Poppins_800ExtraBold",
+                      color: "#0066CC",
+                    }}
+                  >
                     ₹{result.totalPayable}
                   </Text>
                 </View>
@@ -333,13 +778,27 @@ export default function GSTCalculatorScreen() {
           )}
 
           {/* Calculate Button */}
-          <View className="px-4 pb-6">
+          <View style={{ paddingHorizontal: 16, paddingBottom: 24 }}>
             <TouchableOpacity
               onPress={handleCalculate}
-              className="bg-[#0066CC] rounded-xl py-3.5 flex-row items-center justify-center gap-2"
+              style={{
+                backgroundColor: "#0066CC",
+                borderRadius: 12,
+                paddingVertical: 16,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+              }}
             >
-              <Ionicons name="calculator" size={20} color="white" />
-              <Text className="text-white font-bold text-base">
+              <Ionicons name="calculator" size={20} color={COLORS.white} />
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontFamily: "Poppins_700Bold",
+                  fontSize: 16,
+                }}
+              >
                 Calculate GST
               </Text>
             </TouchableOpacity>
