@@ -1,130 +1,313 @@
-import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
+import React from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const COLORS = {
+  primary: "#1E4FA3",
+  secondary: "#2ECC71",
+  success: "#22c55e",
+  alertRed: "#ef4444",
+  alertAmber: "#FFC107",
+  lightGrey: "#F5F7FB",
+  white: "#FFFFFF",
+  textDark: "#1A1A1A",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+};
 
 type ServiceTrack = {
-    id: string;
-    name: string;
-    requestedOn: string;
-    amount: string;
-    serviceStatus: 'In Review' | 'Pending Documents' | 'Completed';
-    paymentStatus: 'Paid' | 'Pending';
-    canDownload?: boolean;
+  id: string;
+  name: string;
+  requestedOn: string;
+  amount: string;
+  serviceStatus: "In Review" | "Pending Documents" | "Completed";
+  paymentStatus: "Paid" | "Pending";
+  canDownload?: boolean;
 };
 
 const items: ServiceTrack[] = [
-    {
-        id: 'SRV-1024',
-        name: 'GST Registration',
-        requestedOn: '10 Mar 2026',
-        amount: 'Rs999',
-        serviceStatus: 'In Review',
-        paymentStatus: 'Paid',
-    },
-    {
-        id: 'SRV-1018',
-        name: 'Trademark Registration',
-        requestedOn: '08 Mar 2026',
-        amount: 'Rs4,999',
-        serviceStatus: 'Pending Documents',
-        paymentStatus: 'Pending',
-    },
-    {
-        id: 'SRV-1007',
-        name: 'ITR Filing',
-        requestedOn: '02 Mar 2026',
-        amount: 'Rs499',
-        serviceStatus: 'Completed',
-        paymentStatus: 'Paid',
-        canDownload: true,
-    },
+  {
+    id: "SRV-1024",
+    name: "GST Registration",
+    requestedOn: "10 Mar 2026",
+    amount: "Rs999",
+    serviceStatus: "In Review",
+    paymentStatus: "Paid",
+  },
+  {
+    id: "SRV-1018",
+    name: "Trademark Registration",
+    requestedOn: "08 Mar 2026",
+    amount: "Rs4,999",
+    serviceStatus: "Pending Documents",
+    paymentStatus: "Pending",
+  },
+  {
+    id: "SRV-1007",
+    name: "ITR Filing",
+    requestedOn: "02 Mar 2026",
+    amount: "Rs499",
+    serviceStatus: "Completed",
+    paymentStatus: "Paid",
+    canDownload: true,
+  },
 ];
 
-const StatusPill = ({ value }: { value: ServiceTrack['serviceStatus'] }) => {
-    const map = {
-        'In Review': 'bg-[#DBEAFE] text-[#1D4ED8]',
-        'Pending Documents': 'bg-[#FEF3C7] text-[#B45309]',
-        Completed: 'bg-[#DCFCE7] text-[#166534]',
-    } as const;
+const StatusPill = ({ value }: { value: ServiceTrack["serviceStatus"] }) => {
+  const map = {
+    "In Review": { bg: "#DBEAFE", color: "#1D4ED8" },
+    "Pending Documents": { bg: "#FEF3C7", color: "#B45309" },
+    Completed: { bg: "#DCFCE7", color: "#166534" },
+  } as const;
 
-    return (
-        <View className={`px-2 py-1 rounded-full ${map[value]}`}>
-            <Text className="text-[10px] font-bold">{value}</Text>
-        </View>
-    );
+  const { bg, color } = map[value];
+
+  return (
+    <View
+      style={{
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 20,
+        backgroundColor: bg,
+      }}
+    >
+      <Text style={{ fontSize: 10, fontFamily: "Poppins_700Bold", color }}>
+        {value}
+      </Text>
+    </View>
+  );
 };
 
 export default function MyServicesScreen() {
-    const router = useRouter();
+  const router = useRouter();
 
-    return (
-        <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
-            <Stack.Screen options={{ headerShown: false }} />
+  return (
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: COLORS.white }}
+      edges={["top"]}
+    >
+      <Stack.Screen options={{ headerShown: false }} />
 
-            <View className="px-5 pt-2 pb-4 flex-row items-center">
-                <TouchableOpacity
-                    onPress={() => router.back()}
-                    className="w-10 h-10 rounded-full bg-white items-center justify-center border border-[#E5EAF0]"
-                >
-                    <Ionicons name="chevron-back" size={20} color="#0F172A" />
-                </TouchableOpacity>
-                <Text className="text-lg font-bold text-[#0F172A] ml-3">My Services</Text>
+      <View
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          flexDirection: "row",
+          alignItems: "center",
+          borderBottomWidth: 1,
+          borderBottomColor: COLORS.border,
+          backgroundColor: COLORS.white,
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: COLORS.white,
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: 1,
+            borderColor: COLORS.border,
+          }}
+        >
+          <Ionicons name="chevron-back" size={20} color={COLORS.textDark} />
+        </TouchableOpacity>
+        <Text
+          style={{
+            fontSize: 18,
+            fontFamily: "Poppins_700Bold",
+            color: COLORS.textDark,
+            marginLeft: 12,
+          }}
+        >
+          My Services
+        </Text>
+      </View>
+
+      <ScrollView
+        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {items.map((item) => (
+          <View
+            key={item.id}
+            style={{
+              backgroundColor: COLORS.white,
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              paddingHorizontal: 16,
+              paddingVertical: 16,
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.textDark,
+                }}
+              >
+                {item.name}
+              </Text>
+              <StatusPill value={item.serviceStatus} />
             </View>
 
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
-                {items.map((item) => (
-                    <View key={item.id} className="bg-white rounded-2xl border border-[#E5EAF0] p-4 mb-3">
-                        <View className="flex-row items-center justify-between">
-                            <Text className="text-[15px] font-bold text-[#0F172A]">{item.name}</Text>
-                            <StatusPill value={item.serviceStatus} />
-                        </View>
+            <Text
+              style={{ fontSize: 12, color: COLORS.textGray, marginTop: 4 }}
+            >
+              Request ID: {item.id}
+            </Text>
+            <Text
+              style={{ fontSize: 12, color: COLORS.textGray, marginTop: 2 }}
+            >
+              Requested on {item.requestedOn}
+            </Text>
 
-                        <Text className="text-xs text-[#64748B] mt-1">Request ID: {item.id}</Text>
-                        <Text className="text-xs text-[#64748B] mt-0.5">Requested on {item.requestedOn}</Text>
+            <View
+              style={{
+                height: 1,
+                backgroundColor: "#EEF2F7",
+                marginVertical: 12,
+              }}
+            />
 
-                        <View className="h-[1px] bg-[#EEF2F7] my-3" />
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: 12,
+              }}
+            >
+              <View>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: "#94A3B8",
+                    fontFamily: "Poppins_500Medium",
+                  }}
+                >
+                  Payment
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_600SemiBold",
+                    color:
+                      item.paymentStatus === "Paid" ? "#16A34A" : "#B45309",
+                    marginTop: 2,
+                  }}
+                >
+                  {item.paymentStatus}
+                </Text>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    color: "#94A3B8",
+                    textAlign: "right",
+                    fontFamily: "Poppins_500Medium",
+                  }}
+                >
+                  Amount
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textDark,
+                    marginTop: 2,
+                  }}
+                >
+                  {item.amount}
+                </Text>
+              </View>
+            </View>
 
-                        <View className="flex-row items-center justify-between mb-3">
-                            <View>
-                                <Text className="text-[11px] text-[#94A3B8]">Payment</Text>
-                                <Text className={`text-sm font-semibold ${item.paymentStatus === 'Paid' ? 'text-[#16A34A]' : 'text-[#B45309]'}`}>
-                                    {item.paymentStatus}
-                                </Text>
-                            </View>
-                            <View>
-                                <Text className="text-[11px] text-[#94A3B8] text-right">Amount</Text>
-                                <Text className="text-sm font-semibold text-[#0F172A]">{item.amount}</Text>
-                            </View>
-                        </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#EFF6FF",
+                  borderRadius: 12,
+                  paddingHorizontal: 12,
+                  paddingVertical: 10,
+                  marginRight: 8,
+                }}
+                onPress={() =>
+                  router.push({
+                    pathname: "/(dashboard)/profile-pages/request-details",
+                    params: { service: item.name, requestId: item.id },
+                  })
+                }
+              >
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: "#1D4ED8",
+                  }}
+                >
+                  View Details
+                </Text>
+              </TouchableOpacity>
 
-                        <View className="flex-row items-center">
-                            <TouchableOpacity
-                                className="bg-[#EFF6FF] rounded-xl px-3 py-2 mr-2"
-                                onPress={() =>
-                                    router.push({
-                                        pathname: '/(dashboard)/profile-pages/request-details',
-                                        params: { service: item.name, requestId: item.id },
-                                    })
-                                }
-                            >
-                                <Text className="text-xs font-semibold text-[#1D4ED8]">View Details</Text>
-                            </TouchableOpacity>
-
-                            {item.canDownload ? (
-                                <TouchableOpacity className="bg-[#0066CC] rounded-xl px-3 py-2">
-                                    <Text className="text-xs font-semibold text-white">Download Files</Text>
-                                </TouchableOpacity>
-                            ) : (
-                                <TouchableOpacity className="bg-[#F1F5F9] rounded-xl px-3 py-2">
-                                    <Text className="text-xs font-semibold text-[#64748B]">Download Pending</Text>
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    </View>
-                ))}
-            </ScrollView>
-        </SafeAreaView>
-    );
+              {item.canDownload ? (
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: COLORS.primary,
+                    borderRadius: 12,
+                    paddingHorizontal: 12,
+                    paddingVertical: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.white,
+                    }}
+                  >
+                    Download Files
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#F1F5F9",
+                    borderRadius: 12,
+                    paddingHorizontal: 12,
+                    paddingVertical: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.textGray,
+                    }}
+                  >
+                    Download Pending
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
