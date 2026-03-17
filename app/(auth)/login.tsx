@@ -33,7 +33,11 @@ export default function LoginScreen() {
     const [rememberMe, setRememberMe] = useState(false);
 
     const handleLogin = () => {
-        router.replace("/(dashboard)/home");
+        if (email.toLowerCase() === "admin@vyaaparsaathi.com" || email === "admin") {
+            router.replace("/(admin)/dashboard");
+        } else {
+            router.replace("/(dashboard)/home");
+        }
     };
 
     return (
@@ -81,7 +85,7 @@ export default function LoginScreen() {
                                 autoCapitalize="none"
                                 value={email}
                                 onChangeText={setEmail}
-                                style={{ flex: 1, fontSize: 15, color: COLORS.textDark, outlineStyle: "none" }}
+                                style={{ flex: 1, fontSize: 15, color: COLORS.textDark, outlineStyle: "none" as any }}
                             />
                         </View>
                     </View>
@@ -98,7 +102,7 @@ export default function LoginScreen() {
                                 secureTextEntry={!showPassword}
                                 value={password}
                                 onChangeText={setPassword}
-                                style={{ flex: 1, fontSize: 15, color: COLORS.textDark, outlineStyle: "none" }}
+                                style={{ flex: 1, fontSize: 15, color: COLORS.textDark, outlineStyle: "none" as any }}
                             />
                             <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={{ padding: 4 }}>
                                 <Ionicons
