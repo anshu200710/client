@@ -1,128 +1,584 @@
-import React from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const FilterChip = ({ label, active }: { label: string; active?: boolean }) => (
-    <TouchableOpacity className={`px-4 py-2 rounded-full mr-2 border ${active ? 'bg-[#2A83E8] border-[#2A83E8]' : 'bg-card border-[#D7E0EA]'}`}>
-        <Text className={`text-xs font-semibold ${active ? 'text-white' : 'text-[#475569]'}`}>{label}</Text>
-    </TouchableOpacity>
+// Match home.tsx colors
+const COLORS = {
+  primary: "#1E4FA3",
+  secondary: "#2ECC71",
+  success: "#22c55e",
+  alertRed: "#ef4444",
+  alertAmber: "#FFC107",
+  lightGrey: "#F5F7FB",
+  white: "#FFFFFF",
+  textDark: "#1A1A1A",
+  textGray: "#666666",
+  textLight: "#9FA3B1",
+  border: "#E4E7EF",
+
+  // Custom pastels from screenshot
+  cardOrangeBg: "#FFF7ED",
+  cardOrangeIcon: "#FF8A00",
+  cardGreenBg: "#ECFDF5",
+  cardGreenIcon: "#10B981",
+  actionBlueBg: "#EFF6FF",
+  actionPurpleBg: "#F5F3FF",
+  actionPurpleIcon: "#8B5CF6",
+  actionGreenBg: "#ECFDF5",
+  actionGreenIcon: "#10B981",
+  actionRedBg: "#FEF2F2",
+  actionRedIcon: "#EF4444",
+  actionYellowBg: "#FFFBEB",
+  actionYellowIcon: "#F59E0B",
+  actionGreyBg: "#F8FAFC",
+  actionGreyIcon: "#94A3B8",
+};
+
+const FilterChip = ({
+  label,
+  active,
+  onPress,
+}: {
+  label: string;
+  active?: boolean;
+  onPress?: () => void;
+}) => (
+  <TouchableOpacity
+    onPress={onPress}
+    style={{
+      paddingHorizontal: 16,
+      paddingVertical: 10,
+      marginRight: 12,
+      borderRadius: 20,
+      backgroundColor: active ? COLORS.primary : COLORS.lightGrey,
+      borderWidth: 1,
+      borderColor: active ? COLORS.primary : COLORS.border,
+    }}
+  >
+    <Text
+      style={{
+        fontSize: 12,
+        fontFamily: "Poppins_500Medium",
+        color: active ? COLORS.white : COLORS.textLight,
+      }}
+    >
+      {label}
+    </Text>
+  </TouchableOpacity>
+);
+
+const OfferCard = ({
+  category,
+  categoryColor,
+  title,
+  discount,
+  description,
+  timeLeft,
+  icon,
+  onClaim,
+}: any) => (
+  <View
+    style={{
+      backgroundColor: COLORS.white,
+      borderRadius: 20,
+      marginBottom: 16,
+      overflow: "hidden",
+      borderWidth: 1,
+      borderColor: COLORS.border,
+    }}
+  >
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        backgroundColor: "#F0F4FF",
+      }}
+    >
+      <View
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 12,
+          backgroundColor: COLORS.white,
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: 12,
+        }}
+      >
+        <Ionicons name={icon} size={20} color={categoryColor} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text
+          style={{
+            fontSize: 10,
+            fontFamily: "Poppins_700Bold",
+            color: categoryColor,
+            textTransform: "uppercase",
+            letterSpacing: 0.5,
+          }}
+        >
+          {category}
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            fontFamily: "Poppins_700Bold",
+            color: COLORS.textDark,
+            marginTop: 2,
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+      {timeLeft && (
+        <View
+          style={{
+            backgroundColor: "#FEE2E2",
+            paddingHorizontal: 10,
+            paddingVertical: 4,
+            borderRadius: 8,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 10,
+              fontFamily: "Poppins_700Bold",
+              color: COLORS.alertRed,
+            }}
+          >
+            {timeLeft}
+          </Text>
+        </View>
+      )}
+    </View>
+    <View style={{ paddingHorizontal: 16, paddingVertical: 16 }}>
+      <Text
+        style={{
+          fontSize: 26,
+          fontFamily: "Poppins_800ExtraBold",
+          color: COLORS.textDark,
+          marginBottom: 8,
+        }}
+      >
+        {discount}
+      </Text>
+      <Text
+        style={{
+          fontSize: 13,
+          fontFamily: "Poppins_400Regular",
+          color: COLORS.textLight,
+          lineHeight: 20,
+          marginBottom: 16,
+        }}
+      >
+        {description}
+      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 11,
+              fontFamily: "Poppins_400Regular",
+              color: COLORS.textLight,
+              textDecorationLine: "underline",
+            }}
+          >
+            Terms Apply
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={onClaim}
+          style={{
+            backgroundColor: COLORS.primary,
+            paddingHorizontal: 20,
+            paddingVertical: 12,
+            borderRadius: 12,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 12,
+              fontFamily: "Poppins_700Bold",
+              color: COLORS.white,
+            }}
+          >
+            Claim Now
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
 );
 
 export default function OffersScreen() {
-    const router = useRouter();
+  const router = useRouter();
+  const [activeFilter, setActiveFilter] = useState("all");
 
-    return (
-        <SafeAreaView className="flex-1 bg-[#F4F7FB]" edges={['top']}>
-            <Stack.Screen options={{ headerShown: false }} />
+  const filters = ["All Offers", "GST Filing", "Business Loans", "Software"];
 
-            <View className="px-5 pt-2 pb-3 bg-card border-b border-[#E8EDF3]">
-                <View className="flex-row items-center justify-between">
-                    <View>
-                        <Text className="text-[30px] font-bold text-[#0F172A]">Offers & Freebies</Text>
-                        <Text className="text-xs text-[#64748B] mt-0.5">Exclusive deals for your business</Text>
-                    </View>
-                    <TouchableOpacity className="w-9 h-9 rounded-full items-center justify-center" onPress={() => router.push('/(dashboard)/notifications')}>
-                        <Ionicons name="notifications-outline" size={20} color="#475569" />
-                    </TouchableOpacity>
-                </View>
+  return (
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: COLORS.white }}
+      edges={["top"]}
+    >
+      <Stack.Screen options={{ headerShown: false }} />
 
-                <View className="mt-4 bg-[#2A83E8] rounded-2xl p-4">
-                    <Text className="text-[10px] font-bold text-[#CFE4FF]">PREMIUM MEMBER</Text>
-                    <Text className="text-[24px] font-bold text-white mt-1">Exclusive Business Rewards</Text>
-                    <Text className="text-xs text-[#E4F0FF] mt-1">Handpicked tools for your growth this month.</Text>
-                </View>
+      {/* Header */}
+      <View
+        style={{
+          paddingHorizontal: 24,
+          paddingTop: 16,
+          paddingBottom: 8,
+          backgroundColor: COLORS.white,
+          borderBottomWidth: 1,
+          borderBottomColor: COLORS.border,
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 16,
+          }}
+        >
+          <View>
+            <Text
+              style={{
+                fontSize: 28,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.textDark,
+              }}
+            >
+              Offers
+            </Text>
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: "Poppins_400Regular",
+                color: COLORS.textLight,
+                marginTop: 2,
+              }}
+            >
+              Exclusive deals for your business
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: COLORS.lightGrey,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            onPress={() => router.push("/(dashboard)/notifications")}
+          >
+            <Ionicons
+              name="notifications-outline"
+              size={20}
+              color={COLORS.textDark}
+            />
+          </TouchableOpacity>
+        </View>
 
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mt-3">
-                    <FilterChip label="All Offers" active />
-                    <FilterChip label="GST Filing" />
-                    <FilterChip label="Business Loans" />
-                    <FilterChip label="Software" />
-                </ScrollView>
+        {/* Filter Chips */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginBottom: 4 }}
+        >
+          {filters.map((filter, idx) => (
+            <FilterChip
+              key={idx}
+              label={filter}
+              active={activeFilter === filter.toLowerCase()}
+              onPress={() => setActiveFilter(filter.toLowerCase())}
+            />
+          ))}
+        </ScrollView>
+      </View>
+
+      {/* Offers List */}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingTop: 16,
+          paddingBottom: 130,
+        }}
+      >
+        <OfferCard
+          icon="document-text"
+          category="Taxation"
+          categoryColor="#2563EB"
+          title="ClearTax Premium"
+          discount="20% off"
+          description="Save big on your quarterly returns. Expert assisted filing with zero errors guaranteed."
+          timeLeft="Ends in 04:23:01"
+          onClaim={() => {}}
+        />
+
+        <View
+          style={{
+            backgroundColor: COLORS.primary,
+            borderRadius: 20,
+            padding: 16,
+            marginBottom: 16,
+            borderWidth: 2,
+            borderColor: COLORS.primary,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 12,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  backgroundColor: "#E0E8FF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: 12,
+                }}
+              >
+                <Ionicons name="business" size={20} color={COLORS.secondary} />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    fontFamily: "Poppins_800ExtraBold",
+                    color: COLORS.white,
+                  }}
+                >
+                  Business Loan
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "Poppins_400Regular",
+                    color: "#B8D4FF",
+                    marginTop: 2,
+                  }}
+                >
+                  Partner Bank
+                </Text>
+              </View>
             </View>
+            <View
+              style={{
+                backgroundColor: "#FACC15",
+                paddingHorizontal: 10,
+                paddingVertical: 4,
+                borderRadius: 12,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Poppins_800ExtraBold",
+                  color: "#713F12",
+                }}
+              >
+                POPULAR
+              </Text>
+            </View>
+          </View>
+          <Text
+            style={{
+              fontSize: 24,
+              fontFamily: "Poppins_800ExtraBold",
+              color: COLORS.white,
+              marginBottom: 4,
+            }}
+          >
+            Zero Processing
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              fontFamily: "Poppins_400Regular",
+              color: "#E0E8FF",
+              marginBottom: 12,
+              lineHeight: 18,
+            }}
+          >
+            On all business loans above Rs1 Lakh. Approved within 24 hours.
+          </Text>
+          <View
+            style={{
+              backgroundColor: "rgba(255,255,255,0.1)",
+              borderRadius: 12,
+              paddingHorizontal: 12,
+              paddingVertical: 8,
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <Ionicons name="alert-circle" size={14} color="#FACC15" />
+            <Text
+              style={{
+                fontSize: 11,
+                fontFamily: "Poppins_500Medium",
+                color: "#FACC15",
+                marginLeft: 8,
+              }}
+            >
+              Only 12 slots left today
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.secondary,
+              paddingVertical: 12,
+              borderRadius: 12,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 13,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.white,
+              }}
+            >
+              Check Eligibility
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 10, paddingTop: 10, paddingBottom: 120 }}>
-                <View className="bg-card rounded-2xl border border-[#E5EAF0] overflow-hidden mb-3">
-                    <View className="bg-[#E9EEF8] px-3 py-2.5 flex-row items-center justify-between">
-                        <View className="flex-row items-center">
-                            <View className="w-8 h-8 rounded-lg bg-[#DFE9FF] items-center justify-center mr-2">
-                                <Ionicons name="document-text" size={15} color="#2563EB" />
-                            </View>
-                            <View>
-                                <Text className="text-[10px] text-[#1D4ED8] uppercase tracking-wide">Taxation</Text>
-                                <Text className="text-[15px] font-bold text-[#0F172A]">ClearTax Premium</Text>
-                            </View>
-                        </View>
-                        <View className="bg-[#FEE2E2] px-2 py-1 rounded-md">
-                            <Text className="text-[10px] font-bold text-[#DC2626]">Ends in 04:23:01</Text>
-                        </View>
-                    </View>
+        <OfferCard
+          icon="document"
+          category="Documentation"
+          categoryColor="#8B5CF6"
+          title="Invoice Templates"
+          discount="100% Free"
+          description="Professional invoice templates for GST-compliant billing. Create unlimited invoices instantly."
+          onClaim={() => {}}
+        />
 
-                    <View className="p-3.5">
-                        <Text className="text-[24px] font-bold text-[#0F172A]">20% off on first GST filing</Text>
-                        <Text className="text-xs text-[#64748B] mt-1">Save big on your quarterly returns. Expert assisted filing with zero errors guaranteed.</Text>
-
-                        <View className="flex-row items-center justify-between mt-4">
-                            <TouchableOpacity>
-                                <Text className="text-[11px] text-[#94A3B8] underline">Terms Apply</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity className="bg-[#2A83E8] rounded-xl px-5 py-2.5">
-                                <Text className="text-white text-xs font-bold">Claim Now</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-
-                <View className="bg-card rounded-2xl border border-[#2A83E8] p-3.5 mb-3">
-                    <View className="flex-row items-center justify-between">
-                        <View className="flex-row items-center">
-                            <View className="w-8 h-8 rounded-full bg-[#DCFCE7] items-center justify-center mr-2">
-                                <Ionicons name="business" size={16} color="#16A34A" />
-                            </View>
-                            <View>
-                                <Text className="text-[15px] font-bold text-[#0F172A]">Business Loan</Text>
-                                <Text className="text-[11px] text-[#94A3B8]">Partner Bank</Text>
-                            </View>
-                        </View>
-                        <View className="bg-[#FACC15] px-2 py-0.5 rounded-full">
-                            <Text className="text-[9px] font-bold text-[#713F12]">POPULAR</Text>
-                        </View>
-                    </View>
-
-                    <Text className="text-[24px] font-bold text-[#0F172A] mt-3">Zero Processing Fee</Text>
-                    <Text className="text-xs text-[#64748B] mt-1">On all business loans above Rs1 Lakh. Approved within 24 hours.</Text>
-
-                    <View className="mt-3 bg-[#F8FAFC] rounded-lg px-2.5 py-2 flex-row items-center">
-                        <Ionicons name="alert-circle" size={14} color="#EF4444" />
-                        <Text className="text-[11px] text-[#EF4444] ml-1">Only 12 slots left today</Text>
-                    </View>
-
-                    <TouchableOpacity className="bg-[#2A83E8] rounded-xl py-3 items-center mt-3">
-                        <Text className="text-white text-xs font-bold">Check Eligibility</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View className="rounded-2xl p-4 mb-3" style={{ backgroundColor: '#6D28D9' }}>
-                    <View className="flex-row items-center justify-between">
-                        <View className="bg-[#A78BFA] px-2 py-0.5 rounded">
-                            <Text className="text-[9px] font-bold text-white">FREEBIE</Text>
-                        </View>
-                        <View className="w-8 h-8 rounded-lg bg-card items-center justify-center">
-                            <Ionicons name="qr-code" size={15} color="#6D28D9" />
-                        </View>
-                    </View>
-
-                    <Text className="text-[29px] font-bold text-white mt-4">Free Digital Business Card</Text>
-                    <Text className="text-xs text-[#E9D5FF] mt-2">Create a professional digital identity for your business. Shareable on WhatsApp instantly.</Text>
-
-                    <TouchableOpacity className="bg-card rounded-xl py-3 items-center mt-5">
-                        <Text className="text-[#6D28D9] text-xs font-bold">Create Now -></Text>
-                    </TouchableOpacity>
-
-                    <Text className="text-[10px] text-[#DDD6FE] text-center mt-4">No credit card required</Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
+        {/* Freebie Card */}
+        <View
+          style={{
+            backgroundColor: "#7C3AED",
+            borderRadius: 20,
+            padding: 16,
+            marginBottom: 20,
+            overflow: "hidden",
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 12,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "#A78BFA",
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+                borderRadius: 8,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 9,
+                  fontFamily: "Poppins_800ExtraBold",
+                  color: COLORS.white,
+                  textTransform: "uppercase",
+                }}
+              >
+                Freebie
+              </Text>
+            </View>
+            <View
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 12,
+                backgroundColor: COLORS.white,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Ionicons name="qr-code" size={20} color="#7C3AED" />
+            </View>
+          </View>
+          <Text
+            style={{
+              fontSize: 26,
+              fontFamily: "Poppins_800ExtraBold",
+              color: COLORS.white,
+              marginBottom: 8,
+            }}
+          >
+            Digital Card
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              fontFamily: "Poppins_400Regular",
+              color: "#E9D5FF",
+              marginBottom: 16,
+              lineHeight: 18,
+            }}
+          >
+            Create a professional digital identity for your business. Shareable
+            on WhatsApp instantly.
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: COLORS.white,
+              paddingVertical: 12,
+              borderRadius: 12,
+              alignItems: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 13,
+                fontFamily: "Poppins_700Bold",
+                color: "#7C3AED",
+              }}
+            >
+              Create Now →
+            </Text>
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 10,
+              fontFamily: "Poppins_400Regular",
+              color: "#DDD6FE",
+              textAlign: "center",
+              marginTop: 12,
+            }}
+          >
+            No credit card required
+          </Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
