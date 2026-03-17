@@ -80,6 +80,13 @@ const tools: ToolItem[] = [
     iconBg: COLORS.actionBlueBg,
     iconColor: "#0EA5E9",
   },
+  {
+    title: "Trademark Checker",
+    subtitle: "Check trademark availability and search existing trademarks.",
+    icon: "shield-checkmark",
+    iconBg: COLORS.actionRedBg,
+    iconColor: COLORS.actionRedIcon,
+  },
 ];
 
 const QuickAction = ({ iconName, iconColor, bg, label, onPress }: any) => (
@@ -260,6 +267,8 @@ export default function ToolsScreen() {
                 router.push("/(dashboard)/tools-pages/delivery-challan");
               } else if (tool.title === "GST Calculator") {
                 router.push("/(dashboard)/tools-pages/gst-calculator");
+              } else if (tool.title === "Trademark Checker") {
+                router.push("/(dashboard)/tools-pages/trademark-checker");
               }
             };
 
