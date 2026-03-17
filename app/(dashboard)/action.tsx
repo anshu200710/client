@@ -1,9 +1,12 @@
-import { View, Text } from 'react-native';
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
 
 export default function ActionScreen() {
-    return (
-        <View className="flex-1 items-center justify-center bg-[#F7F9FC]">
-            <Text className="text-xl font-bold text-text">Add New</Text>
-        </View>
-    );
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push("/(dashboard)/services");
+  }, [router]);
+
+  return null;
 }

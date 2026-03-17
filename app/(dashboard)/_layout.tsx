@@ -8,7 +8,7 @@ const COLORS = {
   primary: "#1E4FA3", // New Primary
   secondary: "#2ECC71", // New Secondary
   textLight: "#9FA3B1", // Kept for inactive tabs
-  textDark: "#1A1A1A" // New text
+  textDark: "#1A1A1A", // New text
 };
 
 // Custom Add Button Component for the center tab
@@ -87,11 +87,11 @@ export default function DashboardLayout() {
         }}
       />
       <Tabs.Screen
-        name="services"
+        name="chat"
         options={{
-          title: "Services",
+          title: "Offers",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="cube" size={24} color={color} />
+            <Ionicons name="pricetag" size={24} color={color} />
           ),
         }}
       />
@@ -105,11 +105,11 @@ export default function DashboardLayout() {
         }}
       />
       <Tabs.Screen
-        name="chat"
+        name="tools"
         options={{
-          title: "Chat",
+          title: "Tools",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble" size={24} color={color} />
+            <Ionicons name="hammer" size={24} color={color} />
           ),
         }}
       />
@@ -122,11 +122,11 @@ export default function DashboardLayout() {
           ),
         }}
       />
-      
+
       {/* Hidden Screens */}
-      <Tabs.Screen name="tools" options={{ href: null }} />
-      <Tabs.Screen name="profile-pages" options={{ href: null }} />
+      <Tabs.Screen name="services" options={{ href: null }} />
       <Tabs.Screen name="notifications" options={{ href: null }} />
+      <Tabs.Screen name="profile-pages" options={{ href: null }} />
       <Tabs.Screen name="service-pages" options={{ href: null }} />
       <Tabs.Screen name="tools-pages" options={{ href: null }} />
     </Tabs>
