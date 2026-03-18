@@ -1,48 +1,60 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import React from "react";
-import { Platform, TouchableOpacity, View, Text } from "react-native";
+import { Platform, TouchableOpacity, View } from "react-native";
 
 const COLORS = {
   primary: "#1E4FA3",
+  primaryLight: "#E5F0FF",
   secondary: "#2ECC71",
+  accent: "#6366F1",
   textLight: "#9FA3B1",
   textDark: "#1A1A1A",
   white: "#FFFFFF",
+  lightGrey: "#F8FAFC",
+  border: "#E2E8F0",
 };
 
 // Custom Add Button Component for the center tab
-const AddButton = ({ onPress }: { onPress?: () => void }) => (
-  <TouchableOpacity
-    onPress={onPress}
-    style={{
-      top: -20,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-    activeOpacity={0.9}
-  >
-    <View
+const AddButton = () => {
+  const router = useRouter();
+
+  const handlePress = () => {
+    router.push("/(admin)/offers");
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={handlePress}
       style={{
-        width: 64,
-        height: 64,
-        borderRadius: 32,
-        backgroundColor: COLORS.primary,
+        top: -25,
         justifyContent: "center",
         alignItems: "center",
-        elevation: 8,
-        shadowColor: COLORS.primary,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.35,
-        shadowRadius: 10,
-        borderWidth: 4,
-        borderColor: COLORS.white,
       }}
+      activeOpacity={0.9}
     >
-      <Ionicons name="add" size={32} color={COLORS.white} />
-    </View>
-  </TouchableOpacity>
-);
+      <View
+        style={{
+          width: 70,
+          height: 70,
+          borderRadius: 35,
+          backgroundColor: COLORS.primary,
+          justifyContent: "center",
+          alignItems: "center",
+          elevation: 12,
+          shadowColor: COLORS.primary,
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.4,
+          shadowRadius: 16,
+          borderWidth: 5,
+          borderColor: COLORS.white,
+        }}
+      >
+        <Ionicons name="add" size={32} color={COLORS.white} />
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 export default function AdminLayout() {
   return (
@@ -57,25 +69,30 @@ export default function AdminLayout() {
           bottom: 0,
           left: 0,
           right: 0,
-          elevation: 0,
+          elevation: 8,
           backgroundColor: COLORS.white,
-          borderTopColor: "#F0F3F7",
+          borderTopColor: COLORS.border,
           borderTopWidth: 1,
-          height: Platform.OS === "ios" ? 88 : 75,
-          paddingBottom: Platform.OS === "ios" ? 28 : 12,
-          paddingTop: 10,
+          height: Platform.OS === "ios" ? 95 : 80,
+          paddingBottom: Platform.OS === "ios" ? 32 : 16,
+          paddingTop: 12,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
-          fontFamily: "Poppins_500Medium",
-          marginTop: 2,
+          fontSize: 11,
+          fontFamily: "Poppins_600SemiBold",
+          marginTop: 4,
         },
         tabBarIconStyle: {
-          marginTop: 0,
+          marginTop: 2,
         },
         tabBarItemStyle: {
           justifyContent: "center",
           alignItems: "center",
+          paddingVertical: 4,
         },
       }}
     >
@@ -84,7 +101,7 @@ export default function AdminLayout() {
         options={{
           title: "Dashboard",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid" size={24} color={color} />
+            <Ionicons name="grid" size={22} color={color} />
           ),
         }}
       />
@@ -93,7 +110,7 @@ export default function AdminLayout() {
         options={{
           title: "Users",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="people" size={24} color={color} />
+            <Ionicons name="people" size={22} color={color} />
           ),
         }}
       />
@@ -103,27 +120,33 @@ export default function AdminLayout() {
           title: "",
           tabBarIcon: () => null,
           tabBarLabel: () => null,
-          tabBarButton: (props: any) => <AddButton onPress={props.onPress} />,
+          tabBarButton: () => <AddButton />,
         }}
       />
+
       <Tabs.Screen
         name="requests"
         options={{
           title: "Requests",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document-text" size={24} color={color} />
+            <Ionicons name="document-text" size={22} color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
-        name="settings"
+        name="payment"
         options={{
-          title: "Settings",
+          title: "Payment",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={24} color={color} />
+            <Ionicons name="card" size={22} color={color} />
           ),
         }}
       />
+
+      {/* Hidden routes: accessible via + button or notifications */}
+      <Tabs.Screen name="offers" options={{ href: null }} />
+      <Tabs.Screen name="notifications" options={{ href: null }} />
     </Tabs>
   );
 }
