@@ -1,50 +1,50 @@
-import React, { useMemo, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View, Image, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useMemo, useState } from 'react';
+import { Image, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Match Dashboard/Auth Colors
 const COLORS = {
-  primary: "#0066CC",
-  secondary: "#FF9900",
-  success: "#28A745",
-  alertRed: "#DC3545",
-  alertAmber: "#FFC107",
-  lightGrey: "#F8F9FA",
-  white: "#FFFFFF",
-  textDark: "#1A1D2E",
-  textGray: "#666666",
-  textLight: "#9FA3B1",
-  border: "#E4E7EF",
-  
-  // Custom pastels matching home.tsx
-  actionBlueBg: "#EFF6FF",
-  actionPurpleBg: "#F5F3FF",
-  actionPurpleIcon: "#8B5CF6",
-  actionGreenBg: "#ECFDF5",
-  actionGreenIcon: "#10B981",
-  actionRedBg: "#FEF2F2",
-  actionRedIcon: "#EF4444",
-  actionYellowBg: "#FFFBEB",
-  actionYellowIcon: "#F59E0B",
-  actionGreyBg: "#F8FAFC",
-  actionGreyIcon: "#94A3B8",
+    primary: "#0066CC",
+    secondary: "#FF9900",
+    success: "#28A745",
+    alertRed: "#DC3545",
+    alertAmber: "#FFC107",
+    lightGrey: "#F8F9FA",
+    white: "#FFFFFF",
+    textDark: "#1A1D2E",
+    textGray: "#666666",
+    textLight: "#9FA3B1",
+    border: "#E4E7EF",
+
+    // Custom pastels matching home.tsx
+    actionBlueBg: "#EFF6FF",
+    actionPurpleBg: "#F5F3FF",
+    actionPurpleIcon: "#8B5CF6",
+    actionGreenBg: "#ECFDF5",
+    actionGreenIcon: "#10B981",
+    actionRedBg: "#FEF2F2",
+    actionRedIcon: "#EF4444",
+    actionYellowBg: "#FFFBEB",
+    actionYellowIcon: "#F59E0B",
+    actionGreyBg: "#F8FAFC",
+    actionGreyIcon: "#94A3B8",
 };
 
 const docOptions = ['PAN Card', 'Aadhar Card', 'Business Proof', 'Bank Statement'];
 
 const conversionFAQs = [
-  { q: "Can I avoid GST if my business is small?", a: "If you sell online on Amazon/Flipkart or sell outside your state, GST is 100% mandatory from day one! Don't risk heavy penalties." },
-  { q: "Will GST registration help me get business loans?", a: "Yes! Banks trust businesses with a GST number. It works as solid proof of business and helps secure mudra or MSME loans faster." },
-  { q: "Can I claim back the GST I pay on purchases?", a: "Absolutely. With GST registration, you can claim Input Tax Credit (ITC) on goods and services you buy for your business, saving you thousands every month!" },
-  { q: "Does a GST number make me look professional?", a: "Yes. Big companies, B2B clients, and government tenders usually only work with GST-registered vendors." },
-  { q: "Am I losing customers without GST?", a: "Likely yes. B2B buyers prefer GST-registered suppliers so they can claim ITC. Without GST, you are turning away high-value clients." },
-  { q: "I run my business from home. Can I still get GST?", a: "Yes! You can easily register GST using your home address. Just provide your electricity bill and a NOC from the property owner." },
-  { q: "Is GST registration a complicated offline process?", a: "Not at all! With VyaaparSaathi, it is completely online, paperless, and hassle-free. You don't need to visit any government office." },
-  { q: "What if I get GST but have zero sales in some months?", a: "No problem. You simply file a 'Nil Return.' Filing is quick, and having the GST active keeps your business ready for future growth." },
-  { q: "How much penalty can I face for not registering?", a: "Operating without GST when required can attract penalties of 100% of the tax due or a minimum of ₹10,000. It's not worth the risk!" },
-  { q: "I'm not sure if I cross the turnover limit?", a: "Voluntary registration has zero disadvantages and opens up growth opportunities. Registering early is always the safer path." }
+    { q: "Can I avoid GST if my business is small?", a: "If you sell online on Amazon/Flipkart or sell outside your state, GST is 100% mandatory from day one! Don't risk heavy penalties." },
+    { q: "Will GST registration help me get business loans?", a: "Yes! Banks trust businesses with a GST number. It works as solid proof of business and helps secure mudra or MSME loans faster." },
+    { q: "Can I claim back the GST I pay on purchases?", a: "Absolutely. With GST registration, you can claim Input Tax Credit (ITC) on goods and services you buy for your business, saving you thousands every month!" },
+    { q: "Does a GST number make me look professional?", a: "Yes. Big companies, B2B clients, and government tenders usually only work with GST-registered vendors." },
+    { q: "Am I losing customers without GST?", a: "Likely yes. B2B buyers prefer GST-registered suppliers so they can claim ITC. Without GST, you are turning away high-value clients." },
+    { q: "I run my business from home. Can I still get GST?", a: "Yes! You can easily register GST using your home address. Just provide your electricity bill and a NOC from the property owner." },
+    { q: "Is GST registration a complicated offline process?", a: "Not at all! With VyaaparSaathi, it is completely online, paperless, and hassle-free. You don't need to visit any government office." },
+    { q: "What if I get GST but have zero sales in some months?", a: "No problem. You simply file a 'Nil Return.' Filing is quick, and having the GST active keeps your business ready for future growth." },
+    { q: "How much penalty can I face for not registering?", a: "Operating without GST when required can attract penalties of 100% of the tax due or a minimum of ₹10,000. It's not worth the risk!" },
+    { q: "I'm not sure if I cross the turnover limit?", a: "Voluntary registration has zero disadvantages and opens up growth opportunities. Registering early is always the safer path." }
 ];
 
 export default function ServiceRequestFormScreen() {
@@ -95,11 +95,11 @@ export default function ServiceRequestFormScreen() {
             </View>
 
             <ScrollView contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
-                
+
                 {/* Image Banner */}
                 <View style={{ width: '100%', height: 160, borderRadius: 20, overflow: 'hidden', marginBottom: 24 }}>
-                    <Image 
-                        source={require('../../../assets/images/splash3.png')} 
+                    <Image
+                        source={require('../../../assets/images/splash.jpeg')}
                         style={{ width: '100%', height: '100%', resizeMode: 'cover' }}
                     />
                 </View>
@@ -195,13 +195,13 @@ export default function ServiceRequestFormScreen() {
                 <View style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16 }}>
                     <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 12 }}>Frequently Asked Questions</Text>
                     {conversionFAQs.map((faq, index) => (
-                        <TouchableOpacity 
-                            key={index} 
+                        <TouchableOpacity
+                            key={index}
                             onPress={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                            style={{ 
-                                borderBottomWidth: index === conversionFAQs.length - 1 ? 0 : 1, 
-                                borderBottomColor: COLORS.border, 
-                                paddingVertical: 12 
+                            style={{
+                                borderBottomWidth: index === conversionFAQs.length - 1 ? 0 : 1,
+                                borderBottomColor: COLORS.border,
+                                paddingVertical: 12
                             }}
                         >
                             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
@@ -266,9 +266,9 @@ export default function ServiceRequestFormScreen() {
 
                         <View style={{ width: '100%', height: 180, backgroundColor: COLORS.lightGrey, borderRadius: 16, marginBottom: 24, alignItems: "center", justifyContent: "center", overflow: "hidden", borderWidth: 1, borderColor: COLORS.border, borderStyle: "dashed" }}>
                             {/* Sample Image */}
-                            <Image 
-                                source={require('../../../assets/images/1.jpeg')} 
-                                style={{ width: '100%', height: '100%', opacity: 0.8, resizeMode: "cover" }} 
+                            <Image
+                                source={require('../../../assets/images/splash.jpeg')}
+                                style={{ width: '100%', height: '100%', opacity: 0.8, resizeMode: "cover" }}
                             />
                             <View style={{ position: "absolute", backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 }}>
                                 <Text style={{ color: COLORS.white, fontSize: 12, fontFamily: "Poppins_600SemiBold", letterSpacing: 0.5 }}>SAMPLE FORMAT</Text>

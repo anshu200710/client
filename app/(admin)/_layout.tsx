@@ -7,31 +7,24 @@ const COLORS = {
   primary: "#1E4FA3",
   primaryLight: "#E5F0FF",
   secondary: "#2ECC71",
-  accent: "#6366F1",
   textLight: "#9FA3B1",
   textDark: "#1A1A1A",
   white: "#FFFFFF",
-  lightGrey: "#F8FAFC",
   border: "#E2E8F0",
 };
 
-// Custom Add Button Component for the center tab
+// Center Add Button
 const AddButton = () => {
   const router = useRouter();
-
-  const handlePress = () => {
-    router.push("/(admin)/offers");
-  };
-
   return (
     <TouchableOpacity
-      onPress={handlePress}
+      onPress={() => router.push("/(admin)/offers")}
+      activeOpacity={0.9}
       style={{
         top: -25,
         justifyContent: "center",
         alignItems: "center",
       }}
-      activeOpacity={0.9}
     >
       <View
         style={{
@@ -100,7 +93,7 @@ export default function AdminLayout() {
         name="dashboard"
         options={{
           title: "Dashboard",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color }) => (
             <Ionicons name="grid" size={22} color={color} />
           ),
         }}
@@ -109,27 +102,31 @@ export default function AdminLayout() {
         name="users"
         options={{
           title: "Users",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color }) => (
             <Ionicons name="people" size={22} color={color} />
           ),
         }}
       />
+      
       <Tabs.Screen
         name="action"
         options={{
           title: "",
+          // Empty icon/label since custom button overrides it
           tabBarIcon: () => null,
           tabBarLabel: () => null,
           tabBarButton: () => <AddButton />,
         }}
       />
 
+      {/* KEEP PAYMENT AND REQUEST ICON TABS ON THE RIGHT SIDE */}
       <Tabs.Screen
         name="requests"
         options={{
           title: "Requests",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="document-text" size={22} color={color} />
+          tabBarIcon: ({ color }) => (
+            // A redirect style icon as requested
+            <Ionicons name="arrow-forward-outline" size={22} color={color} />
           ),
         }}
       />
@@ -138,13 +135,13 @@ export default function AdminLayout() {
         name="payment"
         options={{
           title: "Payment",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: ({ color }) => (
             <Ionicons name="card" size={22} color={color} />
           ),
         }}
       />
 
-      {/* Hidden routes: accessible via + button or notifications */}
+      {/* Hidden Screens */}
       <Tabs.Screen name="offers" options={{ href: null }} />
       <Tabs.Screen name="notifications" options={{ href: null }} />
     </Tabs>
