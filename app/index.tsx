@@ -1,6 +1,6 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack, router } from "expo-router";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   FlatList,
@@ -51,6 +51,19 @@ export default function OnboardingScreen() {
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef<FlatList>(null);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (currentIndex < DATA.length - 1) {
+        slidesRef.current?.scrollToOffset({
+          offset: (currentIndex + 1) * width,
+          animated: true,
+        });
+      }
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [currentIndex, width]);
+
   const handleNext = () => {
     if (currentIndex < DATA.length - 1) {
       slidesRef.current?.scrollToOffset({
@@ -62,10 +75,13 @@ export default function OnboardingScreen() {
     }
   };
 
-  const handleMomentumScrollEnd = (event: any) => {
-    const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-    setCurrentIndex(newIndex);
-  };
+  const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+    if (viewableItems && viewableItems[0]) {
+      setCurrentIndex(viewableItems[0].index);
+    }
+  }).current;
+
+  const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
   const Paginator = () => (
     <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -213,25 +229,10 @@ export default function OnboardingScreen() {
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             source={require("../assets/images/transLogo.png")}
-            style={{ width: 35, height: 35, marginRight: 8, borderRadius: 8 }}
+            style={{ width: 100, height: 100, marginRight: 8, borderRadius: 8 }}
             resizeMode="contain"
           />
         </View>
-
-        <TouchableOpacity
-          onPress={() => router.push("/(auth)/login")}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-        >
-          <Text
-            style={{
-              color: "#fff",
-              fontSize: 16,
-              fontFamily: "Poppins_600SemiBold",
-            }}
-          >
-            Skip
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <Animated.FlatList
@@ -243,7 +244,8 @@ export default function OnboardingScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         bounces={false}
-        onMomentumScrollEnd={handleMomentumScrollEnd}
+        onViewableItemsChanged={onViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: false },
