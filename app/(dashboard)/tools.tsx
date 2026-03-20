@@ -87,6 +87,34 @@ const tools: ToolItem[] = [
     iconBg: COLORS.actionRedBg,
     iconColor: COLORS.actionRedIcon,
   },
+  {
+    title: "Free Logo Maker",
+    subtitle: "Create an AI-powered logo for your business instantly.",
+    icon: "color-palette",
+    iconBg: COLORS.actionYellowBg,
+    iconColor: COLORS.actionYellowIcon,
+  },
+  {
+    title: "Visiting Card Generator",
+    subtitle: "Design and export professional business cards.",
+    icon: "id-card",
+    iconBg: COLORS.actionBlueBg,
+    iconColor: "#2563EB",
+  },
+  {
+    title: "Social Media Posts",
+    subtitle: "Canva style templates for festivals and offers.",
+    icon: "logo-instagram",
+    iconBg: COLORS.actionPurpleBg,
+    iconColor: COLORS.actionPurpleIcon,
+  },
+  {
+    title: "WhatsApp Templates",
+    subtitle: "Ready-to-use marketing messages for WhatsApp.",
+    icon: "logo-whatsapp",
+    iconBg: COLORS.actionGreenBg,
+    iconColor: COLORS.actionGreenIcon,
+  },
 ];
 
 const QuickAction = ({ iconName, iconColor, bg, label, onPress }: any) => (
@@ -269,6 +297,14 @@ export default function ToolsScreen() {
                 router.push("/(dashboard)/tools-pages/gst-calculator");
               } else if (tool.title === "Trademark Checker") {
                 router.push("/(dashboard)/tools-pages/trademark-checker");
+              } else if (tool.title === "Free Logo Maker") {
+                router.push("/(dashboard)/tools-pages/logo-maker");
+              } else if (tool.title === "Visiting Card Generator") {
+                router.push("/(dashboard)/tools-pages/visiting-card-generator");
+              } else if (tool.title === "Social Media Posts") {
+                router.push("/(dashboard)/tools-pages/social-media-posts");
+              } else if (tool.title === "WhatsApp Templates") {
+                router.push("/(dashboard)/tools-pages/whatsapp-templates");
               }
             };
 
