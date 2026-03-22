@@ -202,8 +202,17 @@ export default function DashboardScreen() {
       onPress={onPress}
       style={{
         alignItems: "center",
-        width: "25%",
-        marginBottom: 24,
+        width: "23%",
+        marginBottom: 16,
+        backgroundColor: COLORS.white,
+        borderRadius: 20,
+        paddingVertical: 14,
+        paddingHorizontal: 4,
+        shadowColor: "#000",
+        shadowOpacity: 0.06,
+        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 4 },
+        elevation: 4,
       }}
     >
       <LinearGradient
@@ -211,28 +220,23 @@ export default function DashboardScreen() {
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={{
-          width: 58,
-          height: 58,
-          borderRadius: 18,
+          width: 55,
+          height: 55,
+          borderRadius: 16,
           alignItems: "center",
           justifyContent: "center",
           marginBottom: 8,
-          shadowColor: bg[1],
-          shadowOpacity: 0.35,
-          shadowRadius: 8,
-          shadowOffset: { width: 0, height: 4 },
-          elevation: 4,
         }}
       >
         <Ionicons name={icon} size={28} color={COLORS.white} />
       </LinearGradient>
       <Text
         style={{
-          fontSize: 12,
-          fontFamily: "Poppins_500Medium",
+          fontSize: 11,
+          fontFamily: "Poppins_600SemiBold",
           color: COLORS.textDark,
           textAlign: "center",
-          lineHeight: 17,
+          lineHeight: 14,
         }}
       >
         {label}
@@ -337,36 +341,33 @@ export default function DashboardScreen() {
               paddingTop: 16,
               flexDirection: "row",
               justifyContent: "space-between",
-              alignItems: "center",
+              alignItems: "flex-start",
             }}
           >
+            <View style={{ width: 46 }} /> {/* Spacer to center logo */}
             {/* Logo block */}
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <View style={{ alignItems: "center", gap: 4 }}>
               <View
                 style={{
-                  width: 52,
-                  height: 52,
-                  borderRadius: 14,
-                  backgroundColor: COLORS.white,
+                  width: 64,
+                  height: 64,
+                  borderRadius: 16,
                   alignItems: "center",
                   justifyContent: "center",
-                  shadowColor: "#000",
-                  shadowOpacity: 0.1,
-                  shadowRadius: 8,
-                  elevation: 4,
                 }}
               >
                 <Image
                   source={require("../../assets/images/transLogo.png")}
-                  style={{ width: 52, height: 52, borderRadius: 14 }}
+                  style={{ width: 64, height: 64, borderRadius: 16 }}
                 />
               </View>
-              <View>
+              <View style={{ alignItems: "center" }}>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 22,
                     fontFamily: "Poppins_700Bold",
                     color: COLORS.textDark,
+                    lineHeight: 28,
                   }}
                 >
                   <Text style={{ color: COLORS.textDark }}>EaseMy</Text>
@@ -377,6 +378,7 @@ export default function DashboardScreen() {
                     fontSize: 11,
                     fontFamily: "Poppins_400Regular",
                     color: COLORS.textGray,
+                    marginTop: -4,
                   }}
                 >
                   powered by Vyapar Saathi
@@ -547,28 +549,27 @@ export default function DashboardScreen() {
           </View>
 
           {/* View Reports Button */}
-          {/* <View style={{ paddingHorizontal: 20, marginTop: 16 }}>
+          <View style={{ paddingHorizontal: 20, marginTop: 24, alignItems: "center" }}>
             <TouchableOpacity
               onPress={() => router.push("/(dashboard)/tools")}
               style={{
                 borderRadius: 30,
-                borderWidth: 1,
-                borderColor: COLORS.border,
                 backgroundColor: COLORS.white,
-                paddingVertical: 12,
+                paddingVertical: 10,
+                paddingHorizontal: 24,
                 alignItems: "center",
                 flexDirection: "row",
                 justifyContent: "center",
                 gap: 6,
                 shadowColor: "#000",
                 shadowOpacity: 0.05,
-                shadowRadius: 4,
-                elevation: 2,
+                shadowRadius: 5,
+                elevation: 3,
               }}
             >
               <Text
                 style={{
-                  fontSize: 15,
+                  fontSize: 14,
                   fontFamily: "Poppins_600SemiBold",
                   color: COLORS.textDark,
                 }}
@@ -577,121 +578,11 @@ export default function DashboardScreen() {
               </Text>
               <Ionicons name="chevron-forward" size={16} color={COLORS.textDark} />
             </TouchableOpacity>
-          </View> */}
+          </View>
         </LinearGradient>
 
 
-        {/* ── TOOLS & SERVICES ── */}
-        <View
-          style={{
-            marginHorizontal: 20,
-            marginTop: 20,
-            backgroundColor: COLORS.white,
-            borderRadius: 20,
-            padding: 20,
-            shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 3,
-          }}
-        >
-          {/* Header */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 16,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  backgroundColor: "#FFF7ED",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons name="apps-outline" size={18} color="#EA580C" />
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                  }}
-                >
-                  Tools & Services
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textLight,
-                  }}
-                >
-                  Boost your business
-                </Text>
-              </View>
-            </View>
-          </View>
 
-          {/* Tools Grid */}
-          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: 8 }}>
-            {tools.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={{
-                  width: "25%",
-                  alignItems: "center",
-                  marginBottom: 20,
-                }}
-                onPress={() => {
-                  const slug = item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                  router.push(`/tools-pages/${slug}` as any);
-                }}
-              >
-                <LinearGradient
-                  colors={item.iconBg}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 18,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 8,
-                    shadowColor: item.iconBg[1],
-                    shadowOpacity: 0.35,
-                    shadowRadius: 6,
-                    shadowOffset: { width: 0, height: 3 },
-                    elevation: 3,
-                  }}
-                >
-                  <Ionicons name={item.icon as any} size={26} color={COLORS.white} />
-                </LinearGradient>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    fontFamily: "Poppins_500Medium",
-                    color: COLORS.textDark,
-                    textAlign: "center",
-                    lineHeight: 14,
-                    paddingHorizontal: 2,
-                  }}
-                  numberOfLines={2}
-                >
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
 
         {/* ── POPULAR SERVICES ── */}
         <View
@@ -835,6 +726,123 @@ export default function DashboardScreen() {
             ))}
           </View>
         </View>
+
+
+
+
+        {/* ── TOOLS & SERVICES ── */}
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginTop: 20,
+            backgroundColor: COLORS.white,
+            borderRadius: 20,
+            padding: 20,
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+          {/* Header */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <View
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  backgroundColor: "#FFF7ED",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons name="apps-outline" size={18} color="#EA580C" />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  Tools & Services
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_400Regular",
+                    color: COLORS.textLight,
+                  }}
+                >
+                  Boost your business
+                </Text>
+              </View>
+            </View>
+          </View>
+
+          {/* Tools Grid */}
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: 8 }}>
+            {tools.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={{
+                  width: "25%",
+                  alignItems: "center",
+                  marginBottom: 20,
+                }}
+                onPress={() => {
+                  const slug = item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                  router.push(`/tools-pages/${slug}` as any);
+                }}
+              >
+                <LinearGradient
+                  colors={item.iconBg}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 18,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: 8,
+                    shadowColor: item.iconBg[1],
+                    shadowOpacity: 0.35,
+                    shadowRadius: 6,
+                    shadowOffset: { width: 0, height: 3 },
+                    elevation: 3,
+                  }}
+                >
+                  <Ionicons name={item.icon as any} size={26} color={COLORS.white} />
+                </LinearGradient>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "Poppins_500Medium",
+                    color: COLORS.textDark,
+                    textAlign: "center",
+                    lineHeight: 14,
+                    paddingHorizontal: 2,
+                  }}
+                  numberOfLines={2}
+                >
+                  {item.title}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+
 
 
 
