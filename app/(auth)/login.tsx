@@ -2,15 +2,18 @@ import { Ionicons } from "@expo/vector-icons";
 import { Stack, router } from "expo-router";
 import React, { useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../context/AuthContext";
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -26,21 +29,85 @@ const COLORS = {
   border: "#E4E7EF",
 };
 
+/**
+ * Login Screen Component
+ * Handles user authentication with email and password
+ */
 export default function LoginScreen() {
+  // State Management
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
-  const handleLogin = () => {
-    if (
-      email.toLowerCase() === "admin@vyaaparsaathi.com" ||
-      email === "admin"
-    ) {
-      router.replace("/(admin)/dashboard");
-    } else {
+  // Auth Context
+  const { login, loading, error, clearError } = useAuth();
+
+  /**
+   * Validate email format
+   */
+  const isValidEmail = (emailStr: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(emailStr);
+  };
+
+  /**
+   * Handle login submission
+   */
+  const handleLogin = async () => {
+    try {
+      // Clear previous errors
+      setValidationError(null);
+      clearError();
+
+      // Validation
+      if (!email.trim()) {
+        setValidationError("Email is required");
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        setValidationError("Please enter a valid email address");
+        return;
+      }
+
+      if (!password) {
+        setValidationError("Password is required");
+        return;
+      }
+
+      if (password.length < 6) {
+        setValidationError("Password must be at least 6 characters");
+        return;
+      }
+
+      // Attempt login
+      await login(email, password);
+
+      // Check admin status for routing
+      // The router will handle this based on the user's role
       router.replace("/(dashboard)/home");
+    } catch (err: any) {
+      const errorMessage = err.message || "Login failed. Please try again.";
+      Alert.alert("Login Error", errorMessage, [{ text: "OK" }]);
+      console.error("Login error:", err);
     }
+  };
+
+  /**
+   * Navigate to signup screen
+   */
+  const navigateToSignup = () => {
+    router.replace("/signup");
+  };
+
+  /**
+   * Navigate to forgot password screen
+   */
+  const navigateToForgotPassword = () => {
+    // TODO: Implement forgot password screen
+    Alert.alert("Coming Soon", "Password recovery feature coming soon!");
   };
 
   return (
@@ -84,6 +151,7 @@ export default function LoginScreen() {
             }}
           >
             <TouchableOpacity
+              disabled
               style={{
                 flex: 1,
                 backgroundColor: COLORS.primary,
@@ -108,7 +176,7 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => router.replace("/signup")}
+              onPress={navigateToSignup}
               style={{
                 flex: 1,
                 borderRadius: 50,
@@ -128,6 +196,30 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
           </View>
+
+          {/* Error Message Display */}
+          {(validationError || error) && (
+            <View
+              style={{
+                backgroundColor: COLORS.alertRed + "15",
+                borderLeftWidth: 4,
+                borderLeftColor: COLORS.alertRed,
+                padding: 12,
+                borderRadius: 8,
+                marginBottom: 20,
+              }}
+            >
+              <Text
+                style={{
+                  color: COLORS.alertRed,
+                  fontSize: 13,
+                  fontFamily: "Poppins_500Medium",
+                }}
+              >
+                {validationError || error}
+              </Text>
+            </View>
+          )}
 
           {/* Email Input */}
           <View style={{ marginBottom: 20 }}>
@@ -150,15 +242,23 @@ export default function LoginScreen() {
                 borderRadius: 16,
                 paddingHorizontal: 16,
                 paddingVertical: 14,
+                borderWidth: 1.5,
+                borderColor: validationError && !email ? COLORS.alertRed : "transparent",
               }}
             >
+              <Ionicons name="mail-outline" size={18} color={COLORS.textLight} style={{ marginRight: 8 }} />
               <TextInput
-                placeholder="Uzzalh4343@gmail.com"
+                placeholder="example@gmail.com"
                 placeholderTextColor={COLORS.textLight}
                 keyboardType="email-address"
                 autoCapitalize="none"
+                autoCorrect={false}
+                editable={!loading}
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => {
+                  setEmail(text);
+                  setValidationError(null);
+                }}
                 style={{
                   flex: 1,
                   fontSize: 15,
@@ -190,14 +290,21 @@ export default function LoginScreen() {
                 borderRadius: 16,
                 paddingHorizontal: 16,
                 paddingVertical: 14,
+                borderWidth: 1.5,
+                borderColor: validationError && !password ? COLORS.alertRed : "transparent",
               }}
             >
+              <Ionicons name="lock-closed-outline" size={18} color={COLORS.textLight} style={{ marginRight: 8 }} />
               <TextInput
                 placeholder="••••••••••••"
                 placeholderTextColor={COLORS.textLight}
                 secureTextEntry={!showPassword}
+                editable={!loading}
                 value={password}
-                onChangeText={setPassword}
+                onChangeText={(text) => {
+                  setPassword(text);
+                  setValidationError(null);
+                }}
                 style={{
                   flex: 1,
                   fontSize: 15,
@@ -231,6 +338,7 @@ export default function LoginScreen() {
               onPress={() => setRememberMe(!rememberMe)}
               style={{ flexDirection: "row", alignItems: "center" }}
               activeOpacity={0.7}
+              disabled={loading}
             >
               <View
                 style={{
@@ -260,15 +368,15 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={navigateToForgotPassword} disabled={loading}>
               <Text
                 style={{
                   fontSize: 13,
-                  color: COLORS.textLight,
-                  fontFamily: "Poppins_500Medium",
+                  color: COLORS.primary,
+                  fontFamily: "Poppins_600SemiBold",
                 }}
               >
-                Forgot Password
+                Forgot Password?
               </Text>
             </TouchableOpacity>
           </View>
@@ -277,8 +385,9 @@ export default function LoginScreen() {
           <TouchableOpacity
             onPress={handleLogin}
             activeOpacity={0.8}
+            disabled={loading || !email || !password}
             style={{
-              backgroundColor: COLORS.primary,
+              backgroundColor: loading || !email || !password ? COLORS.textLight : COLORS.primary,
               borderRadius: 50,
               paddingVertical: 16,
               alignItems: "center",
@@ -288,8 +397,13 @@ export default function LoginScreen() {
               shadowOpacity: 0.3,
               shadowRadius: 12,
               elevation: 6,
+              flexDirection: "row",
+              justifyContent: "center",
             }}
           >
+            {loading ? (
+              <ActivityIndicator size="small" color={COLORS.white} style={{ marginRight: 8 }} />
+            ) : null}
             <Text
               style={{
                 color: COLORS.white,
@@ -297,7 +411,7 @@ export default function LoginScreen() {
                 fontFamily: "Poppins_700Bold",
               }}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </Text>
           </TouchableOpacity>
 
@@ -327,7 +441,7 @@ export default function LoginScreen() {
             />
           </View>
 
-          {/* Social Buttons */}
+          {/* Social Login Buttons */}
           <View
             style={{
               flexDirection: "row",
@@ -348,6 +462,7 @@ export default function LoginScreen() {
                 borderColor: COLORS.border,
                 backgroundColor: COLORS.white,
               }}
+              disabled={loading}
             >
               <Ionicons
                 name="logo-google"
@@ -377,6 +492,7 @@ export default function LoginScreen() {
                 borderColor: COLORS.border,
                 backgroundColor: COLORS.white,
               }}
+              disabled={loading}
             >
               <Ionicons
                 name="logo-apple"
@@ -396,7 +512,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* Bottom link */}
+          {/* Bottom Navigation Link */}
           <View
             style={{
               flexDirection: "row",
@@ -407,12 +523,12 @@ export default function LoginScreen() {
             <Text style={{ fontSize: 14, color: COLORS.textLight }}>
               Don&apos;t have an account?{" "}
             </Text>
-            <TouchableOpacity onPress={() => router.replace("/signup")}>
+            <TouchableOpacity onPress={navigateToSignup} disabled={loading}>
               <Text
                 style={{
                   fontSize: 14,
                   fontFamily: "Poppins_700Bold",
-                  color: COLORS.textDark,
+                  color: COLORS.primary,
                 }}
               >
                 Sign up

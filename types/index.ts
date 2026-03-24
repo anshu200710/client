@@ -14,8 +14,9 @@ export interface SignupRequest {
   lastName: string;
   email: string;
   password: string;
+  confirmPassword: string;
   accountType: "individual" | "business" | "lawyer" | "admin";
-  phoneNumber?: string;
+  phoneNumber: string;
   businessName?: string;
   gstNumber?: string;
 }
@@ -49,51 +50,62 @@ export interface ResetPasswordRequest {
 
 // ============ User Types ============
 export interface User {
-  id: string;
+  _id?: string;
+  id?: string;
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber?: string;
+  phoneNumber: string;
   accountType: "individual" | "business" | "lawyer" | "admin";
+  businessName?: string;
+  role?: "user" | "admin";
+  isEmailVerified?: boolean;
   profilePicture?: string;
-  verified: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface BusinessUser extends User {
-  businessName: string;
-  gstNumber: string;
-  businessType: string;
-  panNumber?: string;
-  businessAddress?: string;
-  businessCity?: string;
-  businessState?: string;
-  businessPincode?: string;
-}
-
-export interface UserProfile extends User {
-  bio?: string;
-  website?: string;
-  location?: string;
-  businessDetails?: BusinessUser;
-  stats?: {
-    totalServices: number;
-    totalRequests: number;
-    completionRate: number;
-    rating: number;
+  profile?: {
+    phone?: string;
+    address?: string;
+    isCompany?: boolean;
+    companyName?: string;
+    gstNumber?: string;
+    businessType?: string;
   };
+  documents?: {
+    panCard?: {
+      fileUrl?: string;
+      uploadedAt?: string;
+      verified?: boolean;
+    };
+    aadhaarCard?: {
+      front?: {
+        fileUrl?: string;
+        uploadedAt?: string;
+      };
+      back?: {
+        fileUrl?: string;
+        uploadedAt?: string;
+      };
+      verified?: boolean;
+    };
+    gstCertificate?: {
+      fileUrl?: string;
+      uploadedAt?: string;
+      verified?: boolean;
+    };
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface UpdateProfileRequest {
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
-  bio?: string;
-  website?: string;
-  profilePicture?: string;
   businessName?: string;
-  gstNumber?: string;
+  profile?: {
+    address?: string;
+    gstNumber?: string;
+    businessType?: string;
+  };
 }
 
 // ============ Service Types ============
@@ -268,18 +280,25 @@ export interface ApiError {
 
 // ============ Auth Context Types ============
 export interface AuthContextType {
+  // State
   user: User | null;
   isAdmin: boolean;
   loading: boolean;
   authenticated: boolean;
+  error: string | null;
   tokens: {
     accessToken: string | null;
     refreshToken: string | null;
   };
-  login: (email: string, password: string) => Promise<void>;
-  signup: (data: SignupRequest) => Promise<void>;
+  
+  // Auth Methods
+  login: (email: string, password: string) => Promise<User>;
+  signup: (data: SignupRequest) => Promise<User>;
+  verifyEmail: (email: string, verificationCode: string) => Promise<User>;
+  resendVerificationCode: (email: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshTokens: () => Promise<void>;
-  updateProfile: (data: UpdateProfileRequest) => Promise<void>;
-  setUser: (user: User | null) => void;
+  updateProfile: (data: UpdateProfileRequest) => Promise<User>;
+  clearError: () => void;
+  initializeAuth: () => Promise<void>;
 }

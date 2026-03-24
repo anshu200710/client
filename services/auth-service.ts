@@ -112,17 +112,40 @@ class AuthService {
   }
 
   /**
-   * Verify email
+   * Verify email with verification code
    */
-  async verifyEmail(token: string): Promise<AuthResponse> {
+  async verifyEmail(email: string, verificationCode: string): Promise<AuthResponse> {
     try {
       const response = await apiClient.post<AuthResponse>(
         API_ENDPOINTS.VERIFY_EMAIL,
-        { token },
+        { email, verificationCode },
+      );
+
+      if (response.data.data?.tokens) {
+        const { accessToken, refreshToken } = response.data.data.tokens;
+        await this.saveTokens(accessToken, refreshToken);
+        apiClient.setAuthToken(accessToken);
+      }
+
+      return response.data;
+    } catch (error: any) {
+      console.error("Email verification error:", error.response?.data || error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * Resend verification code
+   */
+  async resendVerificationCode(email: string): Promise<AuthResponse> {
+    try {
+      const response = await apiClient.post<AuthResponse>(
+        API_ENDPOINTS.VERIFY_EMAIL.replace('verify-email', 'resend-verification-code'),
+        { email },
       );
       return response.data;
     } catch (error: any) {
-      console.error("Email verification error:", error.response?.data);
+      console.error("Resend verification error:", error.response?.data || error.message);
       throw error;
     }
   }

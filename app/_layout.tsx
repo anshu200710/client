@@ -9,6 +9,7 @@ import {
   Poppins_700Bold,
   Poppins_800ExtraBold,
 } from "@expo-google-fonts/poppins";
+import { AuthProvider } from "@/context/AuthContext";
 import "@/global.css";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -33,5 +34,9 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </AuthProvider>
+  );
 }
