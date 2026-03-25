@@ -329,11 +329,27 @@ export default function DashboardScreen() {
       >
         {/* ── GRADIENT HEADER ── */}
         <LinearGradient
-          colors={["#A8D8F0", "#C5E8C0", "#F5F7FB"]}
+          colors={["#75bfe4ff", "#81df73ff"]}
           start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={{ paddingBottom: 24 }}
+          end={{ x: 1, y: 0 }}
+          style={{
+            paddingBottom: 24,
+            borderBottomLeftRadius: 30,
+            borderBottomRightRadius: 30,
+            overflow: "hidden",
+          }}
         >
+          {/* Bottom fade to white */}
+          <LinearGradient
+            colors={["transparent", "#F5F7FB"]}
+            start={{ x: 0, y: 0.4 }}
+            end={{ x: 0, y: 1 }}
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+            }}
+          />
           {/* Logo + Bell Row */}
           <View
             style={{
@@ -358,7 +374,7 @@ export default function DashboardScreen() {
               >
                 <Image
                   source={require("../../assets/images/transLogo.png")}
-                  style={{ width: 64, height: 64, borderRadius: 16 }}
+                  style={{ width: 84, height: 84, borderRadius: 16 }}
                 />
               </View>
               <View style={{ alignItems: "center" }}>
