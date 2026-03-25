@@ -13,7 +13,6 @@ import {
     SignupRequest,
     UpdateProfileRequest,
     User,
-    UserProfile,
 } from "../types";
 import apiClient from "./api-client";
 
@@ -185,9 +184,9 @@ class AuthService {
   /**
    * Get user profile
    */
-  async getUserProfile(): Promise<UserProfile> {
+  async getUserProfile(): Promise<User> {
     try {
-      const response = await apiClient.get<{ data: UserProfile }>(
+      const response = await apiClient.get<{ data: User }>(
         API_ENDPOINTS.GET_PROFILE,
       );
       return response.data.data;

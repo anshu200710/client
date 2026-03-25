@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
-import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../context/AuthContext";
 
 // Match other pages colors
 const COLORS = {
@@ -119,6 +120,54 @@ const ProfileRow = ({
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { user, logout, loading } = useAuth();
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    Alert.alert("Log Out", "Are you sure you want to log out?", [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "Log Out",
+        onPress: async () => {
+          try {
+            setLoggingOut(true);
+            await logout();
+            router.replace("/(auth)/login");
+          } catch (error) {
+            Alert.alert("Error", "Failed to log out");
+          } finally {
+            setLoggingOut(false);
+          }
+        },
+        style: "destructive",
+      },
+    ]);
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </SafeAreaView>
+    );
+  }
+
+  if (!user) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 16, color: COLORS.textDark, fontFamily: "Poppins_600SemiBold" }}>
+          Please log in to view your profile
+        </Text>
+      </SafeAreaView>
+    );
+  }
+
+  const fullName = `${user.firstName} ${user.lastName}`;
+  const profileCompletion = user.isEmailVerified ? "90%" : "50%";
 
   return (
     <SafeAreaView
@@ -203,7 +252,9 @@ export default function ProfileScreen() {
                 }}
               >
                 <Image
-                  source={{ uri: "https://i.pravatar.cc/200?img=32" }}
+                  source={{ 
+                    uri: user.profilePicture || `https://i.pravatar.cc/200?u=${user.email}`
+                  }}
                   style={{ width: "100%", height: "100%" }}
                 />
               </View>
@@ -215,14 +266,18 @@ export default function ProfileScreen() {
                   width: 24,
                   height: 24,
                   borderRadius: 12,
-                  backgroundColor: "#06B6D4",
+                  backgroundColor: user.isEmailVerified ? "#06B6D4" : COLORS.alertAmber,
                   alignItems: "center",
                   justifyContent: "center",
                   borderWidth: 2,
                   borderColor: COLORS.white,
                 }}
               >
-                <Ionicons name="checkmark" size={12} color={COLORS.white} />
+                <Ionicons 
+                  name={user.isEmailVerified ? "checkmark" : "alert-circle"} 
+                  size={12} 
+                  color={COLORS.white} 
+                />
               </View>
             </View>
 
@@ -234,7 +289,7 @@ export default function ProfileScreen() {
                 marginTop: 12,
               }}
             >
-              Rajesh Kumar
+              {fullName}
             </Text>
             <View
               style={{
@@ -250,14 +305,16 @@ export default function ProfileScreen() {
                   fontFamily: "Poppins_500Medium",
                 }}
               >
-                Rajesh Textiles Pvt Ltd
+                {user.businessName || user.accountType.charAt(0).toUpperCase() + user.accountType.slice(1)}
               </Text>
-              <Ionicons
-                name="checkmark-circle"
-                size={12}
-                color="#06B6D4"
-                style={{ marginLeft: 4 }}
-              />
+              {user.isEmailVerified && (
+                <Ionicons
+                  name="checkmark-circle"
+                  size={12}
+                  color="#06B6D4"
+                  style={{ marginLeft: 4 }}
+                />
+              )}
             </View>
             <Text
               style={{
@@ -267,7 +324,7 @@ export default function ProfileScreen() {
                 fontFamily: "Poppins_400Regular",
               }}
             >
-              rajesh.kumar@example.com
+              {user.email}
             </Text>
           </View>
 
@@ -282,11 +339,11 @@ export default function ProfileScreen() {
               paddingTop: 16,
             }}
           >
-            <StatBlock value="85%" label="COMPLETE" />
+            <StatBlock value={profileCompletion} label="COMPLETE" />
             <View
               style={{ height: 32, width: 1, backgroundColor: "#D6DEE8" }}
             />
-            <StatBlock value="Pro" label="PLAN" accent="#06B6D4" />
+            <StatBlock value={user.accountType} label="TYPE" accent="#06B6D4" />
           </View>
         </View>
 
@@ -315,26 +372,6 @@ export default function ProfileScreen() {
           }}
         >
           <ProfileRow
-            icon="reader-outline"
-            iconBg="#E8F8FE"
-            title="Request Details"
-            subtitle="Update documents and chat with admin"
-            onPress={() =>
-              router.push("/(dashboard)/profile-pages/request-details")
-            }
-          />
-          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
-          <ProfileRow
-            icon="folder-open-outline"
-            iconBg="#E8F8FE"
-            title="My Services"
-            subtitle="Track requests, payments and downloads"
-            onPress={() =>
-              router.push("/(dashboard)/profile-pages/my-services")
-            }
-          />
-          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
-          <ProfileRow
             icon="person-outline"
             iconBg="#E8F8FE"
             title="Edit Profile"
@@ -348,9 +385,19 @@ export default function ProfileScreen() {
             icon="business-outline"
             iconBg="#E8F8FE"
             title="Business Details"
-            subtitle="Manage documents & GST"
+            subtitle={user.accountType === "business" ? "Manage GST & company info" : "Set up business account"}
             onPress={() =>
               router.push("/(dashboard)/profile-pages/business-details")
+            }
+          />
+          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
+          <ProfileRow
+            icon="document-text-outline"
+            iconBg="#E8F8FE"
+            title="Documents"
+            subtitle="Upload PAN, Aadhaar, GST"
+            onPress={() =>
+              router.push("/(dashboard)/profile-pages/documents")
             }
           />
           <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
@@ -360,6 +407,41 @@ export default function ProfileScreen() {
             title="Settings"
             subtitle="App preferences & security"
             onPress={() => router.push("/(dashboard)/profile-pages/settings")}
+          />
+        </View>
+
+        {/* Service Requests Section */}
+        <Text
+          style={{
+            fontSize: 11,
+            color: COLORS.textLight,
+            fontFamily: "Poppins_700Bold",
+            textTransform: "uppercase",
+            letterSpacing: 0.5,
+            marginTop: 24,
+            marginBottom: 12,
+            paddingHorizontal: 4,
+          }}
+        >
+          BUSINESS MANAGEMENT
+        </Text>
+        <View
+          style={{
+            backgroundColor: COLORS.white,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: COLORS.border,
+            paddingHorizontal: 12,
+          }}
+        >
+          <ProfileRow
+            icon="briefcase-outline"
+            iconBg="#E8F8FE"
+            title="My Service Requests"
+            subtitle="View pending, approved & completed"
+            onPress={() =>
+              router.push("/(dashboard)/profile-pages/my-requests")
+            }
           />
         </View>
 
@@ -399,8 +481,9 @@ export default function ProfileScreen() {
           <ProfileRow
             icon="log-out-outline"
             iconBg="#FFF1F2"
-            title="Log Out"
+            title={loggingOut ? "Logging out..." : "Log Out"}
             isDanger
+            onPress={handleLogout}
           />
         </View>
 

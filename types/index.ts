@@ -278,6 +278,38 @@ export interface ApiError {
   timestamp: string;
 }
 
+// ============ Service Request Types ============
+export interface ServiceRequest {
+  id: string;
+  serviceTitle: string;
+  clientName: string;
+  amount: number;
+  status: "pending" | "approved" | "completed" | "rejected";
+  createdAt: string;
+  completedAt?: string;
+  description: string;
+  clientEmail?: string;
+  clientPhone?: string;
+  providerId?: string;
+  clientId?: string;
+  notes?: string;
+}
+
+export interface ServiceRequestResponse {
+  success: boolean;
+  data: ServiceRequest[];
+  total: number;
+}
+
+export interface CreateServiceRequestPayload {
+  serviceTitle: string;
+  clientName: string;
+  clientEmail: string;
+  clientPhone: string;
+  amount: number;
+  description: string;
+}
+
 // ============ Auth Context Types ============
 export interface AuthContextType {
   // State

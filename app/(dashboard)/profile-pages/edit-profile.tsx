@@ -1,14 +1,19 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Stack, useRouter } from "expo-router";
-import React from "react";
+import { Stack, router } from "expo-router";
+import React, { useState } from "react";
 import {
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../../../context/AuthContext";
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -25,170 +30,308 @@ const COLORS = {
 };
 
 export default function EditProfileScreen() {
-  const router = useRouter();
+  const { user, updateProfile, loading } = useAuth();
 
-  return (
-    <SafeAreaView
-      style={{ flex: 1, backgroundColor: COLORS.white }}
-      edges={["top"]}
-    >
-      <Stack.Screen options={{ headerShown: false }} />
+  const [firstName, setFirstName] = useState(user?.firstName || "");
+  const [lastName, setLastName] = useState(user?.lastName || "");
+  const [phoneNumber, setPhoneNumber] = useState(user?.phoneNumber || "");
+  const [address, setAddress] = useState(user?.profile?.address || "");
+  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
-      <View
+  const validateForm = () => {
+    if (!firstName.trim()) {
+      setError("First name is required");
+      return false;
+    }
+    if (!lastName.trim()) {
+      setError("Last name is required");
+      return false;
+    }
+    if (!phoneNumber.trim()) {
+      setError("Phone number is required");
+      return false;
+    }
+    const phoneRegex = /^[0-9]{10,}$/;
+    if (!phoneRegex.test(phoneNumber.replace(/\D/g, ""))) {
+      setError("Please enter a valid phone number");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSave = async () => {
+    if (!validateForm()) return;
+
+    try {
+      setIsSaving(true);
+      setError(null);
+
+      await updateProfile({
+        firstName,
+        lastName,
+        phoneNumber,
+        profile: {
+          address,
+        },
+      });
+
+      Alert.alert("Success", "Profile updated successfully!");
+      router.back();
+    } catch (err: any) {
+      setError(err.message || "Failed to update profile");
+      Alert.alert("Error", err.message || "Failed to update profile");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const InputField = ({
+    label,
+    value,
+    onChangeText,
+    placeholder,
+    keyboardType = "default",
+    multiline = false,
+  }: {
+    label: string;
+    value: string;
+    onChangeText: (text: string) => void;
+    placeholder: string;
+    keyboardType?: string;
+    multiline?: boolean;
+  }) => (
+    <View style={{ marginBottom: 20 }}>
+      <Text
         style={{
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          flexDirection: "row",
-          alignItems: "center",
-          borderBottomWidth: 1,
-          borderBottomColor: COLORS.border,
-          backgroundColor: COLORS.white,
+          fontSize: 13,
+          fontFamily: "Poppins_600SemiBold",
+          color: COLORS.textDark,
+          marginBottom: 8,
         }}
       >
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: COLORS.white,
-            alignItems: "center",
-            justifyContent: "center",
-            borderWidth: 1,
-            borderColor: COLORS.border,
-          }}
-        >
-          <Ionicons name="chevron-back" size={20} color={COLORS.textDark} />
-        </TouchableOpacity>
-        <Text
-          style={{
-            fontSize: 18,
+        {label}
+      </Text>
+      <TextInput
+        value={value}
+        onChangeText={(text) => {
+          onChangeText(text);
+          setError(null);
+        }}
+        placeholder={placeholder}
+        placeholderTextColor={COLORS.textLight}
+        keyboardType={keyboardType as any}
+        multiline={multiline}
+        editable={!isSaving && !loading}
+        style={{
+          backgroundColor: COLORS.lightGrey,
+          borderRadius: 12,
+          paddingHorizontal: 16,
+          paddingVertical: multiline ? 12 : 14,
+          fontSize: 14,
+          color: COLORS.textDark,
+          fontFamily: "Poppins_400Regular",
+          minHeight: multiline ? 80 : 48,
+          borderWidth: 1,
+          borderColor: COLORS.border,
+        }}
+      />
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "Edit Profile",
+          headerTitleStyle: {
             fontFamily: "Poppins_700Bold",
+            fontSize: 18,
             color: COLORS.textDark,
-            marginLeft: 12,
-          }}
-        >
-          Edit Profile
-        </Text>
-      </View>
+          },
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => router.back()}>
+              <Ionicons
+                name="chevron-back"
+                size={28}
+                color={COLORS.primary}
+                style={{ marginLeft: 16 }}
+              />
+            </TouchableOpacity>
+          ),
+        }}
+      />
 
-      <ScrollView
-        contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 120 }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
       >
-        <View
-          style={{
-            backgroundColor: COLORS.white,
-            borderRadius: 16,
-            paddingHorizontal: 16,
-            paddingVertical: 16,
-            borderWidth: 1,
-            borderColor: COLORS.border,
+        <ScrollView
+          contentContainerStyle={{
+            paddingHorizontal: 20,
+            paddingVertical: 20,
+            paddingBottom: 120,
           }}
+          showsVerticalScrollIndicator={false}
         >
-          <Text
+          {/* Current Info Card */}
+          <View
             style={{
-              fontSize: 11,
-              fontFamily: "Poppins_700Bold",
-              color: COLORS.textLight,
-              marginBottom: 8,
-              textTransform: "uppercase",
-              letterSpacing: 0.5,
+              backgroundColor: "#EAF8FF",
+              borderRadius: 16,
+              borderWidth: 1,
+              borderColor: "#DFECF5",
+              padding: 16,
+              marginBottom: 24,
             }}
           >
-            FULL NAME
-          </Text>
-          <TextInput
+            <Text
+              style={{
+                fontSize: 13,
+                color: COLORS.textDark,
+                fontFamily: "Poppins_600SemiBold",
+                marginBottom: 12,
+              }}
+            >
+              Account Info
+            </Text>
+            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+              <TouchableOpacity style={{ flex: 1, marginRight: 8 }}>
+                <Text style={{ fontSize: 11, color: COLORS.textLight, fontFamily: "Poppins_500Medium" }}>
+                  Email
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: COLORS.textDark,
+                    fontFamily: "Poppins_600SemiBold",
+                    marginTop: 4,
+                  }}
+                >
+                  {user?.email}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* Form Fields */}
+          <Text
             style={{
-              backgroundColor: COLORS.lightGrey,
-              borderWidth: 1,
-              borderColor: COLORS.border,
-              borderRadius: 12,
-              paddingHorizontal: 12,
-              paddingVertical: 12,
+              fontSize: 13,
+              color: COLORS.textLight,
+              fontFamily: "Poppins_700Bold",
+              textTransform: "uppercase",
+              letterSpacing: 0.5,
               marginBottom: 16,
-              fontSize: 14,
-              color: COLORS.textDark,
-              fontFamily: "Poppins_500Medium",
-            }}
-            value="Rajesh Kumar"
-          />
-
-          <Text
-            style={{
-              fontSize: 11,
-              fontFamily: "Poppins_700Bold",
-              color: COLORS.textLight,
-              marginBottom: 8,
-              textTransform: "uppercase",
-              letterSpacing: 0.5,
             }}
           >
-            EMAIL
+            Personal Information
           </Text>
-          <TextInput
+
+          <InputField
+            label="First Name"
+            value={firstName}
+            onChangeText={setFirstName}
+            placeholder="John"
+          />
+
+          <InputField
+            label="Last Name"
+            value={lastName}
+            onChangeText={setLastName}
+            placeholder="Doe"
+          />
+
+          <InputField
+            label="Phone Number"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            placeholder="9876543210"
+            keyboardType="phone-pad"
+          />
+
+          <InputField
+            label="Address (Optional)"
+            value={address}
+            onChangeText={setAddress}
+            placeholder="Enter your address"
+            multiline
+          />
+
+          {/* Error Message */}
+          {error && (
+            <View
+              style={{
+                backgroundColor: "#FEE2E2",
+                borderRadius: 12,
+                borderLeftWidth: 4,
+                borderLeftColor: COLORS.alertRed,
+                padding: 12,
+                marginBottom: 20,
+              }}
+            >
+              <Text
+                style={{
+                  color: COLORS.alertRed,
+                  fontSize: 13,
+                  fontFamily: "Poppins_500Medium",
+                }}
+              >
+                {error}
+              </Text>
+            </View>
+          )}
+
+          {/* Save Button */}
+          <TouchableOpacity
+            onPress={handleSave}
             style={{
-              backgroundColor: COLORS.lightGrey,
-              borderWidth: 1,
-              borderColor: COLORS.border,
+              backgroundColor: isSaving || loading ? COLORS.lightGrey : COLORS.primary,
               borderRadius: 12,
-              paddingHorizontal: 12,
-              paddingVertical: 12,
-              marginBottom: 16,
-              fontSize: 14,
-              color: COLORS.textDark,
-              fontFamily: "Poppins_500Medium",
+              paddingVertical: 14,
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
             }}
-            value="rajesh.kumar@example.com"
-          />
-
-          <Text
-            style={{
-              fontSize: 11,
-              fontFamily: "Poppins_700Bold",
-              color: COLORS.textLight,
-              marginBottom: 8,
-              textTransform: "uppercase",
-              letterSpacing: 0.5,
-            }}
+            disabled={isSaving || loading}
           >
-            PHONE
-          </Text>
-          <TextInput
-            style={{
-              backgroundColor: COLORS.lightGrey,
-              borderWidth: 1,
-              borderColor: COLORS.border,
-              borderRadius: 12,
-              paddingHorizontal: 12,
-              paddingVertical: 12,
-              fontSize: 14,
-              color: COLORS.textDark,
-              fontFamily: "Poppins_500Medium",
-            }}
-            value="+91 98765 43210"
-          />
-        </View>
+            {isSaving || loading ? (
+              <ActivityIndicator color={COLORS.primary} />
+            ) : (
+              <Text
+                style={{
+                  color: COLORS.white,
+                  fontSize: 16,
+                  fontFamily: "Poppins_700Bold",
+                }}
+              >
+                Save Changes
+              </Text>
+            )}
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            backgroundColor: COLORS.primary,
-            borderRadius: 16,
-            marginTop: 20,
-            paddingVertical: 16,
-            alignItems: "center",
-          }}
-        >
-          <Text
+          <TouchableOpacity
+            onPress={() => router.back()}
             style={{
-              color: COLORS.white,
-              fontFamily: "Poppins_700Bold",
-              fontSize: 14,
+              paddingVertical: 14,
+              alignItems: "center",
+              marginTop: 12,
             }}
+            disabled={isSaving || loading}
           >
-            Save Changes
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
+            <Text
+              style={{
+                color: COLORS.primary,
+                fontSize: 16,
+                fontFamily: "Poppins_600SemiBold",
+              }}
+            >
+              Cancel
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
