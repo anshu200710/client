@@ -48,10 +48,82 @@ const DATA = [
 export default function OnboardingScreen() {
   const { width, height } = useWindowDimensions();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showIntro, setShowIntro] = useState(true);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef<FlatList>(null);
 
+  // ── Logo Animation Values ──
+  const logoScale = useRef(new Animated.Value(0.3)).current;
+  const logoOpacity = useRef(new Animated.Value(0)).current;
+  const nameOpacity = useRef(new Animated.Value(0)).current;
+  const nameTranslateY = useRef(new Animated.Value(20)).current;
+  const taglineOpacity = useRef(new Animated.Value(0)).current;
+  const taglineTranslateY = useRef(new Animated.Value(15)).current;
+  const introOverallOpacity = useRef(new Animated.Value(1)).current;
+
+  // ── Intro Animation Sequence ──
   useEffect(() => {
+    if (!showIntro) return;
+
+    Animated.sequence([
+      // 1. Logo scales up + fades in (0–600ms)
+      Animated.parallel([
+        Animated.spring(logoScale, {
+          toValue: 1,
+          tension: 60,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(logoOpacity, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }),
+      ]),
+      // 2. Brief pause
+      Animated.delay(200),
+      // 3. App name slides up + fades in (600–1000ms)
+      Animated.parallel([
+        Animated.timing(nameOpacity, {
+          toValue: 1,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+        Animated.timing(nameTranslateY, {
+          toValue: 0,
+          duration: 400,
+          useNativeDriver: true,
+        }),
+      ]),
+      // 4. Tagline slides up + fades in
+      Animated.parallel([
+        Animated.timing(taglineOpacity, {
+          toValue: 1,
+          duration: 350,
+          useNativeDriver: true,
+        }),
+        Animated.timing(taglineTranslateY, {
+          toValue: 0,
+          duration: 350,
+          useNativeDriver: true,
+        }),
+      ]),
+      // 5. Hold for a moment
+      Animated.delay(800),
+      // 6. Fade out entire intro
+      Animated.timing(introOverallOpacity, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setShowIntro(false);
+    });
+  }, [showIntro]);
+
+  // ── Auto-scroll for onboarding ──
+  useEffect(() => {
+    if (showIntro) return;
     const timer = setInterval(() => {
       if (currentIndex < DATA.length - 1) {
         slidesRef.current?.scrollToOffset({
@@ -62,7 +134,7 @@ export default function OnboardingScreen() {
     }, 3000);
 
     return () => clearInterval(timer);
-  }, [currentIndex, width]);
+  }, [currentIndex, width, showIntro]);
 
   const handleNext = () => {
     if (currentIndex < DATA.length - 1) {
@@ -198,6 +270,24 @@ export default function OnboardingScreen() {
   const currentBgColor1 = DATA[currentIndex]?.bgColor1 || "#4A90E2";
   const currentBgColor2 = DATA[currentIndex]?.bgColor2 || "#5BA3F5";
 
+  // ── LOGO INTRO SCREEN ──
+  if (showIntro) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#FFFFFF", justifyContent: "center", alignItems: "center" }}>
+        <Stack.Screen options={{ headerShown: false }} />
+        <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+        <Animated.View style={{ opacity: introOverallOpacity }}>
+          <Image
+            source={require("../assets/images/animate.gif")}
+            style={{ width: 500, height: 500 }}
+            resizeMode="contain"
+          />
+        </Animated.View>
+      </View>
+    );
+  }
+
+  // ── ONBOARDING SCREEN ──
   return (
     <View style={{ flex: 1 }}>
       <Stack.Screen options={{ headerShown: false }} />
@@ -255,3 +345,4 @@ export default function OnboardingScreen() {
     </View>
   );
 }
+
