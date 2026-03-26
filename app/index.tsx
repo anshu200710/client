@@ -316,13 +316,7 @@ export default function OnboardingScreen() {
           justifyContent: "space-between",
         }}
       >
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Image
-            source={require("../assets/images/transLogo.png")}
-            style={{ width: 100, height: 100, marginRight: 8, borderRadius: 8 }}
-            resizeMode="contain"
-          />
-        </View>
+        
       </View>
 
       <Animated.FlatList
