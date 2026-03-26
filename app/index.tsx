@@ -16,8 +16,8 @@ const DATA = [
   {
     id: "1",
     image: require("../assets/images/spl1.png"),
-    title: "Start Your Business Easily",
-    subtitle: "Company Registration · GST · MSME",
+    title: "Start Your Business in Minutes- No Office Visit Required",
+    subtitle: "GST • MSME • Startup Registration • 100% Online",
     buttonText: "Next",
     bgColor1: "#4A90E2",
     bgColor2: "#5BA3F5",
@@ -26,8 +26,8 @@ const DATA = [
   {
     id: "2",
     image: require("../assets/images/spl2.png"),
-    title: "Complete Your Compliance",
-    subtitle: "ISO · FSSAI · Licenses",
+    title: "All Your Compliance in One Place",
+    subtitle: "ISO • FSSAI • Licenses • Legal Support",
     buttonText: "Next",
     bgColor1: "#27AE60",
     bgColor2: "#2ECC71",
@@ -36,8 +36,8 @@ const DATA = [
   {
     id: "3",
     image: require("../assets/images/spl3.png"),
-    title: "Grow Your Business Faster",
-    subtitle: "Trademark · Legal · Business Support",
+    title: "Powerful Business Tools — Absolutely Free",
+    subtitle: "GST Calculator • Trademark Search • 50+ Ready Agreements & More",
     buttonText: "Get Started",
     bgColor1: "#E67E22",
     bgColor2: "#F39C12",
