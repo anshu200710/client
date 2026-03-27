@@ -50,18 +50,28 @@ export default function TrademarkCheckerScreen() {
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
 
-  const handleSearch = (opts?: { class?: string | null; status?: string | null }) => {
+  const handleSearch = (term?: string, opts?: { class?: string | null; status?: string | null }) => {
+    const effectiveTerm = (typeof term === 'string') ? term : searchTerm;
     const cls = opts && Object.prototype.hasOwnProperty.call(opts, 'class') ? opts.class : selectedClass;
     const statusOpt = opts && Object.prototype.hasOwnProperty.call(opts, 'status') ? opts.status : statusFilter;
 
-    if (!searchTerm.trim() || searchTerm.trim().length < 2) return;
+    if (!effectiveTerm || !effectiveTerm.trim() || effectiveTerm.trim().length < 2) return;
 
     (async () => {
       try {
-        setLoading(true);
-        setError(null);
-        setHasSearched(false);
-        const resp = await toolsService.checkTrademark({ trademark: searchTerm, class: cls });
+      setLoading(true);
+      setError(null);
+      setHasSearched(false);
+
+      // Build request payload expected by toolsService (it reads `trademark` and `classes`)
+      const payload: any = { trademark: effectiveTerm };
+      if (cls) payload.classes = [cls];
+
+      // Wrap the request with a timeout to avoid extremely long waits
+      const timeoutMs = 25000; // 25s
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), timeoutMs));
+
+      const resp = await Promise.race([toolsService.checkTrademark(payload), timeoutPromise]);
 
         const normalize = (r: any): SearchResult => {
           const raw = (r.brand_name || r.name || '') as string;
@@ -261,12 +271,12 @@ export default function TrademarkCheckerScreen() {
               gap: 8,
             }}
           >
-            <TextInput
+              <TextInput
               placeholder="Enter trademark name..."
               placeholderTextColor={COLORS.textLight}
               value={searchTerm}
               onChangeText={setSearchTerm}
-              onSubmitEditing={handleSearch}
+                onSubmitEditing={() => handleSearch(searchTerm)}
               style={{
                 flex: 1,
                 backgroundColor: COLORS.lightGrey,
@@ -281,7 +291,7 @@ export default function TrademarkCheckerScreen() {
               }}
             />
             <TouchableOpacity
-              onPress={handleSearch}
+              onPress={() => handleSearch(searchTerm)}
               style={{
                 backgroundColor: COLORS.primary,
                 width: 44,
@@ -301,13 +311,13 @@ export default function TrademarkCheckerScreen() {
               <TouchableOpacity
                 key={c}
                 onPress={() => {
-                  const newClass = selectedClass === c ? null : c;
-                  setSelectedClass(newClass);
-                  // trigger search with new class filter if a term exists
-                  if (searchTerm.trim() && searchTerm.trim().length >= 2) {
-                    handleSearch({ class: newClass });
-                  }
-                }}
+                    const newClass = selectedClass === c ? null : c;
+                    setSelectedClass(newClass);
+                    // trigger search with new class filter using current input
+                    if (searchTerm.trim() && searchTerm.trim().length >= 2) {
+                      handleSearch(searchTerm, { class: newClass });
+                    }
+                  }}
                 style={{
                   paddingHorizontal: 10,
                   paddingVertical: 6,
@@ -333,7 +343,7 @@ export default function TrademarkCheckerScreen() {
                   setStatusFilter(newStatus);
                   // if there's a search term, re-run search with updated status filter
                   if (searchTerm.trim() && searchTerm.trim().length >= 2) {
-                    handleSearch({ status: newStatus });
+                    handleSearch(searchTerm, { status: newStatus });
                   }
                 }}
                 style={{
