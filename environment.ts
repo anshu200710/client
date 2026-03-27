@@ -59,7 +59,7 @@ export const API_ENDPOINTS = {
 
   // Tools endpoints
   CALCULATE_GST: "/tools/gst/calculate",
-  CHECK_TRADEMARK: "/tools/trademark/check",
+  CHECK_TRADEMARK: "/trademarks/check",
   GENERATE_INVOICE: "/tools/invoice/generate",
   GENERATE_CHALLAN: "/tools/challan/generate",
 
