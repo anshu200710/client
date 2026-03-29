@@ -122,8 +122,8 @@ export default function DashboardLayout() {
           ),
         }}
       />
-
       {/* Hidden Screens */}
+      <Tabs.Screen name="health-check" options={{ href: null }} />
       <Tabs.Screen name="services" options={{ href: null }} />
       <Tabs.Screen name="notifications" options={{ href: null }} />
       <Tabs.Screen name="profile-pages" options={{ href: null }} />

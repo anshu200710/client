@@ -470,133 +470,64 @@ export default function DashboardScreen() {
             </Text>
           </View>
 
-          {/* ── STATS CARDS ── */}
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 20,
-              marginTop: 18,
-              gap: 12,
-            }}
-          >
-            {/* Total Sales */}
-            <LinearGradient
-              colors={["#1E4FA3", "#2B6FE6"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{
-                flex: 1,
-                borderRadius: 20,
-                padding: 18,
-                overflow: "hidden",
-              }}
-            >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "Poppins_500Medium",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  Total Sales
-                </Text>
-                <Ionicons name="trending-up" size={20} color="rgba(255,255,255,0.8)" />
-              </View>
-              <Text
-                style={{
-                  fontSize: 26,
-                  fontFamily: "Poppins_700Bold",
-                  color: COLORS.white,
-                  marginTop: 8,
-                }}
-              >
-                ₹56,790
-              </Text>
-            </LinearGradient>
 
-            {/* Total Due */}
+
+          {/* ── BUSINESS HEALTH CHECK MVP ── */}
+          <View style={{ marginHorizontal: 20, marginTop: 30 }}>
             <LinearGradient
-              colors={["#10B981", "#2ECC71"]}
+              colors={[COLORS.primary, "#2B6FE6"]}
               start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
+              end={{ x: 1, y: 0 }}
               style={{
-                flex: 1,
-                borderRadius: 20,
-                padding: 18,
-                overflow: "hidden",
+                padding: 24,
+                borderRadius: 24,
+                shadowColor: COLORS.primary,
+                shadowOpacity: 0.3,
+                shadowRadius: 15,
+                elevation: 10,
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-start",
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontFamily: "Poppins_500Medium",
-                    color: "rgba(255,255,255,0.85)",
-                  }}
-                >
-                  Total Due
-                </Text>
-                <Ionicons name="wallet" size={20} color="rgba(255,255,255,0.8)" />
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+                <View style={{ flex: 1 }}>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                    <View style={{ backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 }}>
+                      <Text style={{ fontSize: 10, fontFamily: "Poppins_700Bold", color: COLORS.white }}>FREE SERVICE</Text>
+                    </View>
+                    <Ionicons name="sparkles" size={16} color={COLORS.secondary} />
+                  </View>
+                  <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.white, marginBottom: 4 }}>
+                    Business Health Check
+                  </Text>
+                  <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}>
+                    Get your free score & actionable insights in 2 mins.
+                  </Text>
+
+                  <TouchableOpacity
+                    onPress={() => router.push("/(dashboard)/health-check")}
+                    style={{
+                      backgroundColor: COLORS.white,
+                      paddingHorizontal: 20,
+                      paddingVertical: 12,
+                      borderRadius: 14,
+                      alignSelf: "flex-start",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8
+                    }}
+                  >
+                    <Text style={{ fontSize: 14, fontFamily: "Poppins_700Bold", color: COLORS.primary }}>Start Free Check</Text>
+                    <Ionicons name="arrow-forward" size={18} color={COLORS.primary} />
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: "rgba(255,255,255,0.15)", alignItems: "center", justifyContent: "center" }}>
+                  <Ionicons name="fitness" size={48} color={COLORS.white} />
+                </View>
               </View>
-              <Text
-                style={{
-                  fontSize: 26,
-                  fontFamily: "Poppins_700Bold",
-                  color: COLORS.white,
-                  marginTop: 8,
-                }}
-              >
-                ₹12,540
-              </Text>
             </LinearGradient>
           </View>
 
-          {/* View Reports Button */}
-          <View style={{ paddingHorizontal: 20, marginTop: 24, alignItems: "center" }}>
-            <TouchableOpacity
-              onPress={() => router.push("/(dashboard)/tools")}
-              style={{
-                borderRadius: 30,
-                backgroundColor: COLORS.white,
-                paddingVertical: 10,
-                paddingHorizontal: 24,
-                alignItems: "center",
-                flexDirection: "row",
-                justifyContent: "center",
-                gap: 6,
-                shadowColor: "#000",
-                shadowOpacity: 0.05,
-                shadowRadius: 5,
-                elevation: 3,
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontFamily: "Poppins_600SemiBold",
-                  color: COLORS.textDark,
-                }}
-              >
-                View Reports
-              </Text>
-              <Ionicons name="chevron-forward" size={16} color={COLORS.textDark} />
-            </TouchableOpacity>
-          </View>
         </LinearGradient>
-
 
 
 
