@@ -16,8 +16,10 @@ import {
     TextInput,
     TouchableOpacity,
     View,
+    ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as FileSystem from 'expo-file-system';
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -106,6 +108,7 @@ export default function GSTInvoiceScreen() {
   const [notes, setNotes] = useState("It was great doing business with you.");
   const [terms, setTerms] = useState("Please make the payment by the due date.");
   const [showPreview, setShowPreview] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // -- Calculations --
   const calculateTotals = () => {
@@ -198,12 +201,13 @@ export default function GSTInvoiceScreen() {
     ));
   };
 
-  const generatePDF = async (shouldPrint = false) => {
+  const generatePDF = async (mode: 'print' | 'share' | 'save' | 'whatsapp') => {
     if (!companyInfo.name || !clientInfo.name || lineItems.some(i => !i.description || !i.rate)) {
       Alert.alert("Missing Fields", "Please ensure company name, client name, and item details are filled.");
       return;
     }
 
+    setIsGenerating(true);
     let logoBase64 = "";
     if (logoUri) {
         try {
@@ -319,15 +323,31 @@ export default function GSTInvoiceScreen() {
     `;
 
     try {
-        if (shouldPrint) {
+        if (mode === 'print') {
             await Print.printAsync({ html: htmlContent });
         } else {
             const { uri } = await Print.printToFileAsync({ html: htmlContent });
-            await Sharing.shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+            
+            if (mode === 'save' && Platform.OS === 'android') {
+                const permissions = await (FileSystem as any).StorageAccessFramework.requestDirectoryPermissionsAsync();
+                if (permissions.granted) {
+                    const base64 = await FileSystem.readAsStringAsync(uri, { encoding: (FileSystem as any).EncodingType.Base64 });
+                    const fileUri = await (FileSystem as any).StorageAccessFramework.createFileAsync(permissions.directoryUri, `Invoice_${invoiceDetails.invoiceNo}`, 'application/pdf');
+                    await FileSystem.writeAsStringAsync(fileUri, base64, { encoding: (FileSystem as any).EncodingType.Base64 });
+                    Alert.alert("Success", "Invoice saved successfully!");
+                } else {
+                    await Sharing.shareAsync(uri);
+                }
+            } else {
+                // For WhatsApp and Share (and iOS Save), the system share sheet is the most reliable Expo Go way
+                await Sharing.shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
+            }
         }
     } catch (error) {
-        Alert.alert("Error", "Action failed.");
+        Alert.alert("Error", "Action failed. This might require a native build.");
         console.error(error);
+    } finally {
+        setIsGenerating(false);
     }
   };
 
@@ -424,11 +444,23 @@ export default function GSTInvoiceScreen() {
 
             {/* Modal Actions */}
             <View style={styles.previewActions}>
-                <TouchableOpacity onPress={() => generatePDF(false)} style={[styles.actionButton, styles.downloadButton, { marginBottom: 16 }]}>
-                    <Ionicons name="download" size={24} color="#fff" />
-                    <Text style={styles.actionButtonText}>Download & Share PDF</Text>
+                <View style={{ flexDirection: 'row', gap: 12, marginBottom: 16 }}>
+                    <TouchableOpacity onPress={() => generatePDF('save')} style={[styles.actionButton, { flex: 1, backgroundColor: COLORS.success }]}>
+                        <Ionicons name="save" size={24} color="#fff" />
+                        <Text style={styles.actionButtonText}>Save PDF</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => generatePDF('whatsapp')} style={[styles.actionButton, { flex: 1, backgroundColor: '#25D366' }]}>
+                        <Ionicons name="logo-whatsapp" size={24} color="#fff" />
+                        <Text style={styles.actionButtonText}>WhatsApp</Text>
+                    </TouchableOpacity>
+                </View>
+                
+                <TouchableOpacity onPress={() => generatePDF('share')} style={[styles.actionButton, styles.downloadButton, { marginBottom: 16 }]}>
+                    <Ionicons name="share-social" size={24} color="#fff" />
+                    <Text style={styles.actionButtonText}>Share (System)</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => generatePDF(true)} style={[styles.actionButton, styles.printButton]}>
+
+                <TouchableOpacity onPress={() => generatePDF('print')} style={[styles.actionButton, styles.printButton]}>
                     <Ionicons name="print" size={24} color={COLORS.primary} />
                     <Text style={[styles.actionButtonText, { color: COLORS.primary }]}>Print Invoice</Text>
                 </TouchableOpacity>
@@ -534,7 +566,7 @@ export default function GSTInvoiceScreen() {
           <View style={styles.actionContainer}>
             <TouchableOpacity onPress={() => setShowPreview(true)} style={[styles.actionButton, styles.downloadButton]}>
                 <Ionicons name="eye" size={24} color="#fff" />
-                <Text style={styles.actionButtonText}>Preview & Generate</Text>
+                <Text style={styles.actionButtonText}>Preview Invoice</Text>
             </TouchableOpacity>
           </View>
 
