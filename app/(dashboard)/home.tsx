@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -194,6 +194,7 @@ const services: ServiceItem[] = [
 ];
 
 export default function DashboardScreen() {
+  const insets = useSafeAreaInsets();
   const router = useRouter();
 
   // ─── Quick Action Grid ─────────────────────────────────────────────────────
@@ -319,7 +320,7 @@ export default function DashboardScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* ── MAIN SCROLL ── */}
@@ -333,28 +334,18 @@ export default function DashboardScreen() {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{
+            paddingTop: insets.top,
             paddingBottom: 24,
             borderBottomLeftRadius: 30,
             borderBottomRightRadius: 30,
             overflow: "hidden",
           }}
         >
-          {/* Bottom fade to white */}
-          <LinearGradient
-            colors={["transparent", "#F5F7FB"]}
-            start={{ x: 0, y: 0.4 }}
-            end={{ x: 0, y: 1 }}
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-            }}
-          />
           {/* Logo + Bell Row */}
           <View
             style={{
               paddingHorizontal: 20,
-              paddingTop: 16,
+              paddingTop: 8,
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "flex-start",
@@ -482,6 +473,7 @@ export default function DashboardScreen() {
                 padding: 24,
                 borderRadius: 24,
                 shadowColor: COLORS.primary,
+                shadowOffset: { width: 0, height: 10 },
                 shadowOpacity: 0.3,
                 shadowRadius: 15,
                 elevation: 10,
@@ -1369,6 +1361,6 @@ export default function DashboardScreen() {
           </Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
