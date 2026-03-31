@@ -10,7 +10,7 @@ import {
   Dimensions,
   Animated
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get('window');
 
@@ -36,6 +36,8 @@ interface Question {
   options: string[];
   weights: Record<string, number>;
   recommendation?: string;
+  shortRec?: string; // For the "Critical Issues" list
+  cardSubtext?: string; // For the recommendation cards
   service?: string;
   fee?: string;
 }
@@ -43,17 +45,19 @@ interface Question {
 const QUESTIONS: Question[] = [
   {
     id: "registered",
-    section: "Basics",
+    section: "Compliance",
     text: "Is your business registered?",
     options: ["Yes", "No"],
     weights: { "Yes": 10, "No": 0 },
     recommendation: "Register your business as MSME/Udyam to get government benefits.",
+    shortRec: "Business not registered",
+    cardSubtext: "Register in 2 days.",
     service: "Udyam Registration",
     fee: "Free"
   },
   {
     id: "type",
-    section: "Basics",
+    section: "Compliance",
     text: "Select your business type",
     options: ["Proprietor", "LLP", "Pvt Ltd", "Other"],
     weights: {},
@@ -65,6 +69,8 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "No"],
     weights: { "Yes": 15, "No": 0 },
     recommendation: "GST registration is mandatory for selling online and helps in getting business loans.",
+    shortRec: "No GST registration",
+    cardSubtext: "Get GST in 7 days.",
     service: "GST Registration",
     fee: "999"
   },
@@ -75,6 +81,8 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "Sometimes", "No"],
     weights: { "Yes": 10, "Sometimes": 5, "No": 0 },
     recommendation: "Regular GST filing avoids heavy penalties and improves credit rating.",
+    shortRec: "GST returns overdue (2 months)",
+    cardSubtext: "Avoid penalties.",
     service: "GST Filings",
     fee: "499"
   },
@@ -85,6 +93,8 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "No", "Applied"],
     weights: { "Yes": 15, "Applied": 10, "No": 0 },
     recommendation: "Register your brand name legally to protect it from copies.",
+    shortRec: "No trademark protection",
+    cardSubtext: "Secure your brand now.",
     service: "Trademark Registration",
     fee: "1,999"
   },
@@ -95,6 +105,8 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "No"],
     weights: { "Yes": 5, "No": 0 },
     recommendation: "Legal agreements protect your business from payment defaults and disputes.",
+    shortRec: "No legal agreements in place",
+    cardSubtext: "Protect your business.",
     service: "Legal Documentation",
     fee: "499"
   },
@@ -105,6 +117,8 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "No"],
     weights: { "Yes": 10, "No": 0 },
     recommendation: "Proper bookkeeping is essential for business growth and tax compliance.",
+    shortRec: "Basic accounting not maintained",
+    cardSubtext: "Start accounting.",
     service: "Bookkeeping Service",
     fee: "999"
   },
@@ -115,6 +129,7 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "No"],
     weights: { "Yes": 10, "No": 0 },
     recommendation: "Tracking profits helps in making data-driven decisions for your business.",
+    shortRec: "Profit tracking missing",
   },
   {
     id: "online",
@@ -123,6 +138,7 @@ const QUESTIONS: Question[] = [
     options: ["Yes", "No"],
     weights: { "Yes": 5, "No": 0 },
     recommendation: "Selling online can expand your customer base significantly.",
+    shortRec: "No online presence",
   },
   {
     id: "digital",
@@ -131,23 +147,20 @@ const QUESTIONS: Question[] = [
     options: ["High", "Medium", "Low"],
     weights: { "High": 10, "Medium": 5, "Low": 0 },
     recommendation: "Improve your social media presence to reach more customers.",
+    shortRec: "Weak digital presence",
+    cardSubtext: "Grow your reach.",
     service: "Social Media Marketing",
     fee: "1,499"
   },
   {
-    id: "income",
-    section: "Income Tax",
-    text: "How much Income you earned last year?",
-    options: ["<3 Lacs", "<7 Lacs", "<15 Lacs", "15+ Lacs"],
-    weights: {},
-  },
-  {
     id: "itr",
-    section: "Income Tax",
+    section: "Finance",
     text: "Do you file income Tax Return every year?",
     options: ["Yes", "No"],
     weights: { "Yes": 10, "No": 0 },
     recommendation: "Filing ITR is necessary for loans and visar purposes.",
+    shortRec: "Income Tax Return missing",
+    cardSubtext: "File ITR today.",
     service: "ITR Filing",
     fee: "499"
   },
@@ -155,6 +168,7 @@ const QUESTIONS: Question[] = [
 
 export default function HealthCheckScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [step, setStep] = useState(0); // 0: Intro, 1-12: Questions, 13: Result
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -190,6 +204,50 @@ export default function HealthCheckScreen() {
         const maxWeight = Math.max(...Object.values(q.weights));
         const userWeight = answer ? q.weights[answer] || 0 : 0;
         return userWeight < maxWeight && q.recommendation;
+      }
+      return false;
+    });
+  }, [answers]);
+
+  const breakdown = useMemo(() => {
+    const sections: Record<string, { earned: number; max: number }> = {};
+    QUESTIONS.forEach(q => {
+      if (Object.keys(q.weights).length > 0) {
+        if (!sections[q.section]) {
+          sections[q.section] = { earned: 0, max: 0 };
+        }
+        const maxWeight = Math.max(...Object.values(q.weights));
+        const userWeight = answers[q.id] ? (q.weights[answers[q.id]] || 0) : 0;
+        sections[q.section].max += maxWeight;
+        sections[q.section].earned += userWeight;
+      }
+    });
+
+    return Object.entries(sections).map(([name, data]) => {
+      const percentage = data.max > 0 ? (data.earned / data.max) * 100 : 0;
+      let color = COLORS.success;
+      if (percentage < 40) color = COLORS.alertRed;
+      else if (percentage < 70) color = COLORS.alertAmber;
+      return { name, percentage, color };
+    });
+  }, [answers]);
+
+  const criticalIssues = useMemo(() => {
+    return QUESTIONS.filter(q => {
+      if (Object.keys(q.weights).length > 0) {
+        const userWeight = answers[q.id] ? (q.weights[answers[q.id]] || 0) : 0;
+        return userWeight === 0 && Math.max(...Object.values(q.weights)) > 0;
+      }
+      return false;
+    });
+  }, [answers]);
+
+  const goodPractices = useMemo(() => {
+    return QUESTIONS.filter(q => {
+      if (Object.keys(q.weights).length > 0) {
+        const maxWeight = Math.max(...Object.values(q.weights));
+        const userWeight = answers[q.id] ? (q.weights[answers[q.id]] || 0) : 0;
+        return userWeight === maxWeight && maxWeight > 0;
       }
       return false;
     });
@@ -316,72 +374,175 @@ export default function HealthCheckScreen() {
 
   // ── RESULT SCREEN ──
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <Stack.Screen options={{ title: "Results", headerShown: true }} />
-      <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
+    <View style={{ flex: 1, backgroundColor: "#F9FBFF" }}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <ScrollView contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
         
-        {/* Score Card */}
+        {/* Blue Header Section */}
         <LinearGradient
-          colors={[COLORS.primary, "#2B6FE6"]}
-          style={{ padding: 40, alignItems: "center", borderBottomLeftRadius: 40, borderBottomRightRadius: 40 }}
+          colors={["#2563EB", "#1D4ED8"]}
+          style={{ paddingTop: insets.top, paddingBottom: 40, borderBottomLeftRadius: 40, borderBottomRightRadius: 40 }}
         >
-          <View style={{ width: 140, height: 140, borderRadius: 70, borderWidth: 8, borderColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-             <View style={{ position: "absolute", width: '100%', height: '100%', borderRadius: 70, borderLeftWidth: 8, borderLeftColor: "#fff", transform: [{ rotate: `${(score/100)*360}deg` }] }} />
-             <Text style={{ fontSize: 42, fontFamily: "Poppins_700Bold", color: COLORS.white }}>{score}</Text>
-             <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: "rgba(255,255,255,0.8)" }}>OUT OF 100</Text>
+          {/* Top Bar */}
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 10, marginBottom: 20 }}>
+            <TouchableOpacity onPress={() => router.replace("/(dashboard)/home")} style={{ width: 40, height: 40 }}>
+              <Ionicons name="close" size={28} color={COLORS.white} />
+            </TouchableOpacity>
+            <Text style={{ fontSize: 18, fontFamily: "Poppins_700Bold", color: COLORS.white }}>Your Business Health Score</Text>
+            <TouchableOpacity style={{ width: 40, alignItems: 'center' }}>
+              <Ionicons name="notifications" size={24} color={COLORS.white} />
+            </TouchableOpacity>
           </View>
-          
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20 }}>
-            <Ionicons name={healthCategory.icon as any} size={20} color={COLORS.white} />
-            <Text style={{ fontSize: 18, fontFamily: "Poppins_700Bold", color: COLORS.white }}>{healthCategory.label}</Text>
+
+          {/* Semi-circular Gauge */}
+          <View style={{ alignItems: "center", position: 'relative' }}>
+            <View style={{ width: 260, height: 130, overflow: "hidden" }}>
+              {/* Main Gray Arch */}
+              <View style={{ 
+                width: 260, height: 260, borderRadius: 130, 
+                borderWidth: 20, borderColor: "rgba(255,255,255,0.2)"
+              }} />
+              {/* Progress Colored Arch */}
+              <View style={{ 
+                position: "absolute",
+                top: 0, left: 0,
+                width: 260, height: 260, borderRadius: 130, 
+                borderWidth: 20, borderColor: COLORS.alertAmber,
+                borderBottomColor: "transparent",
+                borderLeftColor: "transparent",
+                borderRightColor: "transparent",
+                transform: [{ rotate: `${45 + (score/100)*180}deg` }]
+              }} />
+            </View>
+            
+            {/* Score Text inside gauge space */}
+            <View style={{ position: 'absolute', bottom: 10, alignItems: 'center' }}>
+              <Text style={{ fontSize: 68, fontFamily: "Poppins_700Bold", color: COLORS.alertAmber, lineHeight: 74 }}>
+                {score}<Text style={{ fontSize: 24, color: COLORS.white, fontFamily: "Poppins_600SemiBold" }}>/100</Text>
+              </Text>
+              <View style={{ backgroundColor: "#1e3a8a", paddingHorizontal: 16, paddingVertical: 4, borderRadius: 20, marginTop: -5 }}>
+                <Text style={{ fontSize: 13, fontFamily: "Poppins_600SemiBold", color: healthCategory.color }}>{healthCategory.label}</Text>
+              </View>
+            </View>
           </View>
-          <Text style={{ fontSize: 14, fontFamily: "Poppins_400Regular", color: "rgba(255,255,255,0.9)", marginTop: 12, textAlign: "center" }}>{healthCategory.text}</Text>
         </LinearGradient>
 
-        <View style={{ padding: 24 }}>
-          {/* Action Recommendations */}
-          <Text style={{ fontSize: 18, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 16 }}>Recommended Actions</Text>
-          
-          {recommendations.length > 0 ? (
-            recommendations.map((rec, index) => (
-              <View key={index} style={{ backgroundColor: COLORS.white, borderRadius: 20, borderWidth: 1, borderColor: COLORS.border, padding: 20, marginBottom: 16, shadowColor: "#000", shadowOpacity: 0.05, shadowRadius: 10, elevation: 2 }}>
-                <View style={{ flexDirection: "row", gap: 12, marginBottom: 12 }}>
-                  <View style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: COLORS.actionBlueBg, alignItems: "center", justifyContent: "center" }}>
-                    <Ionicons name="bulb" size={20} color={COLORS.primary} />
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontSize: 14, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>{rec.service || "Improve Business"}</Text>
-                    <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textGray }} numberOfLines={2}>{rec.recommendation}</Text>
-                  </View>
+        <View style={{ padding: 16 }}>
+          {/* Warning Banner */}
+          <View style={{ backgroundColor: COLORS.white, borderRadius: 12, paddingVertical: 14, paddingHorizontal: 20, alignItems: 'center', marginBottom: 20, borderWidth: 1, borderColor: "#E2E8F0", shadowColor: "#000", shadowOpacity: 0.02, shadowRadius: 5, elevation: 1 }}>
+            <Text style={{ fontSize: 13, fontFamily: "Poppins_500Medium", color: COLORS.textDark, textAlign: 'center' }}>
+              Your business has critical gaps that need to be fixed! ⚠️
+            </Text>
+          </View>
+
+          {/* Health Breakdown */}
+          <View style={{ backgroundColor: COLORS.white, borderRadius: 20, padding: 24, marginBottom: 20, shadowColor: "#000", shadowOpacity: 0.04, shadowRadius: 10, elevation: 2, borderWidth: 1, borderColor: "#EDF2F7" }}>
+            <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 20 }}>Health Breakdown</Text>
+            {breakdown.map((item, index) => (
+              <View key={index} style={{ flexDirection: "row", alignItems: "center", marginBottom: 18 }}>
+                <Text style={{ width: 90, fontSize: 13, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark }}>{item.name}</Text>
+                <Text style={{ width: 45, fontSize: 13, fontFamily: "Poppins_700Bold", color: item.color }}>{Math.round(item.percentage)}%</Text>
+                <View style={{ flex: 1, height: 12, backgroundColor: "#EDF2F7", borderRadius: 6, overflow: "hidden" }}>
+                  <View style={{ width: `${item.percentage}%`, height: '100%', backgroundColor: item.color, borderRadius: 6 }} />
                 </View>
-                
-                {rec.service && (
-                  <TouchableOpacity 
-                    onPress={() => router.push(`/service-pages/request-form?service=${encodeURIComponent(rec.service!)}&fee=${encodeURIComponent(rec.fee!)}`)}
-                    style={{ backgroundColor: COLORS.primary, borderRadius: 12, paddingVertical: 12, alignItems: "center" }}
-                  >
-                    <Text style={{ color: COLORS.white, fontSize: 14, fontFamily: "Poppins_700Bold" }}>Fix Now - ₹{rec.fee}</Text>
-                  </TouchableOpacity>
-                )}
               </View>
-            ))
-          ) : (
-            <View style={{ padding: 20, backgroundColor: COLORS.actionBlueBg, borderRadius: 20, alignItems: "center" }}>
-              <Ionicons name="star" size={32} color={COLORS.alertAmber} />
-              <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginTop: 12 }}>Excellent Work!</Text>
-              <Text style={{ fontSize: 14, fontFamily: "Poppins_400Regular", color: COLORS.textGray, textAlign: "center", marginTop: 4 }}>Your business is fully compliant and growing well.</Text>
+            ))}
+          </View>
+
+          {/* Critical Issues */}
+          {criticalIssues.length > 0 && (
+            <View style={{ backgroundColor: COLORS.white, borderRadius: 20, padding: 24, marginBottom: 20, shadowColor: "#000", shadowOpacity: 0.04, shadowRadius: 10, elevation: 2, borderWidth: 1, borderColor: "#EDF2F7" }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <View style={{ backgroundColor: "#FEE2E2", width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="alert-circle" size={24} color={COLORS.alertRed} />
+                </View>
+                <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Critical Issues</Text>
+              </View>
+              <View style={{ height: 1, backgroundColor: "#EDF2F7", marginBottom: 16 }} />
+              {criticalIssues.map((issue, i) => (
+                <View key={i} style={{ flexDirection: "row", alignItems: "flex-start", gap: 12, marginBottom: 14 }}>
+                  <Ionicons name="warning-outline" size={18} color={COLORS.alertRed} style={{ marginTop: 1 }} />
+                  <Text style={{ flex: 1, fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textDark, lineHeight: 18 }}>
+                    {issue.shortRec || issue.text}
+                  </Text>
+                </View>
+              ))}
             </View>
           )}
 
-          <TouchableOpacity
-            onPress={() => router.replace("/(dashboard)/home")}
-            style={{ marginTop: 20, paddingVertical: 16, alignItems: "center", borderRadius: 16, borderWidth: 1.5, borderColor: COLORS.border }}
-          >
-            <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Back to Dashboard</Text>
-          </TouchableOpacity>
+          {/* Good Practices */}
+          {goodPractices.length > 0 && (
+            <View style={{ backgroundColor: COLORS.white, borderRadius: 20, padding: 24, marginBottom: 20, shadowColor: "#000", shadowOpacity: 0.04, shadowRadius: 10, elevation: 2, borderWidth: 1, borderColor: "#EDF2F7" }}>
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                <View style={{ backgroundColor: "#D1FAE5", width: 32, height: 32, borderRadius: 8, alignItems: 'center', justifyContent: 'center' }}>
+                   <Ionicons name="checkmark-circle" size={22} color={COLORS.success} />
+                </View>
+                <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>Good Practices</Text>
+              </View>
+              <View style={{ height: 1, backgroundColor: "#EDF2F7", marginBottom: 16 }} />
+              {goodPractices.map((practice, i) => (
+                <View key={i} style={{ flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 14 }}>
+                  <Ionicons name="checkmark-circle" size={18} color={COLORS.success} />
+                  <Text style={{ flex: 1, fontSize: 13, fontFamily: "Poppins_400Regular", color: COLORS.textDark }}>
+                    {practice.text}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* Smart Recommendations */}
+          <View style={{ backgroundColor: COLORS.white, borderRadius: 20, padding: 24, marginBottom: 20, shadowColor: "#000", shadowOpacity: 0.04, shadowRadius: 10, elevation: 2, borderWidth: 1, borderColor: "#EDF2F7" }}>
+             <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: COLORS.textDark, marginBottom: 20 }}>Smart Recommendations</Text>
+             
+             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
+                {recommendations.slice(0, 3).map((rec, index) => (
+                  <View key={index} style={{ width: 160, backgroundColor: COLORS.white, borderRadius: 16, borderWidth: 1, borderColor: "#EDF2F7", padding: 16, alignItems: 'center' }}>
+                    <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: "#EFF6FF", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                      <Ionicons name={index === 0 ? "shield-checkmark" : (index === 1 ? "document-text" : "reader")} size={22} color="#2563EB" />
+                    </View>
+                    <Text style={{ fontSize: 13, fontFamily: "Poppins_700Bold", color: COLORS.textDark, textAlign: 'center', height: 36, lineHeight: 18 }} numberOfLines={2}>{rec.service || "Improve Business"}</Text>
+                    <Text style={{ fontSize: 11, fontFamily: "Poppins_400Regular", color: COLORS.textGray, textAlign: 'center', marginBottom: 12, height: 32 }} numberOfLines={2}>{rec.cardSubtext || "Get started now."}</Text>
+                    
+                    {rec.service && (
+                      <TouchableOpacity 
+                        onPress={() => router.push(`/service-pages/request-form?service=${encodeURIComponent(rec.service!)}&fee=${encodeURIComponent(rec.fee!)}`)}
+                        style={{ 
+                          backgroundColor: rec.id === 'gst_filing' ? "#EF4444" : "#2563EB", 
+                          borderRadius: 8, 
+                          paddingVertical: 10, 
+                          width: '100%', 
+                          alignItems: "center" 
+                        }}
+                      >
+                        <Text style={{ color: COLORS.white, fontSize: 11, fontFamily: "Poppins_700Bold" }}>{rec.id === 'gst_filing' ? 'File Now >' : (rec.id === 'trademark' ? 'Apply Now >' : 'Get Templates >')}</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                ))}
+             </ScrollView>
+          </View>
         </View>
 
       </ScrollView>
-    </SafeAreaView>
+
+      {/* Fixed Bottom Button */}
+      <View style={{ position: "absolute", bottom: 0, left: 0, right: 0, backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: "#E2E8F0", padding: 16, paddingBottom: Math.max(insets.bottom, 16) }}>
+        <TouchableOpacity 
+          onPress={() => router.replace("/(dashboard)/home")}
+          style={{ borderRadius: 14, overflow: "hidden", shadowColor: "#F59E0B", shadowOpacity: 0.3, shadowRadius: 10, elevation: 8 }}
+        >
+          <LinearGradient
+            colors={["#FBBF24", "#F59E0B"]}
+            start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+            style={{ paddingVertical: 16, alignItems: "center", flexDirection: "row", justifyContent: "center", gap: 10 }}
+          >
+            <Text style={{ fontSize: 24 }}>🚀</Text>
+            <Text style={{ fontSize: 16, fontFamily: "Poppins_700Bold", color: "#1e3a8a" }}>Fix My Business Now</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
+
+    </View>
   );
 }
