@@ -75,7 +75,6 @@ export default function OffersScreen() {
   const router = useRouter();
   const [offers, setOffers] = useState<Offer[]>(initialOffers);
   const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
-  const [bannerText, setBannerText] = useState("");
   const [title, setTitle] = useState("");
   const [code, setCode] = useState("");
   const [value, setValue] = useState("");
@@ -88,7 +87,6 @@ export default function OffersScreen() {
 
   const resetForm = () => {
     setSelectedOfferId(null);
-    setBannerText("");
     setTitle("");
     setCode("");
     setValue("");
@@ -119,7 +117,6 @@ export default function OffersScreen() {
 
   const handleSelectOffer = (offer: Offer) => {
     setSelectedOfferId(offer.id);
-    setBannerText("");
     setTitle(offer.title);
     setCode(offer.code);
     setValue(offer.value);

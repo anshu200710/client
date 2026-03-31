@@ -10,11 +10,7 @@ import {
   View,
   Dimensions,
 } from "react-native";
-<<<<<<< HEAD
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
-=======
 import { useSafeAreaInsets } from "react-native-safe-area-context";
->>>>>>> bb4c4cae354596348956ce9df7b871c46ebf0333
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -199,7 +195,6 @@ const services: ServiceItem[] = [
 ];
 
 export default function DashboardScreen() {
-  const insets = useSafeAreaInsets();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { width } = Dimensions.get("window");
@@ -458,7 +453,7 @@ export default function DashboardScreen() {
             >
               Welcome, Ankit!
             </Text>
-            <Text
+              <Text
               style={{
                 fontSize: 14,
                 fontFamily: "Poppins_400Regular",
@@ -466,7 +461,7 @@ export default function DashboardScreen() {
                 marginTop: 2,
               }}
             >
-              Here's your business overview
+              Here is your business overview
             </Text>
           </View>
 
@@ -965,7 +960,7 @@ export default function DashboardScreen() {
                     color: COLORS.textLight,
                   }}
                 >
-                  Don't forget to follow up!
+                  Do not forget to follow up!
                 </Text>
               </View>
             </View>

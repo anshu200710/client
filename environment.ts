@@ -9,11 +9,7 @@ const ENV: Environment = "development"; // Change based on build environment
 
 const ENV_CONFIG = {
   development: {
-<<<<<<< HEAD
-    API_BASE_URL: "http://192.168.0.13:4000/api", // Local development server
-=======
-    API_BASE_URL: "http://192.168.0.187:4000/api", // Local development server
->>>>>>> bb4c4cae354596348956ce9df7b871c46ebf0333
+    API_BASE_URL: "http://192.168.0.19:4000/api", // Local development server
     API_TIMEOUT: 30000,
     DEBUG: true,
     LOG_REQUESTS: true,
