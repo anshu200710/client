@@ -7,9 +7,10 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Dimensions,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -195,6 +196,10 @@ const services: ServiceItem[] = [
 
 export default function DashboardScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { width } = Dimensions.get("window");
+  const isSmallPhone = width < 360;
+  const bottomPadding = insets.bottom ?? 16;
 
   // ─── Quick Action Grid ─────────────────────────────────────────────────────
   const QuickActionButton = ({ icon, label, bg, onPress }: any) => (
@@ -325,7 +330,7 @@ export default function DashboardScreen() {
       {/* ── MAIN SCROLL ── */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: bottomPadding + 120 }}
       >
         {/* ── GRADIENT HEADER ── */}
         <LinearGradient
@@ -362,25 +367,25 @@ export default function DashboardScreen() {
           >
             <View style={{ width: 46 }} /> {/* Spacer to center logo */}
             {/* Logo block */}
-            <View style={{ alignItems: "center", gap: 4 }}>
+            <View style={{ alignItems: "center" }}>
               <View
                 style={{
                   width: 64,
                   height: 64,
-                  borderRadius: 16,
+                  borderRadius: 12,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
                 <Image
                   source={require("../../assets/images/transLogo.png")}
-                  style={{ width: 84, height: 84, borderRadius: 16 }}
+                  style={{ width: 64, height: 64, borderRadius: 12 }}
                 />
               </View>
-              <View style={{ alignItems: "center" }}>
+              <View style={{ alignItems: "center", marginTop: 6 }}>
                 <Text
                   style={{
-                    fontSize: 22,
+                    fontSize: isSmallPhone ? 18 : 22,
                     fontFamily: "Poppins_700Bold",
                     color: COLORS.textDark,
                     lineHeight: 28,
@@ -391,7 +396,7 @@ export default function DashboardScreen() {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 11,
+                    fontSize: 10,
                     fontFamily: "Poppins_400Regular",
                     color: COLORS.textGray,
                     marginTop: -4,
@@ -1274,7 +1279,7 @@ export default function DashboardScreen() {
           alignItems: "center",
           justifyContent: "space-around",
           paddingVertical: 10,
-          paddingBottom: 20,
+          paddingBottom: bottomPadding + 10,
         }}
       >
         {/* Home */}
