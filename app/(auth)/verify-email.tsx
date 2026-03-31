@@ -216,7 +216,7 @@ export default function VerifyEmailScreen() {
                 lineHeight: 20,
               }}
             >
-              We've sent a verification code to{"\n"}
+              We have sent a verification code to{"\n"}
               <Text style={{ fontFamily: "Poppins_600SemiBold", color: COLORS.primary }}>
                 {email}
               </Text>
@@ -406,7 +406,7 @@ export default function VerifyEmailScreen() {
                   fontFamily: "Poppins_500Medium",
                 }}
               >
-                Didn't receive the code?
+                Did not receive the code?
               </Text>
               {!canResend && timeLeft > 0 && (
                 <Text

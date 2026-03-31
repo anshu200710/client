@@ -33,7 +33,7 @@ export default function CreateOfferScreen() {
   const [offerName, setOfferName] = useState("");
   const [discountCode, setDiscountCode] = useState("");
   const [value, setValue] = useState("");
-  const [expiry, setExpiry] = useState("");
+  
 
   const [toggles, setToggles] = useState({
     offer1: true,

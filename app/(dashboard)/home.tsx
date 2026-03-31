@@ -7,7 +7,8 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
+  Dimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -194,8 +195,11 @@ const services: ServiceItem[] = [
 ];
 
 export default function DashboardScreen() {
-  const insets = useSafeAreaInsets();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { width } = Dimensions.get("window");
+  const isSmallPhone = width < 360;
+  const bottomPadding = insets.bottom ?? 16;
 
   // ─── Quick Action Grid ─────────────────────────────────────────────────────
   const QuickActionButton = ({ icon, label, bg, onPress }: any) => (
@@ -326,7 +330,7 @@ export default function DashboardScreen() {
       {/* ── MAIN SCROLL ── */}
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: bottomPadding + 120 }}
       >
         {/* ── GRADIENT HEADER ── */}
         <LinearGradient
@@ -353,25 +357,25 @@ export default function DashboardScreen() {
           >
             <View style={{ width: 46 }} /> {/* Spacer to center logo */}
             {/* Logo block */}
-            <View style={{ alignItems: "center", gap: 4 }}>
+            <View style={{ alignItems: "center" }}>
               <View
                 style={{
                   width: 64,
                   height: 64,
-                  borderRadius: 16,
+                  borderRadius: 12,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
                 <Image
                   source={require("../../assets/images/transLogo.png")}
-                  style={{ width: 84, height: 84, borderRadius: 16 }}
+                  style={{ width: 64, height: 64, borderRadius: 12 }}
                 />
               </View>
-              <View style={{ alignItems: "center" }}>
+              <View style={{ alignItems: "center", marginTop: 6 }}>
                 <Text
                   style={{
-                    fontSize: 22,
+                    fontSize: isSmallPhone ? 18 : 22,
                     fontFamily: "Poppins_700Bold",
                     color: COLORS.textDark,
                     lineHeight: 28,
@@ -382,7 +386,7 @@ export default function DashboardScreen() {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 11,
+                    fontSize: 10,
                     fontFamily: "Poppins_400Regular",
                     color: COLORS.textGray,
                     marginTop: -4,
@@ -449,7 +453,7 @@ export default function DashboardScreen() {
             >
               Welcome, Ankit!
             </Text>
-            <Text
+              <Text
               style={{
                 fontSize: 14,
                 fontFamily: "Poppins_400Regular",
@@ -457,7 +461,7 @@ export default function DashboardScreen() {
                 marginTop: 2,
               }}
             >
-              Here's your business overview
+              Here is your business overview
             </Text>
           </View>
 
@@ -784,6 +788,215 @@ export default function DashboardScreen() {
 
 
 
+<<<<<<< HEAD
+=======
+
+        {/* ── QUICK ACTIONS ── */}
+
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginTop: 24,
+            backgroundColor: COLORS.white,
+            borderRadius: 20,
+            padding: 20,
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+
+          {/* Header */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <View
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  backgroundColor: COLORS.actionBlueBg,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons name="flash-outline" size={18} color={COLORS.primary} />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  Quick Actions
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_400Regular",
+                    color: COLORS.textLight,
+                  }}
+                >
+                  Manage your business
+                </Text>
+              </View>
+            </View>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+            }}
+          >
+            <QuickActionButton
+              icon="receipt-outline"
+              label="Billing"
+              bg={GRADIENTS.blue}
+              onPress={() => router.push("/(dashboard)/services")}
+            />
+            <QuickActionButton
+              icon="cube-outline"
+              label="Stock"
+              bg={GRADIENTS.teal}
+              onPress={() => router.push("/(dashboard)/tools")}
+            />
+            <QuickActionButton
+              icon="people-outline"
+              label="Customers"
+              bg={GRADIENTS.orange}
+              onPress={() => router.push("/(dashboard)/action")}
+            />
+            <QuickActionButton
+              icon="cash-outline"
+              label="Collections"
+              bg={GRADIENTS.yellow}
+              onPress={() => router.push("/(dashboard)/tools")}
+            />
+            <QuickActionButton
+              icon="bar-chart-outline"
+              label="Expenses"
+              bg={GRADIENTS.red}
+              onPress={() => router.push("/(dashboard)/tools")}
+            />
+            <QuickActionButton
+              icon="business-outline"
+              label="Banking"
+              bg={GRADIENTS.purple}
+              onPress={() => router.push("/(dashboard)/tools")}
+            />
+            <QuickActionButton
+              icon="clipboard-outline"
+              label="Orders"
+              bg={GRADIENTS.cyan}
+              onPress={() => router.push("/(dashboard)/tools")}
+            />
+            <QuickActionButton
+              icon="megaphone-outline"
+              label="Marketing"
+              bg={GRADIENTS.blue}
+              onPress={() => router.push("/(dashboard)/tools")}
+            />
+          </View>
+        </View>
+
+        {/* ── PENDING TASKS ── */}
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginTop: 20,
+            backgroundColor: COLORS.white,
+            borderRadius: 20,
+            padding: 20,
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+          {/* Header */}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 4,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <View
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  backgroundColor: "#EFF6FF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons name="checkmark-done" size={18} color={COLORS.primary} />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  Pending Tasks
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_400Regular",
+                    color: COLORS.textLight,
+                  }}
+                >
+                  Do not forget to follow up!
+                </Text>
+              </View>
+            </View>
+            <TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontFamily: "Poppins_600SemiBold",
+                  color: COLORS.primary,
+                }}
+              >
+                View All &gt;
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <PendingTaskRow
+            title="Invoice #123"
+            sub="Due: ₹5,600"
+            badgeLabel="3 days overdue"
+            badgeBg={COLORS.alertRed}
+            badgeColor={COLORS.white}
+          />
+          <PendingTaskRow
+            title="Payment Reminder"
+            sub="Sharma Traders"
+            badgeLabel="Due today"
+            badgeBg={COLORS.success}
+            badgeColor={COLORS.white}
+            amount="₹ 6,940"
+          />
+        </View>
+
+>>>>>>> 933db2af1247caaaa561e9500d7f6ad0470a4deb
         {/* ── AVAILABLE OFFERS ── */}
         <View style={{ marginHorizontal: 20, marginTop: 44, marginBottom: 12 }}>
           {/* Header */}
@@ -1060,7 +1273,7 @@ export default function DashboardScreen() {
           alignItems: "center",
           justifyContent: "space-around",
           paddingVertical: 10,
-          paddingBottom: 20,
+          paddingBottom: bottomPadding + 10,
         }}
       >
         {/* Home */}
