@@ -788,9 +788,6 @@ export default function DashboardScreen() {
 
 
 
-<<<<<<< HEAD
-=======
-
         {/* ── QUICK ACTIONS ── */}
 
         <View
@@ -995,8 +992,6 @@ export default function DashboardScreen() {
             amount="₹ 6,940"
           />
         </View>
-
->>>>>>> 933db2af1247caaaa561e9500d7f6ad0470a4deb
         {/* ── AVAILABLE OFFERS ── */}
         <View style={{ marginHorizontal: 20, marginTop: 44, marginBottom: 12 }}>
           {/* Header */}
