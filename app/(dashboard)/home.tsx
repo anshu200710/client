@@ -368,7 +368,7 @@ export default function DashboardScreen() {
                 }}
               >
                 <Image
-                  source={require("../../assets/images/transLogo.png")}
+                  source={require("../../assets/images/transLogo2.png")}
                   style={{ width: 64, height: 64, borderRadius: 12 }}
                 />
               </View>
