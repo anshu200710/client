@@ -50,8 +50,229 @@ const GRADIENTS = {
   orange: ["#FB923C", "#EA580C"] as const,
   teal: ["#2DD4BF", "#0D9488"] as const,
   cyan: ["#22D3EE", "#0891B2"] as const,
-  gray: ["#94A3B8", "#475569"] as const
+  gray: ["#94A3B8", "#475569"] as const,
 };
+
+// ─── UPDATED ServiceItem interface ────────────────────────────────────────────
+interface ServiceItem {
+  title: string;
+  subtitle: string;
+  feeLabel?: string;
+  fee: string;
+  icon: string;
+  iconBg: readonly [string, string, ...string[]];
+  iconColor: string;
+  popular?: boolean;
+  accentColor: string;
+  cardBg: readonly [string, string];
+  subItems?: string[];
+}
+
+// ─── UPDATED services data ────────────────────────────────────────────────────
+const services: ServiceItem[] = [
+  {
+    title: "Startup Registration",
+    subtitle: "Private Ltd or LLP registration options",
+    fee: "2,999",
+    icon: "business",
+    iconBg: GRADIENTS.blue,
+    iconColor: COLORS.primary,
+    popular: true,
+    accentColor: "#EFF6FF",
+    cardBg: ["#60A5FA", "#2563EB"],
+    subItems: ["Private Ltd", "LLP"],
+  },
+  {
+    title: "GST Registration",
+    subtitle: "Simplified compliance for your business",
+    feeLabel: "Starting from",
+    fee: "999",
+    icon: "document-text",
+    iconBg: GRADIENTS.teal,
+    iconColor: COLORS.actionGreenIcon,
+    popular: true,
+    accentColor: "#F0FDF4",
+    cardBg: ["#2DD4BF", "#0D9488"],
+  },
+  {
+    title: "Trademark Registration Application",
+    subtitle: "Protect your brand identity legally",
+    feeLabel: "Starting from",
+    fee: "4,999",
+    icon: "shield-checkmark",
+    iconBg: GRADIENTS.orange,
+    iconColor: COLORS.actionYellowIcon,
+    popular: true,
+    accentColor: "#FFF7ED",
+    cardBg: ["#FB923C", "#EA580C"],
+  },
+  {
+    title: "Startup India Certificate Assistance",
+    subtitle: "Get support for your Startup India application",
+    fee: "899",
+    icon: "ribbon",
+    iconBg: GRADIENTS.purple,
+    iconColor: COLORS.actionPurpleIcon,
+    accentColor: "#F5F3FF",
+    cardBg: ["#A78BFA", "#7C3AED"],
+  },
+  {
+    title: "ISO Certification",
+    subtitle: "Choose the certification type you need",
+    fee: "1,499",
+    icon: "duplicate",
+    iconBg: GRADIENTS.yellow,
+    iconColor: COLORS.actionYellowIcon,
+    accentColor: "#FFFBEB",
+    cardBg: ["#FBBF24", "#D97706"],
+    subItems: ["ISO 9001", "ISO 14001", "ISO 45001"],
+  },
+  {
+    title: "FSSAI",
+    subtitle: "Registration, state license or central license",
+    fee: "699",
+    icon: "restaurant",
+    iconBg: GRADIENTS.green,
+    iconColor: COLORS.actionGreenIcon,
+    accentColor: "#ECFDF5",
+    cardBg: ["#34D399", "#059669"],
+    subItems: ["Registration", "State License", "Central License"],
+  },
+  {
+    title: "Income Tax Returns Filing",
+    subtitle: "File your income tax returns accurately",
+    feeLabel: "Starting from",
+    fee: "499",
+    icon: "calculator",
+    iconBg: GRADIENTS.cyan,
+    iconColor: "#0891B2",
+    accentColor: "#ECFEFF",
+    cardBg: ["#22D3EE", "#0891B2"],
+  },
+  {
+    title: "MSME Registration",
+    subtitle: "Free MSME registration support",
+    fee: "Free",
+    icon: "grid",
+    iconBg: GRADIENTS.gray,
+    iconColor: COLORS.actionGreyIcon,
+    accentColor: "#F8FAFC",
+    cardBg: ["#94A3B8", "#475569"],
+  },
+];
+
+const moreServices: ServiceItem[] = [
+  {
+    title: "ROC Filing of Companies",
+    subtitle: "Annual ROC compliance filings",
+    fee: "999",
+    icon: "document-attach",
+    iconBg: GRADIENTS.blue,
+    iconColor: COLORS.primary,
+    accentColor: "#EFF6FF",
+    cardBg: ["#60A5FA", "#2563EB"],
+  },
+  {
+    title: "GST Returns",
+    subtitle: "Monthly and quarterly GST filings",
+    fee: "699",
+    icon: "file-tray-full",
+    iconBg: GRADIENTS.teal,
+    iconColor: COLORS.actionGreenIcon,
+    accentColor: "#F0FDF4",
+    cardBg: ["#2DD4BF", "#0D9488"],
+  },
+  {
+    title: "ISI",
+    subtitle: "Industrial Safety Inspection services",
+    fee: "1,299",
+    icon: "checkmark-done-circle",
+    iconBg: GRADIENTS.orange,
+    iconColor: COLORS.actionYellowIcon,
+    accentColor: "#FFF7ED",
+    cardBg: ["#FB923C", "#EA580C"],
+  },
+  {
+    title: "BIS",
+    subtitle: "Bureau of Indian Standards certification",
+    fee: "1,299",
+    icon: "business",
+    iconBg: GRADIENTS.purple,
+    iconColor: COLORS.actionPurpleIcon,
+    accentColor: "#F5F3FF",
+    cardBg: ["#A78BFA", "#7C3AED"],
+  },
+  {
+    title: "Pasara Registration Application",
+    subtitle: "Apply for liquor retail or wholesale license",
+    fee: "999",
+    icon: "shield-checkmark",
+    iconBg: GRADIENTS.red,
+    iconColor: COLORS.actionRedIcon,
+    accentColor: "#FEF2F2",
+    cardBg: ["#F87171", "#DC2626"],
+  },
+  {
+    title: "APEDA Registration",
+    subtitle: "Export promotion for agricultural products",
+    fee: "799",
+    icon: "leaf",
+    iconBg: GRADIENTS.green,
+    iconColor: COLORS.actionGreenIcon,
+    accentColor: "#ECFDF5",
+    cardBg: ["#34D399", "#059669"],
+  },
+  {
+    title: "Digital Signature Certificate",
+    subtitle: "Secure online documents with DSC",
+    fee: "499",
+    icon: "finger-print",
+    iconBg: GRADIENTS.cyan,
+    iconColor: "#0891B2",
+    accentColor: "#ECFEFF",
+    cardBg: ["#22D3EE", "#0891B2"],
+  },
+  {
+    title: "EPF / ESI Registration",
+    subtitle: "Employee social security registrations",
+    fee: "899",
+    icon: "people",
+    iconBg: GRADIENTS.yellow,
+    iconColor: COLORS.actionYellowIcon,
+    accentColor: "#FFFBEB",
+    cardBg: ["#FBBF24", "#D97706"],
+  },
+  {
+    title: "LLP Annual Compliance",
+    subtitle: "Annual filings for LLP businesses",
+    fee: "799",
+    icon: "clipboard",
+    iconBg: GRADIENTS.blue,
+    iconColor: COLORS.primary,
+    accentColor: "#EFF6FF",
+    cardBg: ["#60A5FA", "#2563EB"],
+  },
+  {
+    title: "Appointment & Removal of Director / Partners",
+    subtitle: "Update company records and filings",
+    fee: "999",
+    icon: "people-circle",
+    iconBg: GRADIENTS.purple,
+    iconColor: COLORS.actionPurpleIcon,
+    accentColor: "#F5F3FF",
+    cardBg: ["#A78BFA", "#7C3AED"],
+  },
+  {
+    title: "Section 8 Company / NGO / Society Registration",
+    subtitle: "Register a non-profit or society",
+    fee: "1,499",
+    icon: "business",
+    iconBg: GRADIENTS.gray,
+    iconColor: COLORS.actionGreyIcon,
+    accentColor: "#F8FAFC",
+    cardBg: ["#94A3B8", "#475569"],
+  },
+];
 
 interface ToolItem {
   title: string;
@@ -134,66 +355,6 @@ const tools: ToolItem[] = [
   },
 ];
 
-interface ServiceItem {
-  title: string;
-  subtitle: string;
-  feeLabel: string;
-  fee: string;
-  icon: string;
-  iconBg: readonly [string, string, ...string[]];
-  iconColor: string;
-  popular?: boolean;
-}
-
-const services: ServiceItem[] = [
-  {
-    title: 'GST Registration',
-    subtitle: 'Get your new GST number within 7 days.',
-    feeLabel: 'Starting from',
-    fee: '999',
-    icon: 'document-text',
-    iconBg: GRADIENTS.blue,
-    iconColor: COLORS.primary,
-    popular: true,
-  },
-  {
-    title: 'ITR Filing',
-    subtitle: 'Expert assisted tax filing for FY 2023-24.',
-    feeLabel: 'Starting from',
-    fee: '499',
-    icon: 'business',
-    iconBg: GRADIENTS.teal,
-    iconColor: COLORS.actionGreenIcon,
-  },
-  {
-    title: 'Udyam Registration',
-    subtitle: 'MSME registration for government benefits.',
-    feeLabel: 'Government Fee',
-    fee: 'Free',
-    icon: 'grid',
-    iconBg: GRADIENTS.purple,
-    iconColor: COLORS.actionPurpleIcon,
-  },
-  {
-    title: 'Trademark Registration',
-    subtitle: 'Protect your brand identity legally.',
-    feeLabel: 'Starting from',
-    fee: '4,999',
-    icon: 'shield-checkmark',
-    iconBg: GRADIENTS.orange,
-    iconColor: COLORS.actionYellowIcon,
-  },
-  {
-    title: 'Shop Act License',
-    subtitle: 'Gumasta license for your shop.',
-    feeLabel: 'Starting from',
-    fee: '1,499',
-    icon: 'storefront',
-    iconBg: GRADIENTS.gray,
-    iconColor: COLORS.actionGreyIcon,
-  },
-];
-
 export default function DashboardScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -201,7 +362,7 @@ export default function DashboardScreen() {
   const isSmallPhone = width < 360;
   const bottomPadding = insets.bottom ?? 16;
 
-  // ─── Quick Action Grid ─────────────────────────────────────────────────────
+  // ─── Quick Action Grid ────────────────────────────────────────────────────
   const QuickActionButton = ({ icon, label, bg, onPress }: any) => (
     <TouchableOpacity
       onPress={onPress}
@@ -249,7 +410,218 @@ export default function DashboardScreen() {
     </TouchableOpacity>
   );
 
-  // ─── Pending Task Row ──────────────────────────────────────────────────────
+  // ─── NEW: Service Card component ──────────────────────────────────────────
+  const ServiceCard = ({ item, onPress }: { item: ServiceItem; onPress: () => void }) => (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.88}
+      style={{
+        width: 220,
+        backgroundColor: COLORS.white,
+        borderRadius: 20,
+        overflow: "hidden",
+        marginRight: 16,
+        marginBottom: 14,
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowRadius: 12,
+        shadowOffset: { width: 0, height: 4 },
+        elevation: 4,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+      }}
+    >
+      {/* ── Illustration / image area ── */}
+      <LinearGradient
+        colors={item.cardBg as any}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          height: 130,
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        {/* Decorative background circle – top right */}
+        <View
+          style={{
+            position: "absolute",
+            top: -24,
+            right: -24,
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            backgroundColor: "rgba(255,255,255,0.13)",
+          }}
+        />
+        {/* Decorative background circle – bottom left */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: -18,
+            left: -18,
+            width: 70,
+            height: 70,
+            borderRadius: 35,
+            backgroundColor: "rgba(255,255,255,0.10)",
+          }}
+        />
+
+        {/* Central icon container */}
+        <View
+          style={{
+            width: 72,
+            height: 72,
+            borderRadius: 24,
+            backgroundColor: "rgba(255,255,255,0.22)",
+            alignItems: "center",
+            justifyContent: "center",
+            borderWidth: 1.5,
+            borderColor: "rgba(255,255,255,0.38)",
+          }}
+        >
+          <Ionicons name={item.icon as any} size={38} color={COLORS.white} />
+        </View>
+
+        {/* HOT badge */}
+        {item.popular && (
+          <View
+            style={{
+              position: "absolute",
+              top: 10,
+              right: 10,
+              backgroundColor: COLORS.alertRed,
+              paddingHorizontal: 8,
+              paddingVertical: 3,
+              borderRadius: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 3,
+              shadowColor: COLORS.alertRed,
+              shadowOpacity: 0.4,
+              shadowRadius: 4,
+              elevation: 2,
+            }}
+          >
+            <Ionicons name="flame" size={10} color={COLORS.white} />
+            <Text
+              style={{
+                fontSize: 9,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.white,
+              }}
+            >
+              HOT
+            </Text>
+          </View>
+        )}
+      </LinearGradient>
+
+      {/* ── Card info body ── */}
+      <View
+        style={{
+          padding: 12,
+          backgroundColor: item.accentColor,
+        }}
+      >
+        {/* Title + price pill row */}
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            marginBottom: 5,
+            gap: 4,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 13,
+              fontFamily: "Poppins_700Bold",
+              color: COLORS.textDark,
+              flex: 1,
+              lineHeight: 18,
+            }}
+            numberOfLines={2}
+          >
+            {item.title}
+          </Text>
+
+          {/* Price pill */}
+          <View
+            style={{
+              backgroundColor:
+                item.fee === "Free" ? COLORS.cardGreenBg : "#EFF6FF",
+              paddingHorizontal: 7,
+              paddingVertical: 3,
+              borderRadius: 10,
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 1,
+              borderColor: item.fee === "Free" ? "#BBF7D0" : "#BFDBFE",
+              flexShrink: 0,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 11,
+                fontFamily: "Poppins_700Bold",
+                color:
+                  item.fee === "Free"
+                    ? COLORS.actionGreenIcon
+                    : COLORS.primary,
+              }}
+            >
+              {item.fee === "Free" ? "FREE" : `₹${item.fee}`}
+            </Text>
+          </View>
+        </View>
+
+        {/* Subtitle */}
+        <Text
+          style={{
+            fontSize: 11,
+            fontFamily: "Poppins_400Regular",
+            color: COLORS.textGray,
+            lineHeight: 15,
+            marginBottom: item.subItems ? 10 : 0,
+          }}
+          numberOfLines={2}
+        >
+          {item.subtitle}
+        </Text>
+        {item.subItems ? (
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+            {item.subItems.map((tag, index) => (
+              <View
+                key={index}
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.04)",
+                  paddingHorizontal: 8,
+                  paddingVertical: 4,
+                  borderRadius: 12,
+                  marginBottom: 6,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 10,
+                    fontFamily: "Poppins_500Medium",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  {tag}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
+      </View>
+    </TouchableOpacity>
+  );
+
+  // ─── Pending Task Row ─────────────────────────────────────────────────────
   const PendingTaskRow = ({
     title,
     sub,
@@ -355,8 +727,7 @@ export default function DashboardScreen() {
               alignItems: "flex-start",
             }}
           >
-            <View style={{ width: 46 }} /> {/* Spacer to center logo */}
-            {/* Logo block */}
+            <View style={{ width: 46 }} />
             <View style={{ alignItems: "center" }}>
               <View
                 style={{
@@ -368,7 +739,7 @@ export default function DashboardScreen() {
                 }}
               >
                 <Image
-                  source={require("../../assets/images/transLogo2.png")}
+                  source={require("../../assets/images/transLogo.png")}
                   style={{ width: 64, height: 64, borderRadius: 12 }}
                 />
               </View>
@@ -453,7 +824,7 @@ export default function DashboardScreen() {
             >
               Welcome, Ankit!
             </Text>
-              <Text
+            <Text
               style={{
                 fontSize: 14,
                 fontFamily: "Poppins_400Regular",
@@ -464,8 +835,6 @@ export default function DashboardScreen() {
               Here is your business overview
             </Text>
           </View>
-
-
 
           {/* ── BUSINESS HEALTH CHECK MVP ── */}
           <View style={{ marginHorizontal: 20, marginTop: 30 }}>
@@ -483,21 +852,62 @@ export default function DashboardScreen() {
                 elevation: 10,
               }}
             >
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <View style={{ flex: 1 }}>
-                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                    <View style={{ backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 }}>
-                      <Text style={{ fontSize: 10, fontFamily: "Poppins_700Bold", color: COLORS.white }}>FREE SERVICE</Text>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 8,
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: "rgba(255,255,255,0.2)",
+                        paddingHorizontal: 8,
+                        paddingVertical: 4,
+                        borderRadius: 8,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 10,
+                          fontFamily: "Poppins_700Bold",
+                          color: COLORS.white,
+                        }}
+                      >
+                        FREE SERVICE
+                      </Text>
                     </View>
                     <Ionicons name="sparkles" size={16} color={COLORS.secondary} />
                   </View>
-                  <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.white, marginBottom: 4 }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontFamily: "Poppins_700Bold",
+                      color: COLORS.white,
+                      marginBottom: 4,
+                    }}
+                  >
                     Business Health Check
                   </Text>
-                  <Text style={{ fontSize: 13, fontFamily: "Poppins_400Regular", color: "rgba(255,255,255,0.8)", marginBottom: 16 }}>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontFamily: "Poppins_400Regular",
+                      color: "rgba(255,255,255,0.8)",
+                      marginBottom: 16,
+                    }}
+                  >
                     Get your free score & actionable insights in 2 mins.
                   </Text>
-
                   <TouchableOpacity
                     onPress={() => router.push("/(dashboard)/health-check")}
                     style={{
@@ -508,26 +918,41 @@ export default function DashboardScreen() {
                       alignSelf: "flex-start",
                       flexDirection: "row",
                       alignItems: "center",
-                      gap: 8
+                      gap: 8,
                     }}
                   >
-                    <Text style={{ fontSize: 14, fontFamily: "Poppins_700Bold", color: COLORS.primary }}>Start Free Check</Text>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontFamily: "Poppins_700Bold",
+                        color: COLORS.primary,
+                      }}
+                    >
+                      Start Free Check
+                    </Text>
                     <Ionicons name="arrow-forward" size={18} color={COLORS.primary} />
                   </TouchableOpacity>
                 </View>
-
-                <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: "rgba(255,255,255,0.15)", alignItems: "center", justifyContent: "center" }}>
+                <View
+                  style={{
+                    width: 80,
+                    height: 80,
+                    borderRadius: 40,
+                    backgroundColor: "rgba(255,255,255,0.15)",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
                   <Ionicons name="fitness" size={48} color={COLORS.white} />
                 </View>
               </View>
             </LinearGradient>
           </View>
-
         </LinearGradient>
 
-
-
-        {/* ── POPULAR SERVICES ── */}
+        {/* ════════════════════════════════════════════════════
+            ── POPULAR SERVICES  (NEW CARD UI) ──
+            ════════════════════════════════════════════════════ */}
         <View
           style={{
             marginHorizontal: 20,
@@ -541,13 +966,13 @@ export default function DashboardScreen() {
             elevation: 3,
           }}
         >
-          {/* Header */}
+          {/* Section header */}
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: 16,
+              marginBottom: 20,
             }}
           >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -584,94 +1009,120 @@ export default function DashboardScreen() {
                 </Text>
               </View>
             </View>
+
+            <TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 13,
+                  fontFamily: "Poppins_600SemiBold",
+                  color: COLORS.primary,
+                }}
+              >
+                View All &gt;
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          {/* Services Grid */}
-          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: 8 }}>
+          {/* Horizontal scroll service cards */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingLeft: 4, paddingVertical: 4 }}
+          >
             {services.map((item, index) => (
-              <TouchableOpacity
+              <ServiceCard
                 key={index}
-                style={{
-                  width: "25%",
-                  alignItems: "center",
-                  marginBottom: 20,
-                }}
-                onPress={() => router.push(`/service-pages/request-form?service=${encodeURIComponent(item.title)}&fee=${encodeURIComponent(item.fee)}`)}
-              >
-                <LinearGradient
-                  colors={item.iconBg}
-                  start={{ x: 1, y: 0 }}
-                  end={{ x: 0, y: 1 }}
-                  style={{
-                    width: 56,
-                    height: 56,
-                    borderRadius: 18,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: 8,
-                    shadowColor: item.iconBg[0],
-                    shadowOpacity: 0.4,
-                    shadowRadius: 6,
-                    shadowOffset: { width: 0, height: 4 },
-                    elevation: 3,
-                  }}
-                >
-                  <Ionicons name={item.icon as any} size={26} color={COLORS.white} />
-                  {item.popular && (
-                    <View
-                      style={{
-                        position: "absolute",
-                        top: -6,
-                        right: -6,
-                        backgroundColor: COLORS.alertRed,
-                        paddingHorizontal: 5,
-                        paddingVertical: 2,
-                        borderRadius: 8,
-                        borderWidth: 1.5,
-                        borderColor: COLORS.white,
-                        shadowColor: "#000",
-                        shadowOpacity: 0.2,
-                        shadowRadius: 2,
-                        shadowOffset: { width: 0, height: 1 },
-                        elevation: 2,
-                      }}
-                    >
-                      <Text style={{ fontSize: 8, fontFamily: "Poppins_700Bold", color: COLORS.white }}>
-                        HOT
-                      </Text>
-                    </View>
-                  )}
-                </LinearGradient>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    fontFamily: "Poppins_500Medium",
-                    color: COLORS.textDark,
-                    textAlign: "center",
-                    lineHeight: 14,
-                    paddingHorizontal: 2,
-                  }}
-                  numberOfLines={2}
-                >
-                  {item.title}
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    fontFamily: "Poppins_600SemiBold",
-                    color: COLORS.primary,
-                    marginTop: 2,
-                  }}
-                >
-                  {item.fee === 'Free' ? 'Free' : `₹${item.fee}`}
-                </Text>
-              </TouchableOpacity>
+                item={item}
+                onPress={() =>
+                  router.push(
+                    `/service-pages/request-form?service=${encodeURIComponent(
+                      item.title
+                    )}&fee=${encodeURIComponent(item.fee)}`
+                  )
+                }
+              />
             ))}
-          </View>
+          </ScrollView>
         </View>
 
+        {/* ── MORE SERVICES ── */}
+        <View
+          style={{
+            marginHorizontal: 20,
+            marginTop: 28,
+            backgroundColor: COLORS.white,
+            borderRadius: 20,
+            padding: 20,
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowRadius: 8,
+            elevation: 3,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 16,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+              <View
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  backgroundColor: COLORS.actionGreenBg,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Ionicons name="layers-outline" size={18} color={COLORS.actionGreenIcon} />
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  More Services
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_400Regular",
+                    color: COLORS.textLight,
+                  }}
+                >
+                  Additional business support services
+                </Text>
+              </View>
+            </View>
+          </View>
 
-
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingLeft: 4, paddingVertical: 4 }}
+          >
+            {moreServices.map((item, index) => (
+              <ServiceCard
+                key={index}
+                item={item}
+                onPress={() =>
+                  router.push(
+                    `/service-pages/request-form?service=${encodeURIComponent(
+                      item.title
+                    )}&fee=${encodeURIComponent(item.fee)}`
+                  )
+                }
+              />
+            ))}
+          </ScrollView>
+        </View>
 
         {/* ── TOOLS & SERVICES ── */}
         <View
@@ -687,7 +1138,6 @@ export default function DashboardScreen() {
             elevation: 3,
           }}
         >
-          {/* Header */}
           <View
             style={{
               flexDirection: "row",
@@ -732,8 +1182,14 @@ export default function DashboardScreen() {
             </View>
           </View>
 
-          {/* Tools Grid */}
-          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "flex-start", marginTop: 8 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              justifyContent: "flex-start",
+              marginTop: 8,
+            }}
+          >
             {tools.map((item, index) => (
               <TouchableOpacity
                 key={index}
@@ -743,7 +1199,10 @@ export default function DashboardScreen() {
                   marginBottom: 20,
                 }}
                 onPress={() => {
-                  const slug = item.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                  const slug = item.title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/(^-|-$)/g, "");
                   router.push(`/tools-pages/${slug}` as any);
                 }}
               >
@@ -785,11 +1244,7 @@ export default function DashboardScreen() {
           </View>
         </View>
 
-
-
-
         {/* ── QUICK ACTIONS ── */}
-
         <View
           style={{
             marginHorizontal: 20,
@@ -803,8 +1258,6 @@ export default function DashboardScreen() {
             elevation: 3,
           }}
         >
-
-          {/* Header */}
           <View
             style={{
               flexDirection: "row",
@@ -920,7 +1373,6 @@ export default function DashboardScreen() {
             elevation: 3,
           }}
         >
-          {/* Header */}
           <View
             style={{
               flexDirection: "row",
@@ -992,9 +1444,9 @@ export default function DashboardScreen() {
             amount="₹ 6,940"
           />
         </View>
+
         {/* ── AVAILABLE OFFERS ── */}
         <View style={{ marginHorizontal: 20, marginTop: 44, marginBottom: 12 }}>
-          {/* Header */}
           <View
             style={{
               flexDirection: "row",
@@ -1059,23 +1511,72 @@ export default function DashboardScreen() {
               elevation: 4,
             }}
           >
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
               <View>
-                <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
                   50% OFF
                 </Text>
-                <Text style={{ fontSize: 13, fontFamily: "Poppins_500Medium", color: COLORS.textDark, marginTop: 2 }}>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontFamily: "Poppins_500Medium",
+                    color: COLORS.textDark,
+                    marginTop: 2,
+                  }}
+                >
                   Trademark Registration
                 </Text>
               </View>
               <Ionicons name="shield-checkmark" size={32} color="rgba(0,0,0,0.1)" />
             </View>
-            <View style={{ marginTop: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <View style={{ backgroundColor: "rgba(255,255,255,0.6)", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 }}>
-                <Text style={{ fontSize: 11, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>CODE: TM50</Text>
+            <View
+              style={{
+                marginTop: 16,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.6)",
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderRadius: 8,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  CODE: TM50
+                </Text>
               </View>
               <TouchableOpacity>
-                <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark }}>Claim Now &gt;</Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  Claim Now &gt;
+                </Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -1095,23 +1596,72 @@ export default function DashboardScreen() {
               elevation: 4,
             }}
           >
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+            >
               <View>
-                <Text style={{ fontSize: 20, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>
+                <Text
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
                   Get ₹500
                 </Text>
-                <Text style={{ fontSize: 13, fontFamily: "Poppins_500Medium", color: COLORS.textDark, marginTop: 2 }}>
+                <Text
+                  style={{
+                    fontSize: 13,
+                    fontFamily: "Poppins_500Medium",
+                    color: COLORS.textDark,
+                    marginTop: 2,
+                  }}
+                >
                   Refer a business friend
                 </Text>
               </View>
               <Ionicons name="people" size={32} color="rgba(0,0,0,0.1)" />
             </View>
-            <View style={{ marginTop: 16, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-              <View style={{ backgroundColor: "rgba(255,255,255,0.6)", paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 }}>
-                <Text style={{ fontSize: 11, fontFamily: "Poppins_700Bold", color: COLORS.textDark }}>SHARE LINK</Text>
+            <View
+              style={{
+                marginTop: 16,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.6)",
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderRadius: 8,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontFamily: "Poppins_700Bold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  SHARE LINK
+                </Text>
               </View>
               <TouchableOpacity>
-                <Text style={{ fontSize: 12, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark }}>Refer Now &gt;</Text>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.textDark,
+                  }}
+                >
+                  Refer Now &gt;
+                </Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -1131,7 +1681,6 @@ export default function DashboardScreen() {
             elevation: 3,
           }}
         >
-          {/* Header */}
           <View
             style={{
               flexDirection: "row",
@@ -1151,7 +1700,11 @@ export default function DashboardScreen() {
                   justifyContent: "center",
                 }}
               >
-                <Ionicons name="newspaper-outline" size={18} color={COLORS.actionPurpleIcon} />
+                <Ionicons
+                  name="newspaper-outline"
+                  size={18}
+                  color={COLORS.actionPurpleIcon}
+                />
               </View>
               <View>
                 <Text
@@ -1187,7 +1740,6 @@ export default function DashboardScreen() {
             </TouchableOpacity>
           </View>
 
-          {/* News Items */}
           <TouchableOpacity
             style={{
               paddingVertical: 12,
@@ -1195,7 +1747,13 @@ export default function DashboardScreen() {
               borderBottomColor: COLORS.border,
             }}
           >
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 4,
+              }}
+            >
               <View
                 style={{
                   backgroundColor: COLORS.actionRedBg,
@@ -1204,27 +1762,57 @@ export default function DashboardScreen() {
                   borderRadius: 6,
                 }}
               >
-                <Text style={{ fontSize: 10, fontFamily: "Poppins_600SemiBold", color: COLORS.alertRed }}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.alertRed,
+                  }}
+                >
                   Important
                 </Text>
               </View>
-              <Text style={{ fontSize: 11, fontFamily: "Poppins_400Regular", color: COLORS.textLight }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  fontFamily: "Poppins_400Regular",
+                  color: COLORS.textLight,
+                }}
+              >
                 2 hrs ago
               </Text>
             </View>
-            <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, marginBottom: 4 }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: "Poppins_600SemiBold",
+                color: COLORS.textDark,
+                marginBottom: 4,
+              }}
+            >
               New GST Return Filing Guidelines
             </Text>
-            <Text style={{ fontSize: 12, fontFamily: "Poppins_400Regular", color: COLORS.textGray }} numberOfLines={2}>
-              The latest circular outlines new deadlines for GSTR-1 and GSTR-3B filings starting next month.
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: "Poppins_400Regular",
+                color: COLORS.textGray,
+              }}
+              numberOfLines={2}
+            >
+              The latest circular outlines new deadlines for GSTR-1 and GSTR-3B
+              filings starting next month.
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              paddingVertical: 12,
-            }}
-          >
-            <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 4 }}>
+
+          <TouchableOpacity style={{ paddingVertical: 12 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 4,
+              }}
+            >
               <View
                 style={{
                   backgroundColor: COLORS.actionGreenBg,
@@ -1233,24 +1821,50 @@ export default function DashboardScreen() {
                   borderRadius: 6,
                 }}
               >
-                <Text style={{ fontSize: 10, fontFamily: "Poppins_600SemiBold", color: COLORS.actionGreenIcon }}>
+                <Text
+                  style={{
+                    fontSize: 10,
+                    fontFamily: "Poppins_600SemiBold",
+                    color: COLORS.actionGreenIcon,
+                  }}
+                >
                   Feature
                 </Text>
               </View>
-              <Text style={{ fontSize: 11, fontFamily: "Poppins_400Regular", color: COLORS.textLight }}>
+              <Text
+                style={{
+                  fontSize: 11,
+                  fontFamily: "Poppins_400Regular",
+                  color: COLORS.textLight,
+                }}
+              >
                 1 day ago
               </Text>
             </View>
-            <Text style={{ fontSize: 14, fontFamily: "Poppins_600SemiBold", color: COLORS.textDark, marginBottom: 4 }}>
+            <Text
+              style={{
+                fontSize: 14,
+                fontFamily: "Poppins_600SemiBold",
+                color: COLORS.textDark,
+                marginBottom: 4,
+              }}
+            >
               Introducing Free Logo Maker
             </Text>
-            <Text style={{ fontSize: 12, fontFamily: "Poppins_400Regular", color: COLORS.textGray }} numberOfLines={2}>
-              Create an AI-powered logo for your business instantly within our new tools dashboard!
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: "Poppins_400Regular",
+                color: COLORS.textGray,
+              }}
+              numberOfLines={2}
+            >
+              Create an AI-powered logo for your business instantly within our
+              new tools dashboard!
             </Text>
           </TouchableOpacity>
         </View>
 
-        {/* ── BOTTOM SPACER ── */}
         <View style={{ height: 16 }} />
       </ScrollView>
 
@@ -1271,7 +1885,6 @@ export default function DashboardScreen() {
           paddingBottom: bottomPadding + 10,
         }}
       >
-        {/* Home */}
         <TouchableOpacity style={{ alignItems: "center" }}>
           <Ionicons name="home" size={24} color={COLORS.primary} />
           <Text
@@ -1286,7 +1899,6 @@ export default function DashboardScreen() {
           </Text>
         </TouchableOpacity>
 
-        {/* Ledger */}
         <TouchableOpacity
           onPress={() => router.push("/(dashboard)/tools")}
           style={{ alignItems: "center" }}
@@ -1304,7 +1916,6 @@ export default function DashboardScreen() {
           </Text>
         </TouchableOpacity>
 
-        {/* Add FAB */}
         <TouchableOpacity
           onPress={() => router.push("/(dashboard)/action")}
           style={{ alignItems: "center", marginTop: -24 }}
@@ -1327,7 +1938,6 @@ export default function DashboardScreen() {
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* Reports */}
         <TouchableOpacity
           onPress={() => router.push("/(dashboard)/tools")}
           style={{ alignItems: "center" }}
@@ -1345,7 +1955,6 @@ export default function DashboardScreen() {
           </Text>
         </TouchableOpacity>
 
-        {/* More */}
         <TouchableOpacity
           onPress={() => router.push("/(dashboard)/profile-pages/help-support")}
           style={{ alignItems: "center" }}
