@@ -426,9 +426,8 @@ export default function DashboardScreen() {
 
   // ─── NEW: Service Card component ──────────────────────────────────────────
   const ServiceCard = ({ item, onPress }: { item: ServiceItem; onPress: () => void }) => {
-    const isWide = item.layout === "wide";
-    const cardWidth = isWide ? width * 0.76 : 210;
-    const imageHeight = isWide ? 120 : 150;
+    const cardWidth = 210;
+    const imageHeight = 150;
 
     return (
       <TouchableOpacity
@@ -436,7 +435,7 @@ export default function DashboardScreen() {
         activeOpacity={0.9}
         style={{
           width: cardWidth,
-          minHeight: isWide ? 200 : 260,
+          minHeight: 260,
           borderRadius: 24,
           overflow: "hidden",
           marginRight: 16,
@@ -449,28 +448,20 @@ export default function DashboardScreen() {
           elevation: 6,
         }}
       >
-        <View
+        <LinearGradient
+          colors={item.cardBg}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
           style={{
             height: imageHeight,
-            backgroundColor: "#F4F7FD",
             alignItems: "center",
             justifyContent: "center",
-            padding: 10,
           }}
         >
-          <View
-            style={{
-              width: "100%",
-              height: "100%",
-              borderRadius: 18,
-              backgroundColor: "rgba(255,255,255,0.95)",
-              borderWidth: 1,
-              borderColor: "rgba(15, 23, 42, 0.05)",
-            }}
-          />
-        </View>
+          <Ionicons name={item.icon as any} size={60} color={COLORS.white} />
+        </LinearGradient>
 
-        <View style={{ padding: 14, backgroundColor: COLORS.white, minHeight: isWide ? 90 : 110 }}>
+        <View style={{ padding: 14, backgroundColor: COLORS.white, minHeight: 110 }}>
           <Text
             style={{
               fontSize: 15,
@@ -1164,120 +1155,6 @@ export default function DashboardScreen() {
           </View>
         </View>
 
-        {/* ── QUICK ACTIONS ── */}
-        <View
-          style={{
-            marginHorizontal: 20,
-            marginTop: 24,
-            backgroundColor: COLORS.white,
-            borderRadius: 20,
-            padding: 20,
-            shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 3,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 16,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  backgroundColor: COLORS.actionBlueBg,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons name="flash-outline" size={18} color={COLORS.primary} />
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                  }}
-                >
-                  Quick Actions
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textLight,
-                  }}
-                >
-                  Manage your business
-                </Text>
-              </View>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "space-between",
-            }}
-          >
-            <QuickActionButton
-              icon="receipt-outline"
-              label="Billing"
-              bg={GRADIENTS.blue}
-              onPress={() => router.push("/(dashboard)/services")}
-            />
-            <QuickActionButton
-              icon="cube-outline"
-              label="Stock"
-              bg={GRADIENTS.teal}
-              onPress={() => router.push("/(dashboard)/tools")}
-            />
-            <QuickActionButton
-              icon="people-outline"
-              label="Customers"
-              bg={GRADIENTS.orange}
-              onPress={() => router.push("/(dashboard)/action")}
-            />
-            <QuickActionButton
-              icon="cash-outline"
-              label="Collections"
-              bg={GRADIENTS.yellow}
-              onPress={() => router.push("/(dashboard)/tools")}
-            />
-            <QuickActionButton
-              icon="bar-chart-outline"
-              label="Expenses"
-              bg={GRADIENTS.red}
-              onPress={() => router.push("/(dashboard)/tools")}
-            />
-            <QuickActionButton
-              icon="business-outline"
-              label="Banking"
-              bg={GRADIENTS.purple}
-              onPress={() => router.push("/(dashboard)/tools")}
-            />
-            <QuickActionButton
-              icon="clipboard-outline"
-              label="Orders"
-              bg={GRADIENTS.cyan}
-              onPress={() => router.push("/(dashboard)/tools")}
-            />
-            <QuickActionButton
-              icon="megaphone-outline"
-              label="Marketing"
-              bg={GRADIENTS.blue}
-              onPress={() => router.push("/(dashboard)/tools")}
-            />
-          </View>
-        </View>
 
         {/* ── PENDING TASKS ── */}
         <View
