@@ -65,6 +65,7 @@ interface ServiceItem {
   popular?: boolean;
   accentColor: string;
   cardBg: readonly [string, string];
+  layout?: "square" | "wide";
   subItems?: string[];
 }
 
@@ -80,6 +81,7 @@ const services: ServiceItem[] = [
     popular: true,
     accentColor: "#EFF6FF",
     cardBg: ["#60A5FA", "#2563EB"],
+    layout: "square",
     subItems: ["Private Ltd", "LLP"],
   },
   {
@@ -93,6 +95,7 @@ const services: ServiceItem[] = [
     popular: true,
     accentColor: "#F0FDF4",
     cardBg: ["#2DD4BF", "#0D9488"],
+    layout: "square",
   },
   {
     title: "Trademark Registration Application",
@@ -105,6 +108,7 @@ const services: ServiceItem[] = [
     popular: true,
     accentColor: "#FFF7ED",
     cardBg: ["#FB923C", "#EA580C"],
+    layout: "wide",
   },
   {
     title: "Startup India Certificate Assistance",
@@ -115,6 +119,7 @@ const services: ServiceItem[] = [
     iconColor: COLORS.actionPurpleIcon,
     accentColor: "#F5F3FF",
     cardBg: ["#A78BFA", "#7C3AED"],
+    layout: "wide",
   },
   {
     title: "ISO Certification",
@@ -125,6 +130,7 @@ const services: ServiceItem[] = [
     iconColor: COLORS.actionYellowIcon,
     accentColor: "#FFFBEB",
     cardBg: ["#FBBF24", "#D97706"],
+    layout: "wide",
     subItems: ["ISO 9001", "ISO 14001", "ISO 45001"],
   },
   {
@@ -136,6 +142,7 @@ const services: ServiceItem[] = [
     iconColor: COLORS.actionGreenIcon,
     accentColor: "#ECFDF5",
     cardBg: ["#34D399", "#059669"],
+    layout: "square",
     subItems: ["Registration", "State License", "Central License"],
   },
   {
@@ -158,6 +165,7 @@ const services: ServiceItem[] = [
     iconColor: COLORS.actionGreyIcon,
     accentColor: "#F8FAFC",
     cardBg: ["#94A3B8", "#475569"],
+    layout: "wide",
   },
 ];
 
@@ -171,6 +179,7 @@ const moreServices: ServiceItem[] = [
     iconColor: COLORS.primary,
     accentColor: "#EFF6FF",
     cardBg: ["#60A5FA", "#2563EB"],
+    layout: "wide",
   },
   {
     title: "GST Returns",
@@ -181,6 +190,7 @@ const moreServices: ServiceItem[] = [
     iconColor: COLORS.actionGreenIcon,
     accentColor: "#F0FDF4",
     cardBg: ["#2DD4BF", "#0D9488"],
+    layout: "square",
   },
   {
     title: "ISI",
@@ -191,6 +201,7 @@ const moreServices: ServiceItem[] = [
     iconColor: COLORS.actionYellowIcon,
     accentColor: "#FFF7ED",
     cardBg: ["#FB923C", "#EA580C"],
+    layout: "square",
   },
   {
     title: "BIS",
@@ -201,6 +212,7 @@ const moreServices: ServiceItem[] = [
     iconColor: COLORS.actionPurpleIcon,
     accentColor: "#F5F3FF",
     cardBg: ["#A78BFA", "#7C3AED"],
+    layout: "wide",
   },
   {
     title: "Pasara Registration Application",
@@ -231,6 +243,7 @@ const moreServices: ServiceItem[] = [
     iconColor: "#0891B2",
     accentColor: "#ECFEFF",
     cardBg: ["#22D3EE", "#0891B2"],
+    layout: "wide",
   },
   {
     title: "EPF / ESI Registration",
@@ -261,6 +274,7 @@ const moreServices: ServiceItem[] = [
     iconColor: COLORS.actionPurpleIcon,
     accentColor: "#F5F3FF",
     cardBg: ["#A78BFA", "#7C3AED"],
+    layout: "wide",
   },
   {
     title: "Section 8 Company / NGO / Society Registration",
@@ -411,215 +425,135 @@ export default function DashboardScreen() {
   );
 
   // ─── NEW: Service Card component ──────────────────────────────────────────
-  const ServiceCard = ({ item, onPress }: { item: ServiceItem; onPress: () => void }) => (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.88}
-      style={{
-        width: 220,
-        backgroundColor: COLORS.white,
-        borderRadius: 20,
-        overflow: "hidden",
-        marginRight: 16,
-        marginBottom: 14,
-        shadowColor: "#000",
-        shadowOpacity: 0.08,
-        shadowRadius: 12,
-        shadowOffset: { width: 0, height: 4 },
-        elevation: 4,
-        borderWidth: 1,
-        borderColor: COLORS.border,
-      }}
-    >
-      {/* ── Illustration / image area ── */}
-      <LinearGradient
-        colors={item.cardBg as any}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+  const ServiceCard = ({ item, onPress }: { item: ServiceItem; onPress: () => void }) => {
+    const isWide = item.layout === "wide";
+    const cardWidth = isWide ? width * 0.76 : 210;
+    const imageHeight = isWide ? 120 : 150;
+
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        activeOpacity={0.9}
         style={{
-          height: 130,
-          alignItems: "center",
-          justifyContent: "center",
-          position: "relative",
+          width: cardWidth,
+          minHeight: isWide ? 200 : 260,
+          borderRadius: 24,
+          overflow: "hidden",
+          marginRight: 16,
+          marginBottom: 16,
+          backgroundColor: COLORS.white,
+          shadowColor: "#000",
+          shadowOpacity: 0.08,
+          shadowRadius: 14,
+          shadowOffset: { width: 0, height: 8 },
+          elevation: 6,
         }}
       >
-        {/* Decorative background circle – top right */}
         <View
           style={{
-            position: "absolute",
-            top: -24,
-            right: -24,
-            width: 100,
-            height: 100,
-            borderRadius: 50,
-            backgroundColor: "rgba(255,255,255,0.13)",
-          }}
-        />
-        {/* Decorative background circle – bottom left */}
-        <View
-          style={{
-            position: "absolute",
-            bottom: -18,
-            left: -18,
-            width: 70,
-            height: 70,
-            borderRadius: 35,
-            backgroundColor: "rgba(255,255,255,0.10)",
-          }}
-        />
-
-        {/* Central icon container */}
-        <View
-          style={{
-            width: 72,
-            height: 72,
-            borderRadius: 24,
-            backgroundColor: "rgba(255,255,255,0.22)",
+            height: imageHeight,
+            backgroundColor: "#F4F7FD",
             alignItems: "center",
             justifyContent: "center",
-            borderWidth: 1.5,
-            borderColor: "rgba(255,255,255,0.38)",
+            padding: 10,
           }}
         >
-          <Ionicons name={item.icon as any} size={38} color={COLORS.white} />
-        </View>
-
-        {/* HOT badge */}
-        {item.popular && (
           <View
             style={{
-              position: "absolute",
-              top: 10,
-              right: 10,
-              backgroundColor: COLORS.alertRed,
-              paddingHorizontal: 8,
-              paddingVertical: 3,
-              borderRadius: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 3,
-              shadowColor: COLORS.alertRed,
-              shadowOpacity: 0.4,
-              shadowRadius: 4,
-              elevation: 2,
+              width: "100%",
+              height: "100%",
+              borderRadius: 18,
+              backgroundColor: "rgba(255,255,255,0.95)",
+              borderWidth: 1,
+              borderColor: "rgba(15, 23, 42, 0.05)",
             }}
-          >
-            <Ionicons name="flame" size={10} color={COLORS.white} />
-            <Text
-              style={{
-                fontSize: 9,
-                fontFamily: "Poppins_700Bold",
-                color: COLORS.white,
-              }}
-            >
-              HOT
-            </Text>
-          </View>
-        )}
-      </LinearGradient>
+          />
+        </View>
 
-      {/* ── Card info body ── */}
-      <View
-        style={{
-          padding: 12,
-          backgroundColor: item.accentColor,
-        }}
-      >
-        {/* Title + price pill row */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            marginBottom: 5,
-            gap: 4,
-          }}
-        >
+        <View style={{ padding: 14, backgroundColor: COLORS.white, minHeight: isWide ? 90 : 110 }}>
           <Text
             style={{
-              fontSize: 13,
+              fontSize: 15,
               fontFamily: "Poppins_700Bold",
               color: COLORS.textDark,
-              flex: 1,
-              lineHeight: 18,
+              lineHeight: 22,
+              marginBottom: 6,
             }}
             numberOfLines={2}
           >
             {item.title}
           </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              fontFamily: "Poppins_400Regular",
+              color: COLORS.textGray,
+              lineHeight: 18,
+              marginBottom: 12,
+            }}
+            numberOfLines={3}
+          >
+            {item.subtitle}
+          </Text>
 
-          {/* Price pill */}
           <View
             style={{
-              backgroundColor:
-                item.fee === "Free" ? COLORS.cardGreenBg : "#EFF6FF",
-              paddingHorizontal: 7,
-              paddingVertical: 3,
-              borderRadius: 10,
+              flexDirection: "row",
+              justifyContent: "space-between",
               alignItems: "center",
-              justifyContent: "center",
-              borderWidth: 1,
-              borderColor: item.fee === "Free" ? "#BBF7D0" : "#BFDBFE",
-              flexShrink: 0,
             }}
           >
-            <Text
-              style={{
-                fontSize: 11,
-                fontFamily: "Poppins_700Bold",
-                color:
-                  item.fee === "Free"
-                    ? COLORS.actionGreenIcon
-                    : COLORS.primary,
-              }}
-            >
-              {item.fee === "Free" ? "FREE" : `₹${item.fee}`}
-            </Text>
-          </View>
-        </View>
-
-        {/* Subtitle */}
-        <Text
-          style={{
-            fontSize: 11,
-            fontFamily: "Poppins_400Regular",
-            color: COLORS.textGray,
-            lineHeight: 15,
-            marginBottom: item.subItems ? 10 : 0,
-          }}
-          numberOfLines={2}
-        >
-          {item.subtitle}
-        </Text>
-        {item.subItems ? (
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
-            {item.subItems.map((tag, index) => (
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View
-                key={index}
                 style={{
-                  backgroundColor: "rgba(0,0,0,0.04)",
-                  paddingHorizontal: 8,
-                  paddingVertical: 4,
+                  width: 32,
+                  height: 32,
                   borderRadius: 12,
-                  marginBottom: 6,
+                  backgroundColor: item.cardBg[0] + "22",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  marginRight: 8,
                 }}
               >
+                <Ionicons name={item.icon as any} size={16} color={item.cardBg[1]} />
+              </View>
+              {item.subItems ? (
                 <Text
                   style={{
-                    fontSize: 10,
+                    fontSize: 11,
                     fontFamily: "Poppins_500Medium",
-                    color: COLORS.textDark,
+                    color: COLORS.textGray,
                   }}
+                  numberOfLines={1}
                 >
-                  {tag}
+                  {item.subItems.join(", ")}
                 </Text>
-              </View>
-            ))}
+              ) : null}
+            </View>
+
+            <View
+              style={{
+                backgroundColor: "#EFF6FF",
+                paddingHorizontal: 10,
+                paddingVertical: 6,
+                borderRadius: 14,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 11,
+                  fontFamily: "Poppins_700Bold",
+                  color: COLORS.primary,
+                }}
+              >
+                {item.fee === "Free" ? "FREE" : `₹${item.fee}`}
+              </Text>
+            </View>
           </View>
-        ) : null}
-      </View>
-    </TouchableOpacity>
-  );
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   // ─── Pending Task Row ─────────────────────────────────────────────────────
   const PendingTaskRow = ({
@@ -957,13 +891,6 @@ export default function DashboardScreen() {
           style={{
             marginHorizontal: 20,
             marginTop: 44,
-            backgroundColor: COLORS.white,
-            borderRadius: 20,
-            padding: 20,
-            shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 3,
           }}
         >
           {/* Section header */}
@@ -972,7 +899,7 @@ export default function DashboardScreen() {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: 20,
+              marginBottom: 16,
             }}
           >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -1027,7 +954,7 @@ export default function DashboardScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingLeft: 4, paddingVertical: 4 }}
+            contentContainerStyle={{ paddingLeft: 20, paddingRight: 20, paddingVertical: 8 }}
           >
             {services.map((item, index) => (
               <ServiceCard
@@ -1050,13 +977,6 @@ export default function DashboardScreen() {
           style={{
             marginHorizontal: 20,
             marginTop: 28,
-            backgroundColor: COLORS.white,
-            borderRadius: 20,
-            padding: 20,
-            shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 3,
           }}
         >
           <View
@@ -1106,7 +1026,7 @@ export default function DashboardScreen() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingLeft: 4, paddingVertical: 4 }}
+            contentContainerStyle={{ paddingLeft: 20, paddingRight: 20, paddingVertical: 8 }}
           >
             {moreServices.map((item, index) => (
               <ServiceCard
