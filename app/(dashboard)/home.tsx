@@ -5,6 +5,7 @@ import React from "react";
 import {
   Image,
   ScrollView,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -51,6 +52,27 @@ const GRADIENTS = {
   teal: ["#2DD4BF", "#0D9488"] as const,
   cyan: ["#22D3EE", "#0891B2"] as const,
   gray: ["#94A3B8", "#475569"] as const,
+};
+
+// ─── RESPONSIVE DESIGN HELPERS ───────────────────────────────────────────────
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+
+const DEVICE_TYPE = (() => {
+  const aspectRatio = screenHeight / screenWidth;
+  if (screenWidth >= 768) return "tablet";
+  if (screenWidth < 375) return "small";
+  if (screenWidth < 410) return "medium";
+  return "large";
+})();
+
+const getResponsiveFontSize = (baseSize: number) => {
+  const scale = screenWidth / 375;
+  return baseSize * scale;
+};
+
+const getResponsivePadding = (basePadding: number) => {
+  const scale = screenWidth / 375;
+  return basePadding * Math.min(scale, 1.2);
 };
 
 // ─── UPDATED ServiceItem interface ────────────────────────────────────────────
@@ -377,57 +399,63 @@ export default function DashboardScreen() {
   const bottomPadding = insets.bottom ?? 16;
 
   // ─── Quick Action Grid ────────────────────────────────────────────────────
-  const QuickActionButton = ({ icon, label, bg, onPress }: any) => (
-    <TouchableOpacity
-      onPress={onPress}
-      style={{
-        alignItems: "center",
-        width: "23%",
-        marginBottom: 16,
-        backgroundColor: COLORS.white,
-        borderRadius: 20,
-        paddingVertical: 14,
-        paddingHorizontal: 4,
-        shadowColor: "#000",
-        shadowOpacity: 0.06,
-        shadowRadius: 10,
-        shadowOffset: { width: 0, height: 4 },
-        elevation: 4,
-      }}
-    >
-      <LinearGradient
-        colors={bg}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
+  const QuickActionButton = ({ icon, label, bg, onPress }: any) => {
+    const buttonSize = Math.max(50, screenWidth * 0.18);
+    const iconSize = Math.max(24, buttonSize * 0.45);
+
+    return (
+      <TouchableOpacity
+        onPress={onPress}
         style={{
-          width: 55,
-          height: 55,
-          borderRadius: 16,
           alignItems: "center",
-          justifyContent: "center",
-          marginBottom: 8,
+          width: "23%",
+          marginBottom: getResponsivePadding(16),
+          backgroundColor: COLORS.white,
+          borderRadius: 20,
+          paddingVertical: getResponsivePadding(14),
+          paddingHorizontal: 4,
+          shadowColor: "#000",
+          shadowOpacity: 0.06,
+          shadowRadius: 10,
+          shadowOffset: { width: 0, height: 4 },
+          elevation: 4,
         }}
       >
-        <Ionicons name={icon} size={28} color={COLORS.white} />
-      </LinearGradient>
-      <Text
-        style={{
-          fontSize: 11,
-          fontFamily: "Poppins_600SemiBold",
-          color: COLORS.textDark,
-          textAlign: "center",
-          lineHeight: 14,
-        }}
-      >
-        {label}
-      </Text>
-    </TouchableOpacity>
-  );
+        <LinearGradient
+          colors={bg}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            width: buttonSize,
+            height: buttonSize,
+            borderRadius: 16,
+            alignItems: "center",
+            justifyContent: "center",
+            marginBottom: 8,
+          }}
+        >
+          <Ionicons name={icon} size={iconSize} color={COLORS.white} />
+        </LinearGradient>
+        <Text
+          style={{
+            fontSize: getResponsiveFontSize(11),
+            fontFamily: "Poppins_600SemiBold",
+            color: COLORS.textDark,
+            textAlign: "center",
+            lineHeight: getResponsiveFontSize(14),
+          }}
+        >
+          {label}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   // ─── NEW: Service Card component ──────────────────────────────────────────
   const ServiceCard = ({ item, onPress }: { item: ServiceItem; onPress: () => void }) => {
-    const cardWidth = 210;
-    const imageHeight = 150;
+    const cardWidth = screenWidth > 768 ? 250 : Math.max(200, screenWidth * 0.52);
+    const imageHeight = screenWidth > 768 ? 160 : 150;
+    const cardMinHeight = screenWidth > 768 ? 280 : 260;
 
     return (
       <TouchableOpacity
@@ -435,7 +463,7 @@ export default function DashboardScreen() {
         activeOpacity={0.9}
         style={{
           width: cardWidth,
-          minHeight: 260,
+          minHeight: cardMinHeight,
           borderRadius: 24,
           overflow: "hidden",
           marginRight: 16,
@@ -461,13 +489,13 @@ export default function DashboardScreen() {
           <Ionicons name={item.icon as any} size={60} color={COLORS.white} />
         </LinearGradient>
 
-        <View style={{ padding: 14, backgroundColor: COLORS.white, minHeight: 110 }}>
+        <View style={{ padding: getResponsivePadding(14), backgroundColor: COLORS.white, minHeight: 110 }}>
           <Text
             style={{
-              fontSize: 15,
+              fontSize: getResponsiveFontSize(15),
               fontFamily: "Poppins_700Bold",
               color: COLORS.textDark,
-              lineHeight: 22,
+              lineHeight: getResponsiveFontSize(22),
               marginBottom: 6,
             }}
             numberOfLines={2}
@@ -476,10 +504,10 @@ export default function DashboardScreen() {
           </Text>
           <Text
             style={{
-              fontSize: 12,
+              fontSize: getResponsiveFontSize(12),
               fontFamily: "Poppins_400Regular",
               color: COLORS.textGray,
-              lineHeight: 18,
+              lineHeight: getResponsiveFontSize(18),
               marginBottom: 12,
             }}
             numberOfLines={3}
@@ -511,7 +539,7 @@ export default function DashboardScreen() {
               {item.subItems ? (
                 <Text
                   style={{
-                    fontSize: 11,
+                    fontSize: getResponsiveFontSize(11),
                     fontFamily: "Poppins_500Medium",
                     color: COLORS.textGray,
                   }}
@@ -532,7 +560,7 @@ export default function DashboardScreen() {
             >
               <Text
                 style={{
-                  fontSize: 11,
+                  fontSize: getResponsiveFontSize(11),
                   fontFamily: "Poppins_700Bold",
                   color: COLORS.primary,
                 }}
@@ -622,11 +650,13 @@ export default function DashboardScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} translucent={false} />
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* ── MAIN SCROLL ── */}
       <ScrollView
         showsVerticalScrollIndicator={false}
+        scrollEventThrottle={16}
         contentContainerStyle={{ paddingBottom: bottomPadding + 120 }}
       >
         {/* ── GRADIENT HEADER ── */}
@@ -742,7 +772,7 @@ export default function DashboardScreen() {
           <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
             <Text
               style={{
-                fontSize: 26,
+                fontSize: getResponsiveFontSize(26),
                 fontFamily: "Poppins_700Bold",
                 color: COLORS.textDark,
               }}
@@ -751,7 +781,7 @@ export default function DashboardScreen() {
             </Text>
             <Text
               style={{
-                fontSize: 14,
+                fontSize: getResponsiveFontSize(14),
                 fontFamily: "Poppins_400Regular",
                 color: COLORS.textGray,
                 marginTop: 2,
@@ -880,7 +910,7 @@ export default function DashboardScreen() {
             ════════════════════════════════════════════════════ */}
         <View
           style={{
-            marginHorizontal: 20,
+            marginHorizontal: 10,
             marginTop: 44,
           }}
         >
@@ -909,7 +939,7 @@ export default function DashboardScreen() {
               <View>
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: getResponsiveFontSize(16),
                     fontFamily: "Poppins_700Bold",
                     color: COLORS.textDark,
                   }}
@@ -918,7 +948,7 @@ export default function DashboardScreen() {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: getResponsiveFontSize(12),
                     fontFamily: "Poppins_400Regular",
                     color: COLORS.textLight,
                   }}
@@ -931,7 +961,7 @@ export default function DashboardScreen() {
             <TouchableOpacity>
               <Text
                 style={{
-                  fontSize: 13,
+                  fontSize: getResponsiveFontSize(13),
                   fontFamily: "Poppins_600SemiBold",
                   color: COLORS.primary,
                 }}
@@ -994,7 +1024,7 @@ export default function DashboardScreen() {
               <View>
                 <Text
                   style={{
-                    fontSize: 16,
+                    fontSize: getResponsiveFontSize(16),
                     fontFamily: "Poppins_700Bold",
                     color: COLORS.textDark,
                   }}
@@ -1003,7 +1033,7 @@ export default function DashboardScreen() {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 12,
+                    fontSize: getResponsiveFontSize(12),
                     fontFamily: "Poppins_400Regular",
                     color: COLORS.textLight,
                   }}
