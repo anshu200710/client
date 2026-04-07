@@ -72,6 +72,7 @@ export default function GSTCalculatorScreen() {
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [discountType, setDiscountType] = useState("flat");
   const [discountValue, setDiscountValue] = useState("0");
+  const [transactionType, setTransactionType] = useState<"intra" | "inter">("intra");
 
   const standardSlabs = [5, 12, 18, 28];
 
@@ -95,25 +96,50 @@ export default function GSTCalculatorScreen() {
     const amountAfterDiscount = baseAmount - discount;
     const selectedSlab =
       showCustomInput && customGst ? parseFloat(customGst) : gstSlab;
-    const gstAmount = (amountAfterDiscount * selectedSlab) / 100;
-    const totalPayable = amountAfterDiscount + gstAmount;
+
+    // IGST, SGST, CGST Calculation
+    let sgstAmount = 0;
+    let cgstAmount = 0;
+    let igstAmount = 0;
+    let totalTaxAmount = 0;
+
+    if (transactionType === "intra") {
+      // Intra-State: SGST + CGST = Half each
+      sgstAmount = (amountAfterDiscount * selectedSlab) / 2 / 100;
+      cgstAmount = (amountAfterDiscount * selectedSlab) / 2 / 100;
+      totalTaxAmount = sgstAmount + cgstAmount;
+    } else {
+      // Inter-State: IGST = Full Rate
+      igstAmount = (amountAfterDiscount * selectedSlab) / 100;
+      totalTaxAmount = igstAmount;
+    }
+
+    const totalPayable = amountAfterDiscount + totalTaxAmount;
 
     return {
       baseAmount: baseAmount.toFixed(2),
       discount: discount.toFixed(2),
       amountAfterDiscount: amountAfterDiscount.toFixed(2),
       gstRate: selectedSlab,
-      gstAmount: gstAmount.toFixed(2),
+      sgstAmount: sgstAmount.toFixed(2),
+      cgstAmount: cgstAmount.toFixed(2),
+      igstAmount: igstAmount.toFixed(2),
+      totalTaxAmount: totalTaxAmount.toFixed(2),
       totalPayable: totalPayable.toFixed(2),
+      transactionType: transactionType,
     };
   };
 
   const handleCalculate = () => {
     const result = calculateGST();
     if (result) {
+      const taxDetails = result.transactionType === "intra"
+        ? `SGST (${result.gstRate / 2}%): ₹${result.sgstAmount}\nCGST (${result.gstRate / 2}%): ₹${result.cgstAmount}`
+        : `IGST (${result.gstRate}%): ₹${result.igstAmount}`;
+
       Alert.alert(
         "GST Calculated",
-        `Base Amount: ₹${result.baseAmount}\nDiscount: ₹${result.discount}\nAmount After Discount: ₹${result.amountAfterDiscount}\n\nGST Rate: ${result.gstRate}%\nGST Amount: ₹${result.gstAmount}\n\nTotal Payable: ₹${result.totalPayable}`,
+        `Base Amount: ₹${result.baseAmount}\nDiscount: ₹${result.discount}\nAmount After Discount: ₹${result.amountAfterDiscount}\n\n${taxDetails}\nTotal Tax: ₹${result.totalTaxAmount}\n\nTotal Payable: ₹${result.totalPayable}`,
         [{ text: "OK", onPress: () => {} }],
       );
     }
@@ -168,7 +194,7 @@ export default function GSTCalculatorScreen() {
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{ paddingBottom: 20 }}
         >
           {/* Info Banner */}
           <View
@@ -201,9 +227,120 @@ export default function GSTCalculatorScreen() {
                 flex: 1,
               }}
             >
-              Calculate GST instantly for your invoices. Enter the taxable value
-              below.
+              Calculate GST instantly for your invoices. Select transaction type and enter the taxable value below.
             </Text>
+          </View>
+
+          {/* Transaction Type Selector */}
+          <View
+            style={{
+              paddingHorizontal: 16,
+              paddingVertical: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: COLORS.border,
+              marginHorizontal: 16,
+              marginBottom: 16,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "Poppins_700Bold",
+                color: COLORS.textDark,
+                marginBottom: 16,
+              }}
+            >
+              Transaction Type
+            </Text>
+
+            <View
+              style={{
+                flexDirection: "row",
+                gap: 12,
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => setTransactionType("intra")}
+                style={{
+                  flex: 1,
+                  paddingVertical: 14,
+                  borderRadius: 12,
+                  borderWidth: 2,
+                  borderColor: transactionType === "intra" ? "#0066CC" : COLORS.border,
+                  backgroundColor: transactionType === "intra" ? "#0066CC" : COLORS.white,
+                }}
+              >
+                <Ionicons
+                  name="layers-outline"
+                  size={20}
+                  color={transactionType === "intra" ? COLORS.white : COLORS.textGray}
+                  style={{ textAlign: "center", marginBottom: 4 }}
+                />
+                <Text
+                  style={{
+                    fontFamily: "Poppins_700Bold",
+                    textAlign: "center",
+                    fontSize: 13,
+                    color: transactionType === "intra" ? COLORS.white : COLORS.textDark,
+                  }}
+                >
+                  Intra-State
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "Poppins_400Regular",
+                    textAlign: "center",
+                    fontSize: 10,
+                    color: transactionType === "intra" ? "rgba(255,255,255,0.8)" : COLORS.textLight,
+                    marginTop: 2,
+                  }}
+                >
+                  SGST + CGST
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPress={() => setTransactionType("inter")}
+                style={{
+                  flex: 1,
+                  paddingVertical: 14,
+                  borderRadius: 12,
+                  borderWidth: 2,
+                  borderColor: transactionType === "inter" ? "#0066CC" : COLORS.border,
+                  backgroundColor: transactionType === "inter" ? "#0066CC" : COLORS.white,
+                }}
+              >
+                <Ionicons
+                  name="globe-outline"
+                  size={20}
+                  color={transactionType === "inter" ? COLORS.white : COLORS.textGray}
+                  style={{ textAlign: "center", marginBottom: 4 }}
+                />
+                <Text
+                  style={{
+                    fontFamily: "Poppins_700Bold",
+                    textAlign: "center",
+                    fontSize: 13,
+                    color: transactionType === "inter" ? COLORS.white : COLORS.textDark,
+                  }}
+                >
+                  Inter-State
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "Poppins_400Regular",
+                    textAlign: "center",
+                    fontSize: 10,
+                    color: transactionType === "inter" ? "rgba(255,255,255,0.8)" : COLORS.textLight,
+                    marginTop: 2,
+                  }}
+                >
+                  IGST
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {/* Taxable Amount Section */}
@@ -716,35 +853,99 @@ export default function GSTCalculatorScreen() {
                   </Text>
                 </View>
 
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    paddingVertical: 12,
-                    borderBottomWidth: 1,
-                    borderBottomColor: COLORS.border,
-                  }}
-                >
-                  <Text
+                {result.transactionType === "intra" ? (
+                  <>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingVertical: 12,
+                        borderBottomWidth: 1,
+                        borderBottomColor: COLORS.border,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          color: COLORS.textGray,
+                          fontFamily: "Poppins_400Regular",
+                        }}
+                      >
+                        SGST ({result.gstRate / 2}%)
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: "Poppins_600SemiBold",
+                          color: "#10B981",
+                        }}
+                      >
+                        + ₹{result.sgstAmount}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        paddingVertical: 12,
+                        borderBottomWidth: 1,
+                        borderBottomColor: COLORS.border,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          color: COLORS.textGray,
+                          fontFamily: "Poppins_400Regular",
+                        }}
+                      >
+                        CGST ({result.gstRate / 2}%)
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 13,
+                          fontFamily: "Poppins_600SemiBold",
+                          color: "#F59E0B",
+                        }}
+                      >
+                        + ₹{result.cgstAmount}
+                      </Text>
+                    </View>
+                  </>
+                ) : (
+                  <View
                     style={{
-                      fontSize: 13,
-                      color: COLORS.textGray,
-                      fontFamily: "Poppins_400Regular",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      paddingVertical: 12,
+                      borderBottomWidth: 1,
+                      borderBottomColor: COLORS.border,
                     }}
                   >
-                    GST ({result.gstRate}%)
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      fontFamily: "Poppins_600SemiBold",
-                      color: "#0EA5E9",
-                    }}
-                  >
-                    + ₹{result.gstAmount}
-                  </Text>
-                </View>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        color: COLORS.textGray,
+                        fontFamily: "Poppins_400Regular",
+                      }}
+                    >
+                      IGST ({result.gstRate}%)
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        fontFamily: "Poppins_600SemiBold",
+                        color: "#0EA5E9",
+                      }}
+                    >
+                      + ₹{result.igstAmount}
+                    </Text>
+                  </View>
+                )}
 
                 <View
                   style={{
@@ -773,37 +974,80 @@ export default function GSTCalculatorScreen() {
                     ₹{result.totalPayable}
                   </Text>
                 </View>
+
+                {/* Tax Summary Badge */}
+                <View
+                  style={{
+                    backgroundColor: result.transactionType === "intra" ? "rgba(16, 185, 129, 0.1)" : "rgba(14, 165, 233, 0.1)",
+                    borderRadius: 12,
+                    paddingHorizontal: 12,
+                    paddingVertical: 10,
+                    marginTop: 16,
+                    borderLeftWidth: 4,
+                    borderLeftColor: result.transactionType === "intra" ? "#10B981" : "#0EA5E9",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: result.transactionType === "intra" ? "#059669" : "#0369A1",
+                      marginBottom: 4,
+                    }}
+                  >
+                    {result.transactionType === "intra" ? "INTRA-STATE TRANSACTION" : "INTER-STATE TRANSACTION"}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 11,
+                      fontFamily: "Poppins_400Regular",
+                      color: result.transactionType === "intra" ? "#059669" : "#0369A1",
+                    }}
+                  >
+                    {result.transactionType === "intra"
+                      ? `SGST: ₹${result.sgstAmount} + CGST: ₹${result.cgstAmount} = ₹${result.totalTaxAmount}`
+                      : `IGST: ₹${result.igstAmount}`}
+                  </Text>
+                </View>
               </View>
             </View>
           )}
+        </ScrollView>
 
-          {/* Calculate Button */}
-          <View style={{ paddingHorizontal: 16, paddingBottom: 24 }}>
-            <TouchableOpacity
-              onPress={handleCalculate}
+        {/* Calculate Button - Sticky at Bottom */}
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingVertical: 12,
+            backgroundColor: COLORS.white,
+            borderTopWidth: 1,
+            borderTopColor: COLORS.border,
+          }}
+        >
+          <TouchableOpacity
+            onPress={handleCalculate}
+            style={{
+              backgroundColor: "#0066CC",
+              borderRadius: 12,
+              paddingVertical: 16,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            <Ionicons name="calculator" size={20} color={COLORS.white} />
+            <Text
               style={{
-                backgroundColor: "#0066CC",
-                borderRadius: 12,
-                paddingVertical: 16,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 8,
+                color: COLORS.white,
+                fontFamily: "Poppins_700Bold",
+                fontSize: 16,
               }}
             >
-              <Ionicons name="calculator" size={20} color={COLORS.white} />
-              <Text
-                style={{
-                  color: COLORS.white,
-                  fontFamily: "Poppins_700Bold",
-                  fontSize: 16,
-                }}
-              >
-                Calculate GST
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+              Calculate GST
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
