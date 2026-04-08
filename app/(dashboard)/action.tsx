@@ -5,7 +5,7 @@ export default function ActionScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/(dashboard)/services");
+    router.replace("/(dashboard)/services");
   }, [router]);
 
   return null;

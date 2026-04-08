@@ -5,6 +5,7 @@ import {
   Animated,
   FlatList,
   Image,
+  ScrollView,
   StatusBar,
   Text,
   TouchableOpacity,
@@ -192,6 +193,7 @@ export default function OnboardingScreen() {
           style={{
             width: "88%",
             maxWidth: 450,
+            height: "85%",
             borderRadius: 28,
             backgroundColor: "rgba(255,255,255,0.95)",
             padding: 24,
@@ -203,48 +205,54 @@ export default function OnboardingScreen() {
             elevation: 8,
           }}
         >
-          <Image
-            source={item.image}
-            style={{
-              width: "100%",
-              height: 260,
-              borderRadius: 20,
-              marginBottom: 24,
-            }}
-            resizeMode="cover"
-          />
-
-          <Text
-            style={{
-              fontSize: 26,
-              fontFamily: "Poppins_700Bold",
-              color: "#2D3436",
-              textAlign: "center",
-              marginBottom: 10,
-              lineHeight: 34,
-            }}
+          <ScrollView
+            contentContainerStyle={{ alignItems: "center" }}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
           >
-            {item.title}
-          </Text>
+            <Image
+              source={item.image}
+              style={{
+                width: "100%",
+                height: 260,
+                borderRadius: 20,
+                marginBottom: 24,
+              }}
+              resizeMode="cover"
+            />
 
-          <Text
-            style={{
-              fontSize: 15,
-              fontFamily: "Poppins_500Medium",
-              color: "#6C7A89",
-              textAlign: "center",
-              marginBottom: 20,
-            }}
-          >
-            {item.subtitle}
-          </Text>
+            <Text
+              style={{
+                fontSize: 26,
+                fontFamily: "Poppins_700Bold",
+                color: "#2D3436",
+                textAlign: "center",
+                marginBottom: 10,
+                lineHeight: 34,
+              }}
+            >
+              {item.title}
+            </Text>
 
-          <Paginator />
+            <Text
+              style={{
+                fontSize: 15,
+                fontFamily: "Poppins_500Medium",
+                color: "#6C7A89",
+                textAlign: "center",
+                marginBottom: 20,
+              }}
+            >
+              {item.subtitle}
+            </Text>
+
+            <Paginator />
+          </ScrollView>
 
           <TouchableOpacity
             onPress={handleNext}
             style={{
-              marginTop: 20,
+              marginTop: "auto",
               width: "100%",
               borderRadius: 16,
               backgroundColor: item.accentColor,
