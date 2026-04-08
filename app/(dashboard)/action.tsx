@@ -1,12 +1,7 @@
-import { useRouter } from "expo-router";
-import { useEffect } from "react";
+import React from "react";
+import { View } from "react-native";
 
 export default function ActionScreen() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/(dashboard)/services");
-  }, [router]);
-
-  return null;
+  // This screen is never displayed - navigation is handled directly in the AddButton
+  return <View />;
 }

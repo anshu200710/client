@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import React from "react";
 import { Platform, TouchableOpacity, View } from "react-native";
 
@@ -12,35 +12,43 @@ const COLORS = {
 };
 
 // Custom Add Button Component for the center tab
-const AddButton = ({ onPress }: { onPress?: () => void }) => (
-  <TouchableOpacity
-    onPress={onPress}
-    style={{
-      top: -20,
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-    activeOpacity={0.9}
-  >
-    <View
+const AddButton = ({ onPress }: { onPress?: () => void }) => {
+  const router = useRouter();
+  
+  const handlePress = () => {
+    router.push("/(dashboard)/services");
+  };
+  
+  return (
+    <TouchableOpacity
+      onPress={handlePress}
       style={{
-        width: 64,
-        height: 64,
-        borderRadius: 32,
-        backgroundColor: COLORS.primary,
+        top: -20,
         justifyContent: "center",
         alignItems: "center",
-        elevation: 8,
-        shadowColor: COLORS.primary,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.35,
-        shadowRadius: 10,
       }}
+      activeOpacity={0.9}
     >
-      <Ionicons name="add" size={32} color="#fff" />
-    </View>
-  </TouchableOpacity>
-);
+      <View
+        style={{
+          width: 64,
+          height: 64,
+          borderRadius: 32,
+          backgroundColor: COLORS.primary,
+          justifyContent: "center",
+          alignItems: "center",
+          elevation: 8,
+          shadowColor: COLORS.primary,
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: 0.35,
+          shadowRadius: 10,
+        }}
+      >
+        <Ionicons name="add" size={32} color="#fff" />
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 export default function DashboardLayout() {
   return (

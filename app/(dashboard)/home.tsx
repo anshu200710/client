@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack, useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   ScrollView,
@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  useColorScheme,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -394,6 +395,7 @@ const tools: ToolItem[] = [
 export default function DashboardScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const colorScheme = useColorScheme();
   const { width } = Dimensions.get("window");
   const isSmallPhone = width < 360;
   const bottomPadding = insets.bottom ?? 16;
@@ -650,7 +652,11 @@ export default function DashboardScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} translucent={false} />
+      <StatusBar 
+        barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} 
+        backgroundColor={colorScheme === 'dark' ? '#000000' : COLORS.white} 
+        translucent={false} 
+      />
       <Stack.Screen options={{ headerShown: false }} />
 
       {/* ── MAIN SCROLL ── */}
