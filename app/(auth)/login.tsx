@@ -83,11 +83,14 @@ export default function LoginScreen() {
       }
 
       // Attempt login
-      await login(email, password);
+      const user = await login(email, password);
 
-      // Check admin status for routing
-      // The router will handle this based on the user's role
-      router.replace("/(dashboard)/home");
+      // Route based on user role
+      if (user?.role === "admin") {
+        router.replace("/(admin)/dashboard");
+      } else {
+        router.replace("/(dashboard)/home");
+      }
     } catch (err: any) {
       const errorMessage = err.message || "Login failed. Please try again.";
       Alert.alert("Login Error", errorMessage, [{ text: "OK" }]);

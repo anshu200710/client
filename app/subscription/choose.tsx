@@ -43,7 +43,7 @@ export default function SubscriptionChooseScreen() {
   const handleContinue = () => {
     if (selectedSubscriptionId) {
       router.push({
-        pathname: "/(dashboard)/subscription/checkout",
+        pathname: "/subscription/checkout",
         params: { subscriptionId: selectedSubscriptionId },
       });
     }

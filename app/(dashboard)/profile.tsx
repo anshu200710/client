@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Image, ScrollView, Text, TouchableOpacity, View, Alert, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
+import { useSubscription } from "../../context/SubscriptionContext";
 
 // Match other pages colors
 const COLORS = {
@@ -121,6 +122,7 @@ const ProfileRow = ({
 export default function ProfileScreen() {
   const router = useRouter();
   const { user, logout, loading } = useAuth();
+  const { hasActiveSubscription, subscriptionTier, userSubscription } = useSubscription();
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -408,6 +410,101 @@ export default function ProfileScreen() {
             subtitle="App preferences & security"
             onPress={() => router.push("/(dashboard)/profile-pages/settings")}
           />
+        </View>
+
+        {/* Subscription & Premium Section */}
+        <Text
+          style={{
+            fontSize: 11,
+            color: COLORS.textLight,
+            fontFamily: "Poppins_700Bold",
+            textTransform: "uppercase",
+            letterSpacing: 0.5,
+            marginTop: 24,
+            marginBottom: 12,
+            paddingHorizontal: 4,
+          }}
+        >
+          SUBSCRIPTION & PREMIUM
+        </Text>
+        <View
+          style={{
+            backgroundColor: COLORS.white,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: COLORS.border,
+            paddingHorizontal: 12,
+            overflow: "hidden",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              paddingVertical: 12,
+              paddingHorizontal: 8,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+            onPress={() => router.push("/(dashboard)/profile-pages/subscription")}
+            activeOpacity={0.7}
+          >
+            <View
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 12,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: hasActiveSubscription ? "#FEF3C7" : "#F3E8FF",
+              }}
+            >
+              <Ionicons
+                name={hasActiveSubscription ? "star" : "star-outline"}
+                size={18}
+                color={hasActiveSubscription ? "#D97706" : "#8B5CF6"}
+              />
+            </View>
+            <View style={{ marginLeft: 12, flex: 1 }}>
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: "Poppins_600SemiBold",
+                  color: COLORS.textDark,
+                }}
+              >
+                My Subscription
+              </Text>
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: COLORS.textLight,
+                  marginTop: 2,
+                  fontFamily: "Poppins_400Regular",
+                }}
+              >
+                {hasActiveSubscription
+                  ? `${subscriptionTier?.charAt(0).toUpperCase()}${subscriptionTier?.slice(1)} - ${userSubscription?.daysRemaining || 0} days left`
+                  : "No active subscription"}
+              </Text>
+            </View>
+            <View
+              style={{
+                backgroundColor: hasActiveSubscription ? "#FEF3C7" : "#F3E8FF",
+                paddingHorizontal: 12,
+                paddingVertical: 6,
+                borderRadius: 8,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontFamily: "Poppins_600SemiBold",
+                  color: hasActiveSubscription ? "#D97706" : "#8B5CF6",
+                }}
+              >
+                {hasActiveSubscription ? "Manage" : "Buy"}
+              </Text>
+            </View>
+          </TouchableOpacity>
         </View>
 
         {/* Service Requests Section */}

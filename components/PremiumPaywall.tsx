@@ -34,7 +34,7 @@ export const PremiumPaywall: React.FC<PremiumPaywallProps> = ({
     if (onUpgradePress) {
       onUpgradePress();
     } else {
-      router.push("/(dashboard)/subscription/choose");
+      router.push("/subscription/choose");
     }
     onClose();
   };

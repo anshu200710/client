@@ -68,7 +68,7 @@ export default function SubscriptionManagementScreen() {
   };
 
   const handleUpgradeOrDowngrade = () => {
-    router.push("/(dashboard)/subscription/choose");
+    router.push("/subscription/choose");
   };
 
   if (userSubscriptionLoading) {
