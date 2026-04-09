@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -56,7 +56,7 @@ interface EditingPlan {
   badge: string;
 }
 
-export default function AdminSubscriptionScreen() {
+export default function AdminSubscriptionEnhancedScreen() {
   const { token, user } = useAuth();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
@@ -282,7 +282,7 @@ export default function AdminSubscriptionScreen() {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 40 }}
       >
         {/* Header */}
         <View
@@ -413,7 +413,7 @@ export default function AdminSubscriptionScreen() {
         )}
 
         {/* Plans List */}
-        <View style={{ marginHorizontal: 20, marginBottom: 20 }}>
+        <View style={{ marginHorizontal: 20 }}>
           {subscriptions.length === 0 ? (
             <View
               style={{
@@ -519,7 +519,7 @@ export default function AdminSubscriptionScreen() {
                               : COLORS.danger,
                           }}
                         >
-                          {plan.isActive ? "  Active" : "  Inactive"}
+                          {plan.isActive ? "●  Active" : "●  Inactive"}
                         </Text>
                       </View>
                       {plan.badge && (
@@ -538,7 +538,7 @@ export default function AdminSubscriptionScreen() {
                               color: COLORS.warning,
                             }}
                           >
-                             {plan.badge}
+                            ★ {plan.badge}
                           </Text>
                         </View>
                       )}
@@ -618,7 +618,7 @@ export default function AdminSubscriptionScreen() {
                       marginBottom: 8,
                     }}
                   >
-                     Features ({plan.features.length})
+                    ✨ Features ({plan.features.length})
                   </Text>
                   <View
                     style={{
@@ -962,16 +962,24 @@ export default function AdminSubscriptionScreen() {
 
                   {/* Features Management */}
                   <View style={{ marginBottom: 20 }}>
-                    <Text
+                    <View
                       style={{
-                        fontSize: 12,
-                        fontFamily: "Poppins_600SemiBold",
-                        color: COLORS.textDark,
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
                         marginBottom: 10,
                       }}
                     >
-                      Features ({editingPlan.features.length})
-                    </Text>
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontFamily: "Poppins_600SemiBold",
+                          color: COLORS.textDark,
+                        }}
+                      >
+                        Features ({editingPlan.features.length})
+                      </Text>
+                    </View>
 
                     {/* Add Feature Input */}
                     <View
@@ -1072,7 +1080,7 @@ export default function AdminSubscriptionScreen() {
                                 flex: 1,
                               }}
                             >
-                               {feature}
+                              ✓ {feature}
                             </Text>
                             <TouchableOpacity
                               onPress={() => {

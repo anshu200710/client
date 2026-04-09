@@ -307,6 +307,32 @@ export const getSubscriptionStats = async (token: string) => {
 };
 
 /**
+ * Delete subscription plan (Admin only)
+ * @param {string} subscriptionId - Subscription ID to delete
+ * @param {string} token - Auth token
+ * @returns {Promise} Delete response
+ */
+export const deleteSubscription = async (
+  subscriptionId: string,
+  token: string
+) => {
+  try {
+    const response = await apiClient.delete(
+      `/admin/subscription/${subscriptionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting subscription:", error);
+    throw error;
+  }
+};
+
+/**
  * Set authorization token for all requests
  * @param {string} token - Auth token
  */
