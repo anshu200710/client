@@ -57,7 +57,7 @@ interface EditingPlan {
 }
 
 export default function AdminSubscriptionScreen() {
-  const { token, user } = useAuth();
+  const { tokens, user } = useAuth();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
@@ -86,19 +86,20 @@ export default function AdminSubscriptionScreen() {
 
   useEffect(() => {
     if (user?.role !== "admin") {
+      setLoading(false);
       Alert.alert("Access Denied", "Only admins can access this page");
       return;
     }
     loadData();
-  }, [user, token]);
+  }, [user, tokens.accessToken]);
 
   const loadData = async () => {
-    if (!token) return;
+    if (!tokens.accessToken) return;
     try {
       setLoading(true);
       const [subsResponse, statsResponse] = await Promise.all([
-        subscriptionService.getAllSubscriptionsAdmin(token),
-        subscriptionService.getSubscriptionStats(token),
+        subscriptionService.getAllSubscriptionsAdmin(tokens.accessToken),
+        subscriptionService.getSubscriptionStats(tokens.accessToken),
       ]);
 
       if (subsResponse.success) {
@@ -124,10 +125,10 @@ export default function AdminSubscriptionScreen() {
           text: "Delete",
           onPress: async () => {
             try {
-              if (!token) return;
+              if (!tokens.accessToken) return;
               const response = await subscriptionService.deleteSubscription?.(
                 subscriptionId,
-                token
+                tokens.accessToken
               );
               if (response?.success) {
                 Alert.alert("Success", "Plan deleted successfully");
@@ -149,7 +150,7 @@ export default function AdminSubscriptionScreen() {
       !editingPlan.name ||
       !editingPlan.price ||
       !editingPlan.durationInDays ||
-      !token
+      !tokens.accessToken
     ) {
       Alert.alert("Validation Error", "Please fill all required fields");
       return;
@@ -171,7 +172,7 @@ export default function AdminSubscriptionScreen() {
       const response = await subscriptionService.updateSubscription(
         editingPlan._id,
         updateData,
-        token
+        tokens.accessToken
       );
 
       if (response?.success) {
@@ -193,7 +194,7 @@ export default function AdminSubscriptionScreen() {
       !createForm.price ||
       !createForm.durationInDays ||
       createForm.features.length === 0 ||
-      !token
+      !tokens.accessToken
     ) {
       Alert.alert(
         "Validation Error",
@@ -219,7 +220,7 @@ export default function AdminSubscriptionScreen() {
 
       const response = await subscriptionService.createSubscription(
         planData,
-        token
+        tokens.accessToken
       );
 
       if (response?.success) {
