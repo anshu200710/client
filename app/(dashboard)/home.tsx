@@ -1,7 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Image,
   ScrollView,
@@ -13,6 +13,7 @@ import {
   useColorScheme,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { AuthContext } from "@/context/AuthContext";
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -399,6 +400,7 @@ export default function DashboardScreen() {
   const { width } = Dimensions.get("window");
   const isSmallPhone = width < 360;
   const bottomPadding = insets.bottom ?? 16;
+  const { user } = useContext(AuthContext)!;
 
   // ─── Quick Action Grid ────────────────────────────────────────────────────
   const QuickActionButton = ({ icon, label, bg, onPress }: any) => {
@@ -783,7 +785,7 @@ export default function DashboardScreen() {
                 color: COLORS.textDark,
               }}
             >
-              Welcome, Ankit!
+              Welcome, {user?.firstName || "User"}!
             </Text>
             <Text
               style={{
