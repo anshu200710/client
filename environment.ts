@@ -5,11 +5,11 @@
 
 type Environment = "development" | "staging" | "production";
 
-const ENV: Environment = "development"; // Change based on build environment
+const ENV: Environment = "production"; // Using Vercel deployment
 
 const ENV_CONFIG = {
   development: {
-    API_BASE_URL: "http://192.168.1.103:4000/api", // Local development server
+    API_BASE_URL: "http://localhost:4000/api", // Local development server
     API_TIMEOUT: 30000,
     DEBUG: true,
     LOG_REQUESTS: true,
@@ -21,7 +21,7 @@ const ENV_CONFIG = {
     LOG_REQUESTS: false,
   },
   production: {
-    API_BASE_URL: "https://api.yourdomain.com/api",
+    API_BASE_URL: "https://vyaaparsaati-backend-git-main-anshu200710s-projects.vercel.app/api",
     API_TIMEOUT: 30000,
     DEBUG: false,
     LOG_REQUESTS: false,
