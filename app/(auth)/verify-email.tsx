@@ -43,7 +43,7 @@ export default function VerifyEmailScreen() {
     return typeof routeEmail === "string" ? routeEmail : routeEmail?.[0] || "";
   });
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes
+  const [timeLeft, setTimeLeft] = useState(60); // 1 minute
   const [canResend, setCanResend] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | number | null>(null);
 
@@ -133,15 +133,24 @@ export default function VerifyEmailScreen() {
         return;
       }
 
-      await resendVerificationCode(email);
-      setTimeLeft(600);
+      const result = await resendVerificationCode(email);
+      setTimeLeft(60); // Reset to 1 minute
       setCanResend(false);
 
-      Alert.alert(
-        "Code Resent",
-        "A new verification code has been sent to your email.",
-        [{ text: "OK" }]
-      );
+      // Show verification code for testing (remove in production)
+      if (result?.verificationCode) {
+        Alert.alert(
+          "New Verification Code",
+          `Your new verification code is: ${result.verificationCode}\n\nThis is for testing only.`,
+          [{ text: "OK" }]
+        );
+      } else {
+        Alert.alert(
+          "Code Resent",
+          "A new verification code has been sent to your email.",
+          [{ text: "OK" }]
+        );
+      }
     } catch (err: any) {
       const errorMessage = err.message || "Failed to resend verification code";
       Alert.alert("Resend Error", errorMessage, [{ text: "OK" }]);

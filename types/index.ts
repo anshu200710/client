@@ -25,12 +25,20 @@ export interface AuthResponse {
   success: boolean;
   message: string;
   data?: {
-    user: User;
-    tokens: {
+    user?: User;
+    pendingUser?: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+      accountType: string;
+    };
+    tokens?: {
       accessToken: string;
       refreshToken: string;
     };
   };
+  requiresVerification?: boolean;
   error?: string;
 }
 
@@ -325,7 +333,7 @@ export interface AuthContextType {
   
   // Auth Methods
   login: (email: string, password: string) => Promise<User>;
-  signup: (data: SignupRequest) => Promise<User>;
+  signup: (data: SignupRequest) => Promise<{ requiresVerification: boolean; pendingUser?: any; verificationCode?: string }>;
   verifyEmail: (email: string, verificationCode: string) => Promise<User>;
   resendVerificationCode: (email: string) => Promise<void>;
   logout: () => Promise<void>;

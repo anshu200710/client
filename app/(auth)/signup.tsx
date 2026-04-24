@@ -147,15 +147,40 @@ export default function SignupScreen() {
       };
 
       // Attempt signup
-      await signup(signupData);
+      const result = await signup(signupData);
 
-      // Navigate to email verification screen
-      router.replace({
-        pathname: "/verify-email",
-        params: { email: email },
-      });
+      // Check if email verification is required
+      if (result?.requiresVerification) {
+        // Show verification code for testing (remove in production)
+        if (result.verificationCode) {
+          Alert.alert(
+            "Verification Code",
+            `Your verification code is: ${result.verificationCode}\n\nThis is for testing only.`,
+            [{ text: "OK" }]
+          );
+        }
+        // Navigate to email verification screen
+        router.replace({
+          pathname: "/verify-email",
+          params: { email: email },
+        });
+      } else {
+        // Direct login (legacy behavior - shouldn't happen with current server)
+        router.replace("/(dashboard)/home");
+      }
     } catch (err: any) {
       const errorMessage = err.message || "Signup failed. Please try again.";
+      
+      // If verification code already sent, redirect to verify-email page
+      if (errorMessage.includes("verification code has already been sent") || 
+          errorMessage.includes("verification code has already been sent")) {
+        router.replace({
+          pathname: "/verify-email",
+          params: { email: email },
+        });
+        return;
+      }
+      
       Alert.alert("Signup Error", errorMessage, [{ text: "OK" }]);
       console.error("Signup error:", err);
     }

@@ -121,21 +121,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   /**
    * Signup user with account details
    */
-  const signup = async (data: SignupRequest): Promise<User> => {
+  const signup = async (data: SignupRequest): Promise<{ requiresVerification: boolean; pendingUser?: any; verificationCode?: string }> => {
     try {
       setLoading(true);
       setError(null);
       const response = await authService.signup(data);
 
+      // Server returns pendingUser (not full user) until email is verified
+      // No tokens are provided until email verification is complete
+      if (response.data?.pendingUser) {
+        // Store pending user info temporarily
+        const pendingInfo = {
+          requiresVerification: response.requiresVerification === true,
+          pendingUser: response.data.pendingUser,
+          verificationCode: response.verificationCode,
+        };
+        return pendingInfo;
+      }
+      
+      // If somehow we get a full user response (legacy behavior)
       if (response.data?.user) {
         setUser(response.data.user);
-        // Don't set authenticated yet until email is verified
         setTokens({
           accessToken: response.data?.tokens?.accessToken || null,
           refreshToken: response.data?.tokens?.refreshToken || null,
         });
-        return response.data.user;
+        return { requiresVerification: false };
       }
+      
+      // Handle case where server returns success but no user yet (email verification required)
+      if (response.success === true || response.requiresVerification === true) {
+        return { requiresVerification: true };
+      }
+      
       throw new Error("Invalid signup response");
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 
