@@ -36,6 +36,16 @@ export default function SubscriptionChooseScreen() {
     return [...subscriptions].sort((a, b) => a.displayOrder - b.displayOrder);
   }, [subscriptions]);
 
+  const monthlySubscriptions = useMemo(
+    () => sortedSubscriptions.filter((sub) => sub.interval === "monthly"),
+    [sortedSubscriptions]
+  );
+
+  const yearlySubscriptions = useMemo(
+    () => sortedSubscriptions.filter((sub) => sub.interval === "yearly"),
+    [sortedSubscriptions]
+  );
+
   const handleSelectPlan = (subscriptionId: string) => {
     setSelectedSubscriptionId(subscriptionId);
   };
@@ -150,14 +160,53 @@ export default function SubscriptionChooseScreen() {
         {/* Subscription Cards */}
         <View style={{ paddingHorizontal: 20 }}>
           {sortedSubscriptions.length > 0 ? (
-            sortedSubscriptions.map((subscription) => (
-              <SubscriptionCard
-                key={subscription._id}
-                subscription={subscription}
-                isSelected={selectedSubscriptionId === subscription._id}
-                onPress={(sub) => handleSelectPlan(sub._id)}
-              />
-            ))
+            <>
+              {monthlySubscriptions.length > 0 && (
+                <View style={{ marginBottom: 20 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.textDark,
+                      marginBottom: 12,
+                    }}
+                  >
+                    Monthly Plans
+                  </Text>
+                  {monthlySubscriptions.map((subscription) => (
+                    <SubscriptionCard
+                      key={subscription._id}
+                      subscription={subscription}
+                      isSelected={selectedSubscriptionId === subscription._id}
+                      onPress={(sub) => handleSelectPlan(sub._id)}
+                    />
+                  ))}
+                </View>
+              )}
+
+              {yearlySubscriptions.length > 0 && (
+                <View style={{ marginBottom: 20 }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: "Poppins_600SemiBold",
+                      color: COLORS.textDark,
+                      marginBottom: 12,
+                    }}
+                  >
+                    Yearly Plans
+                  </Text>
+                  {yearlySubscriptions.map((subscription) => (
+                    <SubscriptionCard
+                      key={subscription._id}
+                      subscription={subscription}
+                      isSelected={selectedSubscriptionId === subscription._id}
+                      onPress={(sub) => handleSelectPlan(sub._id)}
+                    />
+                  ))}
+                </View>
+              )}
+            </>
           ) : (
             <View style={{ alignItems: "center", paddingVertical: 40 }}>
               <Text

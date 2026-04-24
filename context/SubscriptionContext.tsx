@@ -41,6 +41,7 @@ export interface SubscriptionContextType {
   userSubscriptionLoading: boolean;
   hasActiveSubscription: boolean;
   subscriptionTier: "free" | "monthly" | "yearly";
+  canAccessTemplates: boolean;
   // Functions
   fetchAllSubscriptions: () => Promise<void>;
   fetchUserSubscriptionStatus: () => Promise<void>;
@@ -72,6 +73,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({
   const [subscriptionTier, setSubscriptionTier] = useState<
     "free" | "monthly" | "yearly"
   >("free");
+  const canAccessTemplates = hasActiveSubscription && subscriptionTier !== "free";
 
   /**
    * Fetch all available subscription plans
@@ -237,6 +239,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({
     cancelSubscription,
     fetchSubscriptionHistory,
     refreshSubscriptionStatus,
+    canAccessTemplates,
   };
 
   return (

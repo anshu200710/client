@@ -1,8 +1,10 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Stack, useRouter } from "expo-router";
-import React from "react";
-import { ScrollView, Text, TouchableOpacity, View, Image } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSubscription } from "@/context/SubscriptionContext";
+import PremiumPaywall from "@/components/PremiumPaywall";
 
 const COLORS = {
   primary: "#1E4FA3",
@@ -16,16 +18,27 @@ const COLORS = {
 };
 
 const TEMPLATES = [
-  { id: 1, title: "Festival Greeting", category: "Diwali Special", bg: "#FF9800", icon: "flame" },
-  { id: 2, title: "Offer of the Day", category: "Sales & Marketing", bg: "#E91E63", icon: "pricetag" },
-  { id: 3, title: "New Arrival", category: "Product Launch", bg: "#4CAF50", icon: "cube" },
-  { id: 4, title: "Hiring Now", category: "Recruitment", bg: "#9C27B0", icon: "briefcase" },
-  { id: 5, title: "Client Testimonial", category: "Social Proof", bg: "#3F51B5", icon: "star" },
-  { id: 6, title: "Motivational Quote", category: "Engagement", bg: "#00BCD4", icon: "chatbubbles" },
+  { id: 1, title: "Festival Greeting", category: "Diwali Special", bg: "#FF9800", icon: "flame", isPremium: false },
+  { id: 2, title: "Offer of the Day", category: "Sales & Marketing", bg: "#E91E63", icon: "pricetag", isPremium: true },
+  { id: 3, title: "New Arrival", category: "Product Launch", bg: "#4CAF50", icon: "cube", isPremium: true },
+  { id: 4, title: "Hiring Now", category: "Recruitment", bg: "#9C27B0", icon: "briefcase", isPremium: false },
+  { id: 5, title: "Client Testimonial", category: "Social Proof", bg: "#3F51B5", icon: "star", isPremium: false },
+  { id: 6, title: "Motivational Quote", category: "Engagement", bg: "#00BCD4", icon: "chatbubbles", isPremium: true },
 ];
 
 export default function SocialMediaPostsScreen() {
   const router = useRouter();
+  const { canAccessTemplates } = useSubscription();
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  const handleTemplatePress = (item: any) => {
+    if (item.isPremium && !canAccessTemplates) {
+      setShowPaywall(true);
+      return;
+    }
+
+    alert(`Opening template: ${item.title}`);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }} edges={["bottom"]}>
@@ -64,7 +77,7 @@ export default function SocialMediaPostsScreen() {
             <TouchableOpacity
               key={item.id}
               style={{ width: "48%", marginBottom: 16 }}
-              onPress={() => alert(`Opening template: ${item.title}`)}
+              onPress={() => handleTemplatePress(item)}
             >
               <View
                 style={{
@@ -84,13 +97,26 @@ export default function SocialMediaPostsScreen() {
               <Text style={{ fontSize: 13, fontFamily: "Poppins_500Medium", color: COLORS.textDark }}>
                 {item.title}
               </Text>
-              <Text style={{ fontSize: 11, fontFamily: "Poppins_400Regular", color: COLORS.textGray }}>
-                {item.category}
-              </Text>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+                <Text style={{ fontSize: 11, fontFamily: "Poppins_400Regular", color: COLORS.textGray }}>
+                  {item.category}
+                </Text>
+                {item.isPremium && (
+                  <View style={{ backgroundColor: "#FEF3C7", borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 }}>
+                    <Text style={{ fontSize: 10, fontFamily: "Poppins_600SemiBold", color: "#B45309" }}>Premium</Text>
+                  </View>
+                )}
+              </View>
             </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
+      <PremiumPaywall
+        visible={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        featureName="Social media templates"
+        onUpgradePress={() => router.push("/subscription/choose")}
+      />
     </SafeAreaView>
   );
 }
