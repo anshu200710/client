@@ -12,48 +12,62 @@ import {
   Dimensions,
   useColorScheme,
 } from "react-native";
+import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AuthContext } from "@/context/AuthContext";
 
 const COLORS = {
-  primary: "#1E4FA3",
-  secondary: "#2ECC71",
-  success: "#22c55e",
-  alertRed: "#ef4444",
-  alertAmber: "#FFC107",
-  lightGrey: "#F5F7FB",
+  primary: "#4F46E5",
+  primaryLight: "#EEF2FF",
+  secondary: "#10B981",
+  secondaryLight: "#ECFDF5",
+  accent: "#F59E0B",
+  accentLight: "#FFFBEB",
+  slate: {
+    50: "#F8FAFC",
+    100: "#F1F5F9",
+    200: "#E2E8F0",
+    300: "#CBD5E1",
+    400: "#94A3B8",
+    500: "#64748B",
+    600: "#475569",
+    700: "#334155",
+    800: "#1E293B",
+    900: "#0F172A",
+  },
+  success: "#10B981",
+  alertRed: "#EF4444",
+  alertAmber: "#F59E0B",
   white: "#FFFFFF",
-  textDark: "#1A1A1A",
-  textGray: "#666666",
-  textLight: "#9FA3B1",
-  border: "#E4E7EF",
-  cardOrangeBg: "#FFF7ED",
-  cardOrangeIcon: "#FF8A00",
-  cardGreenBg: "#ECFDF5",
-  cardGreenIcon: "#10B981",
-  actionBlueBg: "#EFF6FF",
-  actionPurpleBg: "#F5F3FF",
-  actionPurpleIcon: "#8B5CF6",
-  actionGreenBg: "#ECFDF5",
+  textDark: "#0F172A",
+  textGray: "#475569",
+  textLight: "#94A3B8",
+  border: "#E2E8F0",
   actionGreenIcon: "#10B981",
-  actionRedBg: "#FEF2F2",
-  actionRedIcon: "#EF4444",
-  actionYellowBg: "#FFFBEB",
   actionYellowIcon: "#F59E0B",
-  actionGreyBg: "#F8FAFC",
-  actionGreyIcon: "#94A3B8",
+  actionPurpleIcon: "#8B5CF6",
+  actionRedIcon: "#EF4444",
+  actionGreyIcon: "#64748B",
+  cardOrangeBg: "#FFF7ED",
+  cardOrangeIcon: "#F97316",
 };
 
 const GRADIENTS = {
-  blue: ["#60A5FA", "#2563EB"] as const,
-  green: ["#34D399", "#059669"] as const,
-  purple: ["#A78BFA", "#7C3AED"] as const,
-  yellow: ["#FBBF24", "#D97706"] as const,
-  red: ["#F87171", "#DC2626"] as const,
-  orange: ["#FB923C", "#EA580C"] as const,
-  teal: ["#2DD4BF", "#0D9488"] as const,
-  cyan: ["#22D3EE", "#0891B2"] as const,
-  gray: ["#94A3B8", "#475569"] as const,
+  premium: ["#4F46E5", "#6366F1"] as const,
+  success: ["#10B981", "#059669"] as const,
+  warning: ["#F59E0B", "#D97706"] as const,
+  danger: ["#EF4444", "#DC2626"] as const,
+  slate: ["#1E293B", "#0F172A"] as const,
+  glass: ["rgba(255,255,255,0.8)", "rgba(255,255,255,0.4)"] as const,
+  blue: ["#3B82F6", "#2563EB"] as const,
+  teal: ["#14B8A6", "#0D9488"] as const,
+  orange: ["#F97316", "#EA580C"] as const,
+  purple: ["#8B5CF6", "#7C3AED"] as const,
+  red: ["#EF4444", "#DC2626"] as const,
+  green: ["#22C55E", "#16A34A"] as const,
+  cyan: ["#06B6D4", "#0891B2"] as const,
+  yellow: ["#EAB308", "#CA8A04"] as const,
+  gray: ["#6B7280", "#4B5563"] as const,
 };
 
 // ─── RESPONSIVE DESIGN HELPERS ───────────────────────────────────────────────
@@ -100,11 +114,11 @@ const services: ServiceItem[] = [
     subtitle: "Private Ltd or LLP registration options",
     fee: "2,999",
     icon: "business",
-    iconBg: GRADIENTS.blue,
+    iconBg: GRADIENTS.premium,
     iconColor: COLORS.primary,
     popular: true,
-    accentColor: "#EFF6FF",
-    cardBg: ["#60A5FA", "#2563EB"],
+    accentColor: COLORS.primaryLight,
+    cardBg: GRADIENTS.premium,
     layout: "square",
     subItems: ["Private Ltd", "LLP"],
   },
@@ -114,35 +128,35 @@ const services: ServiceItem[] = [
     feeLabel: "Starting from",
     fee: "999",
     icon: "document-text",
-    iconBg: GRADIENTS.teal,
-    iconColor: COLORS.actionGreenIcon,
+    iconBg: GRADIENTS.success,
+    iconColor: COLORS.secondary,
     popular: true,
-    accentColor: "#F0FDF4",
-    cardBg: ["#2DD4BF", "#0D9488"],
+    accentColor: COLORS.secondaryLight,
+    cardBg: GRADIENTS.success,
     layout: "square",
   },
   {
-    title: "Trademark Registration Application",
+    title: "Trademark Registration",
     subtitle: "Protect your brand identity legally",
     feeLabel: "Starting from",
     fee: "4,999",
     icon: "shield-checkmark",
-    iconBg: GRADIENTS.orange,
-    iconColor: COLORS.actionYellowIcon,
+    iconBg: GRADIENTS.warning,
+    iconColor: COLORS.accent,
     popular: true,
-    accentColor: "#FFF7ED",
-    cardBg: ["#FB923C", "#EA580C"],
+    accentColor: COLORS.accentLight,
+    cardBg: GRADIENTS.warning,
     layout: "wide",
   },
   {
-    title: "Startup India Certificate Assistance",
+    title: "Startup India Certificate",
     subtitle: "Get support for your Startup India application",
     fee: "899",
     icon: "ribbon",
-    iconBg: GRADIENTS.purple,
-    iconColor: COLORS.actionPurpleIcon,
-    accentColor: "#F5F3FF",
-    cardBg: ["#A78BFA", "#7C3AED"],
+    iconBg: GRADIENTS.premium,
+    iconColor: COLORS.primary,
+    accentColor: COLORS.primaryLight,
+    cardBg: GRADIENTS.premium,
     layout: "wide",
   },
   {
@@ -150,45 +164,45 @@ const services: ServiceItem[] = [
     subtitle: "Choose the certification type you need",
     fee: "1,499",
     icon: "duplicate",
-    iconBg: GRADIENTS.yellow,
-    iconColor: COLORS.actionYellowIcon,
-    accentColor: "#FFFBEB",
-    cardBg: ["#FBBF24", "#D97706"],
+    iconBg: GRADIENTS.warning,
+    iconColor: COLORS.accent,
+    accentColor: COLORS.accentLight,
+    cardBg: GRADIENTS.warning,
     layout: "wide",
-    subItems: ["ISO 9001", "ISO 14001", "ISO 45001"],
+    subItems: ["ISO 9001", "ISO 14001"],
   },
   {
     title: "FSSAI",
     subtitle: "Registration, state license or central license",
     fee: "699",
     icon: "restaurant",
-    iconBg: GRADIENTS.green,
-    iconColor: COLORS.actionGreenIcon,
-    accentColor: "#ECFDF5",
-    cardBg: ["#34D399", "#059669"],
+    iconBg: GRADIENTS.success,
+    iconColor: COLORS.secondary,
+    accentColor: COLORS.secondaryLight,
+    cardBg: GRADIENTS.success,
     layout: "square",
-    subItems: ["Registration", "State License", "Central License"],
+    subItems: ["Registration", "State License"],
   },
   {
-    title: "Income Tax Returns Filing",
+    title: "Income Tax Returns",
     subtitle: "File your income tax returns accurately",
     feeLabel: "Starting from",
     fee: "499",
     icon: "calculator",
-    iconBg: GRADIENTS.cyan,
-    iconColor: "#0891B2",
-    accentColor: "#ECFEFF",
-    cardBg: ["#22D3EE", "#0891B2"],
+    iconBg: GRADIENTS.premium,
+    iconColor: COLORS.primary,
+    accentColor: COLORS.primaryLight,
+    cardBg: GRADIENTS.premium,
   },
   {
     title: "MSME Registration",
     subtitle: "Free MSME registration support",
     fee: "Free",
     icon: "grid",
-    iconBg: GRADIENTS.gray,
-    iconColor: COLORS.actionGreyIcon,
-    accentColor: "#F8FAFC",
-    cardBg: ["#94A3B8", "#475569"],
+    iconBg: GRADIENTS.slate,
+    iconColor: COLORS.slate[400],
+    accentColor: COLORS.slate[100],
+    cardBg: GRADIENTS.slate,
     layout: "wide",
   },
 ];
@@ -404,49 +418,38 @@ export default function DashboardScreen() {
 
   // ─── Quick Action Grid ────────────────────────────────────────────────────
   const QuickActionButton = ({ icon, label, bg, onPress }: any) => {
-    const buttonSize = Math.max(50, screenWidth * 0.18);
-    const iconSize = Math.max(24, buttonSize * 0.45);
+    const buttonSize = Math.max(48, screenWidth * 0.16);
+    const iconSize = Math.max(22, buttonSize * 0.42);
 
     return (
       <TouchableOpacity
         onPress={onPress}
-        style={{
-          alignItems: "center",
-          width: "23%",
-          marginBottom: getResponsivePadding(16),
-          backgroundColor: COLORS.white,
-          borderRadius: 20,
-          paddingVertical: getResponsivePadding(14),
-          paddingHorizontal: 4,
-          shadowColor: "#000",
-          shadowOpacity: 0.06,
-          shadowRadius: 10,
-          shadowOffset: { width: 0, height: 4 },
-          elevation: 4,
-        }}
+        className="items-center w-[23%] mb-4"
+        activeOpacity={0.7}
       >
-        <LinearGradient
-          colors={bg}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <View
+          className="items-center justify-center mb-2"
           style={{
             width: buttonSize,
             height: buttonSize,
-            borderRadius: 16,
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 8,
+            borderRadius: 18,
+            backgroundColor: COLORS.white,
+            shadowColor: "#000",
+            shadowOpacity: 0.04,
+            shadowRadius: 8,
+            shadowOffset: { width: 0, height: 4 },
+            elevation: 2,
           }}
         >
-          <Ionicons name={icon} size={iconSize} color={COLORS.white} />
-        </LinearGradient>
+          <Ionicons name={icon} size={iconSize} color={COLORS.primary} />
+        </View>
         <Text
           style={{
             fontSize: getResponsiveFontSize(11),
-            fontFamily: "Poppins_600SemiBold",
-            color: COLORS.textDark,
+            fontFamily: "PlusJakartaSans_600SemiBold",
+            color: COLORS.slate[600],
             textAlign: "center",
-            lineHeight: getResponsiveFontSize(14),
+            lineHeight: 14,
           }}
         >
           {label}
@@ -457,9 +460,7 @@ export default function DashboardScreen() {
 
   // ─── NEW: Service Card component ──────────────────────────────────────────
   const ServiceCard = ({ item, onPress }: { item: ServiceItem; onPress: () => void }) => {
-    const cardWidth = screenWidth > 768 ? 250 : Math.max(200, screenWidth * 0.52);
-    const imageHeight = screenWidth > 768 ? 160 : 150;
-    const cardMinHeight = screenWidth > 768 ? 280 : 260;
+    const cardWidth = screenWidth > 768 ? 240 : screenWidth * 0.58;
 
     return (
       <TouchableOpacity
@@ -467,17 +468,18 @@ export default function DashboardScreen() {
         activeOpacity={0.9}
         style={{
           width: cardWidth,
-          minHeight: cardMinHeight,
-          borderRadius: 24,
-          overflow: "hidden",
-          marginRight: 16,
-          marginBottom: 16,
+          borderRadius: 28,
           backgroundColor: COLORS.white,
+          marginRight: 20,
+          marginBottom: 16,
+          padding: 16,
           shadowColor: "#000",
-          shadowOpacity: 0.08,
-          shadowRadius: 14,
-          shadowOffset: { width: 0, height: 8 },
-          elevation: 6,
+          shadowOpacity: 0.05,
+          shadowRadius: 15,
+          shadowOffset: { width: 0, height: 10 },
+          elevation: 5,
+          borderWidth: 1,
+          borderColor: COLORS.slate[50],
         }}
       >
         <LinearGradient
@@ -485,93 +487,58 @@ export default function DashboardScreen() {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
-            height: imageHeight,
+            width: 56,
+            height: 56,
+            borderRadius: 18,
             alignItems: "center",
             justifyContent: "center",
+            marginBottom: 16,
           }}
         >
-          <Ionicons name={item.icon as any} size={60} color={COLORS.white} />
+          <Ionicons name={item.icon as any} size={28} color={COLORS.white} />
         </LinearGradient>
 
-        <View style={{ padding: getResponsivePadding(14), backgroundColor: COLORS.white, minHeight: 110 }}>
-          <Text
-            style={{
-              fontSize: getResponsiveFontSize(15),
-              fontFamily: "Poppins_700Bold",
-              color: COLORS.textDark,
-              lineHeight: getResponsiveFontSize(22),
-              marginBottom: 6,
-            }}
-            numberOfLines={2}
-          >
-            {item.title}
-          </Text>
-          <Text
-            style={{
-              fontSize: getResponsiveFontSize(12),
-              fontFamily: "Poppins_400Regular",
-              color: COLORS.textGray,
-              lineHeight: getResponsiveFontSize(18),
-              marginBottom: 12,
-            }}
-            numberOfLines={3}
-          >
-            {item.subtitle}
-          </Text>
+        <Text
+          style={{
+            fontSize: 18,
+            fontFamily: "PlusJakartaSans_700Bold",
+            color: COLORS.textDark,
+            lineHeight: 24,
+            marginBottom: 8,
+          }}
+          numberOfLines={2}
+        >
+          {item.title}
+        </Text>
+        
+        <Text
+          style={{
+            fontSize: 13,
+            fontFamily: "PlusJakartaSans_500Medium",
+            color: COLORS.textGray,
+            lineHeight: 18,
+            marginBottom: 16,
+            minHeight: 36,
+          }}
+          numberOfLines={2}
+        >
+          {item.subtitle}
+        </Text>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View
-                style={{
-                  width: 32,
-                  height: 32,
-                  borderRadius: 12,
-                  backgroundColor: item.cardBg[0] + "22",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  marginRight: 8,
-                }}
-              >
-                <Ionicons name={item.icon as any} size={16} color={item.cardBg[1]} />
-              </View>
-              {item.subItems ? (
-                <Text
-                  style={{
-                    fontSize: getResponsiveFontSize(11),
-                    fontFamily: "Poppins_500Medium",
-                    color: COLORS.textGray,
-                  }}
-                  numberOfLines={1}
-                >
-                  {item.subItems.join(", ")}
-                </Text>
-              ) : null}
-            </View>
-
-            <View
+        <View className="flex-row items-center justify-between mt-auto">
+          <View className="flex-row items-center px-3 py-1.5 rounded-full bg-slate-50">
+            <Text
               style={{
-                backgroundColor: "#EFF6FF",
-                paddingHorizontal: 10,
-                paddingVertical: 6,
-                borderRadius: 14,
+                fontSize: 14,
+                fontFamily: "PlusJakartaSans_700Bold",
+                color: COLORS.primary,
               }}
             >
-              <Text
-                style={{
-                  fontSize: getResponsiveFontSize(11),
-                  fontFamily: "Poppins_700Bold",
-                  color: COLORS.primary,
-                }}
-              >
-                {item.fee === "Free" ? "FREE" : `₹${item.fee}`}
-              </Text>
-            </View>
+              {item.fee === "Free" ? "FREE" : `₹${item.fee}`}
+            </Text>
+          </View>
+          <View className="p-2 rounded-full bg-indigo-50">
+            <Ionicons name="arrow-forward" size={16} color={COLORS.primary} />
           </View>
         </View>
       </TouchableOpacity>
@@ -594,14 +561,14 @@ export default function DashboardScreen() {
         alignItems: "center",
         paddingVertical: 14,
         borderBottomWidth: 1,
-        borderBottomColor: COLORS.border,
+        borderBottomColor: COLORS.slate[100],
       }}
     >
       <View>
         <Text
           style={{
             fontSize: 15,
-            fontFamily: "Poppins_600SemiBold",
+            fontFamily: "PlusJakartaSans_600SemiBold",
             color: COLORS.textDark,
           }}
         >
@@ -610,7 +577,7 @@ export default function DashboardScreen() {
         <Text
           style={{
             fontSize: 13,
-            fontFamily: "Poppins_400Regular",
+            fontFamily: "PlusJakartaSans_500Medium",
             color: COLORS.textLight,
           }}
         >
@@ -630,7 +597,7 @@ export default function DashboardScreen() {
           <Text
             style={{
               fontSize: 12,
-              fontFamily: "Poppins_500Medium",
+              fontFamily: "PlusJakartaSans_600SemiBold",
               color: badgeColor,
             }}
           >
@@ -641,7 +608,7 @@ export default function DashboardScreen() {
           <Text
             style={{
               fontSize: 14,
-              fontFamily: "Poppins_600SemiBold",
+              fontFamily: "PlusJakartaSans_700Bold",
               color: COLORS.textDark,
             }}
           >
@@ -653,11 +620,11 @@ export default function DashboardScreen() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.slate[50] }}>
       <StatusBar 
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} 
-        backgroundColor={colorScheme === 'dark' ? '#000000' : COLORS.white} 
-        translucent={false} 
+        backgroundColor="transparent" 
+        translucent={true} 
       />
       <Stack.Screen options={{ headerShown: false }} />
 
@@ -667,314 +634,217 @@ export default function DashboardScreen() {
         scrollEventThrottle={16}
         contentContainerStyle={{ paddingBottom: bottomPadding + 120 }}
       >
-        {/* ── GRADIENT HEADER ── */}
-        <LinearGradient
-          colors={["#75bfe4ff", "#81df73ff"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={{
-            paddingTop: insets.top,
-            paddingBottom: 24,
-            borderBottomLeftRadius: 30,
-            borderBottomRightRadius: 30,
-            overflow: "hidden",
-          }}
-        >
-          {/* Logo + Bell Row */}
-          <View
+        {/* ── PREMIUM HEADER ── */}
+        <View style={{ height: 260 }}>
+          <LinearGradient
+            colors={[COLORS.primary, "#6366F1"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={{
-              paddingHorizontal: 20,
-              paddingTop: 8,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderBottomLeftRadius: 40,
+              borderBottomRightRadius: 40,
             }}
-          >
-            <View style={{ width: 46 }} />
-            <View style={{ alignItems: "center" }}>
-              <View
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 12,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+          />
+          
+          {/* Header Content */}
+          <View style={{ paddingTop: insets.top + 16, paddingHorizontal: 24 }}>
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center">
+                <View className="p-2 rounded-2xl bg-white/20">
+                  <Image
+                    source={require("../../assets/images/transLogo.png")}
+                    style={{ width: 32, height: 32 }}
+                    resizeMode="contain"
+                  />
+                </View>
+                <View className="ml-3">
+                  <Text className="text-white text-lg font-[PlusJakartaSans_700Bold]">
+                    EaseMyVyaapar
+                  </Text>
+                </View>
+              </View>
+
+              <TouchableOpacity
+                onPress={() => router.push("/(dashboard)/notifications")}
+                className="p-3 rounded-2xl bg-white/20"
               >
-                <Image
-                  source={require("../../assets/images/transLogo.png")}
-                  style={{ width: 64, height: 64, borderRadius: 12 }}
-                />
-              </View>
-              <View style={{ alignItems: "center", marginTop: 6 }}>
-                <Text
-                  style={{
-                    fontSize: isSmallPhone ? 18 : 22,
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                    lineHeight: 28,
-                  }}
-                >
-                  <Text style={{ color: COLORS.textDark }}>EaseMy</Text>
-                  <Text style={{ color: COLORS.secondary }}>Vyaapar</Text>
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 10,
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textGray,
-                    marginTop: -4,
-                  }}
-                >
-                  powered by Vyapar Saathi
-                </Text>
-              </View>
+                <Ionicons name="notifications" size={20} color={COLORS.white} />
+                <View className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-rose-500 border-2 border-indigo-600" />
+              </TouchableOpacity>
             </View>
 
-            {/* Bell */}
-            <TouchableOpacity
-              onPress={() => router.push("/(dashboard)/notifications")}
-              style={{ position: "relative", padding: 4 }}
-            >
-              <View
-                style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 14,
-                  backgroundColor: COLORS.primary,
-                  alignItems: "center",
-                  justifyContent: "center",
+            <View style={{ marginTop: 32 }}>
+              <Text 
+                style={{ 
+                  fontSize: 28, 
+                  fontFamily: "PlusJakartaSans_800ExtraBold", 
+                  color: COLORS.white 
                 }}
               >
-                <Ionicons name="notifications" size={22} color={COLORS.white} />
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 6,
-                    right: 6,
-                    width: 16,
-                    height: 16,
-                    borderRadius: 8,
-                    backgroundColor: COLORS.alertRed,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderWidth: 1.5,
-                    borderColor: COLORS.white,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 9,
-                      fontFamily: "Poppins_700Bold",
-                      color: COLORS.white,
-                    }}
-                  >
-                    3
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+                Hi, {user?.firstName || "Partner"}! 👋
+              </Text>
+              <Text 
+                style={{ 
+                  fontSize: 16, 
+                  fontFamily: "PlusJakartaSans_500Medium", 
+                  color: "rgba(255,255,255,0.8)",
+                  marginTop: 4
+                }}
+              >
+                Your business is looking good today.
+              </Text>
+            </View>
           </View>
 
-          {/* Welcome */}
-          <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
-            <Text
-              style={{
-                fontSize: getResponsiveFontSize(26),
-                fontFamily: "Poppins_700Bold",
-                color: COLORS.textDark,
-              }}
-            >
-              Welcome, {user?.firstName || "User"}!
-            </Text>
-            <Text
-              style={{
-                fontSize: getResponsiveFontSize(14),
-                fontFamily: "Poppins_400Regular",
-                color: COLORS.textGray,
-                marginTop: 2,
-              }}
-            >
-              Here is your business overview
-            </Text>
+          {/* Quick Actions Card (Overlapping) */}
+          <View 
+            style={{ 
+              position: 'absolute',
+              bottom: -60,
+              left: 20,
+              right: 20,
+              backgroundColor: COLORS.white,
+              borderRadius: 32,
+              padding: 20,
+              shadowColor: "#000",
+              shadowOpacity: 0.1,
+              shadowRadius: 20,
+              shadowOffset: { width: 0, height: 10 },
+              elevation: 10,
+            }}
+          >
+            <View className="flex-row items-center justify-between">
+              <QuickActionButton icon="rocket" label="Launch" bg={GRADIENTS.premium} onPress={() => {}} />
+              <QuickActionButton icon="stats-chart" label="Stats" bg={GRADIENTS.premium} onPress={() => {}} />
+              <QuickActionButton icon="document-text" label="Reports" bg={GRADIENTS.premium} onPress={() => {}} />
+              <QuickActionButton icon="settings" label="Config" bg={GRADIENTS.premium} onPress={() => {}} />
+            </View>
           </View>
+        </View>
 
-          {/* ── BUSINESS HEALTH CHECK MVP ── */}
-          <View style={{ marginHorizontal: 20, marginTop: 30 }}>
-            <LinearGradient
-              colors={[COLORS.primary, "#2B6FE6"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
+        <View style={{ marginTop: 80 }}>
+          {/* Welcome section replaced by overlapping card */}
+        </View>
+
+
+          <View style={{ marginHorizontal: 24, marginTop: 20 }}>
+            <View 
               style={{
+                backgroundColor: COLORS.white,
+                borderRadius: 32,
                 padding: 24,
-                borderRadius: 24,
-                shadowColor: COLORS.primary,
-                shadowOffset: { width: 0, height: 10 },
-                shadowOpacity: 0.3,
-                shadowRadius: 15,
-                elevation: 10,
+                borderWidth: 1,
+                borderColor: COLORS.slate[100],
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <View style={{ flex: 1 }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 8,
-                      marginBottom: 8,
-                    }}
-                  >
-                    <View
-                      style={{
-                        backgroundColor: "rgba(255,255,255,0.2)",
-                        paddingHorizontal: 8,
-                        paddingVertical: 4,
-                        borderRadius: 8,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 10,
-                          fontFamily: "Poppins_700Bold",
-                          color: COLORS.white,
-                        }}
-                      >
-                        FREE SERVICE
-                      </Text>
-                    </View>
-                    <Ionicons name="sparkles" size={16} color={COLORS.secondary} />
-                  </View>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontFamily: "Poppins_700Bold",
-                      color: COLORS.white,
-                      marginBottom: 4,
-                    }}
-                  >
-                    Business Health Check
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      fontFamily: "Poppins_400Regular",
-                      color: "rgba(255,255,255,0.8)",
-                      marginBottom: 16,
-                    }}
-                  >
-                    Get your free score & actionable insights in 2 mins.
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => router.push("/(dashboard)/health-check")}
-                    style={{
-                      backgroundColor: COLORS.white,
-                      paddingHorizontal: 20,
-                      paddingVertical: 12,
-                      borderRadius: 14,
-                      alignSelf: "flex-start",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        fontFamily: "Poppins_700Bold",
-                        color: COLORS.primary,
-                      }}
-                    >
-                      Start Free Check
+              <View style={{ flex: 1 }}>
+                <View className="flex-row items-center mb-2">
+                  <View className="px-2 py-1 rounded-md bg-indigo-50 mr-2">
+                    <Text className="text-[10px] font-[PlusJakartaSans_800ExtraBold] text-indigo-600">
+                      FREE TOOL
                     </Text>
-                    <Ionicons name="arrow-forward" size={18} color={COLORS.primary} />
-                  </TouchableOpacity>
+                  </View>
+                  <Ionicons name="sparkles" size={14} color={COLORS.accent} />
                 </View>
-                <View
-                  style={{
-                    width: 80,
-                    height: 80,
-                    borderRadius: 40,
-                    backgroundColor: "rgba(255,255,255,0.15)",
-                    alignItems: "center",
-                    justifyContent: "center",
+                <Text 
+                  style={{ 
+                    fontSize: 20, 
+                    fontFamily: "PlusJakartaSans_700Bold", 
+                    color: COLORS.textDark,
+                    marginBottom: 4
                   }}
                 >
-                  <Ionicons name="fitness" size={48} color={COLORS.white} />
-                </View>
+                  Business Health Check
+                </Text>
+                <Text 
+                  style={{ 
+                    fontSize: 14, 
+                    fontFamily: "PlusJakartaSans_500Medium", 
+                    color: COLORS.textGray,
+                    marginBottom: 16
+                  }}
+                >
+                  Get your free score & insights in 2 mins.
+                </Text>
+                <TouchableOpacity
+                  onPress={() => router.push("/(dashboard)/health-check")}
+                  style={{
+                    backgroundColor: COLORS.primary,
+                    paddingHorizontal: 20,
+                    paddingVertical: 12,
+                    borderRadius: 16,
+                    alignSelf: "flex-start",
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontFamily: "PlusJakartaSans_700Bold",
+                      color: COLORS.white,
+                      marginRight: 8
+                    }}
+                  >
+                    Start Analysis
+                  </Text>
+                  <Ionicons name="arrow-forward" size={16} color={COLORS.white} />
+                </TouchableOpacity>
               </View>
-            </LinearGradient>
+              
+              <View 
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 24,
+                  backgroundColor: COLORS.slate[50],
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 16
+                }}
+              >
+                <Ionicons name="pulse" size={40} color={COLORS.primary} />
+              </View>
+            </View>
           </View>
-        </LinearGradient>
 
         {/* ════════════════════════════════════════════════════
             ── POPULAR SERVICES  (NEW CARD UI) ──
             ════════════════════════════════════════════════════ */}
-        <View
-          style={{
-            marginHorizontal: 10,
-            marginTop: 44,
-          }}
-        >
+        <View className="mt-12">
           {/* Section header */}
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 16,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  backgroundColor: COLORS.actionBlueBg,
-                  alignItems: "center",
-                  justifyContent: "center",
+          <View className="flex-row items-center justify-between px-6 mb-6">
+            <View>
+              <Text 
+                style={{ 
+                  fontSize: 22, 
+                  fontFamily: "PlusJakartaSans_800ExtraBold", 
+                  color: COLORS.textDark 
                 }}
               >
-                <Ionicons name="briefcase-outline" size={18} color={COLORS.primary} />
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: getResponsiveFontSize(16),
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                  }}
-                >
-                  Popular Services
-                </Text>
-                <Text
-                  style={{
-                    fontSize: getResponsiveFontSize(12),
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textLight,
-                  }}
-                >
-                  Start your business journey
-                </Text>
-              </View>
+                Popular Services
+              </Text>
+              <Text 
+                style={{ 
+                  fontSize: 14, 
+                  fontFamily: "PlusJakartaSans_500Medium", 
+                  color: COLORS.textLight 
+                }}
+              >
+                Essential for your business
+              </Text>
             </View>
-
-            <TouchableOpacity>
-              <Text
-                style={{
-                  fontSize: getResponsiveFontSize(13),
-                  fontFamily: "Poppins_600SemiBold",
-                  color: COLORS.primary,
-                }}
-              >
-                View All &gt;
+            <TouchableOpacity className="px-4 py-2 rounded-full bg-slate-100">
+              <Text className="text-slate-600 font-[PlusJakartaSans_700Bold] text-xs">
+                See All
               </Text>
             </TouchableOpacity>
           </View>
@@ -1001,54 +871,27 @@ export default function DashboardScreen() {
           </ScrollView>
         </View>
 
-        {/* ── MORE SERVICES ── */}
-        <View
-          style={{
-            marginHorizontal: 20,
-            marginTop: 28,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 16,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  backgroundColor: COLORS.actionGreenBg,
-                  alignItems: "center",
-                  justifyContent: "center",
+        <View className="mt-10">
+          <View className="flex-row items-center justify-between px-6 mb-6">
+            <View>
+              <Text 
+                style={{ 
+                  fontSize: 22, 
+                  fontFamily: "PlusJakartaSans_800ExtraBold", 
+                  color: COLORS.textDark 
                 }}
               >
-                <Ionicons name="layers-outline" size={18} color={COLORS.actionGreenIcon} />
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: getResponsiveFontSize(16),
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                  }}
-                >
-                  More Services
-                </Text>
-                <Text
-                  style={{
-                    fontSize: getResponsiveFontSize(12),
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textLight,
-                  }}
-                >
-                  Additional business support services
-                </Text>
-              </View>
+                More Services
+              </Text>
+              <Text 
+                style={{ 
+                  fontSize: 14, 
+                  fontFamily: "PlusJakartaSans_500Medium", 
+                  color: COLORS.textLight 
+                }}
+              >
+                Scale your operations
+              </Text>
             </View>
           </View>
 
@@ -1073,62 +916,28 @@ export default function DashboardScreen() {
           </ScrollView>
         </View>
 
-        {/* ── TOOLS & SERVICES ── */}
-        <View
-          style={{
-            marginHorizontal: 20,
-            marginTop: 44,
-            backgroundColor: COLORS.white,
-            borderRadius: 20,
-            padding: 20,
-            shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 3,
-          }}
+        <View 
+          className="mx-6 mt-12 bg-white rounded-[32px] p-6 shadow-sm border border-slate-50"
         >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 16,
-            }}
-          >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  backgroundColor: "#FFF7ED",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons name="apps-outline" size={18} color="#EA580C" />
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                  }}
-                >
-                  Tools & Services
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textLight,
-                  }}
-                >
-                  Boost your business
-                </Text>
-              </View>
-            </View>
+          <View className="mb-8">
+            <Text 
+              style={{ 
+                fontSize: 20, 
+                fontFamily: "PlusJakartaSans_800ExtraBold", 
+                color: COLORS.textDark 
+              }}
+            >
+              Tools & Utilities
+            </Text>
+            <Text 
+              style={{ 
+                fontSize: 14, 
+                fontFamily: "PlusJakartaSans_500Medium", 
+                color: COLORS.textLight 
+              }}
+            >
+              Professional resources for you
+            </Text>
           </View>
 
           <View
@@ -1505,15 +1314,17 @@ export default function DashboardScreen() {
         {/* ── NEWS & UPDATES ── */}
         <View
           style={{
-            marginHorizontal: 20,
-            marginTop: 44,
+            marginHorizontal: 24,
+            marginTop: 32,
             backgroundColor: COLORS.white,
-            borderRadius: 20,
-            padding: 20,
+            borderRadius: 32,
+            padding: 24,
             shadowColor: "#000",
-            shadowOpacity: 0.05,
-            shadowRadius: 8,
-            elevation: 3,
+            shadowOpacity: 0.03,
+            shadowRadius: 10,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: COLORS.slate[50],
           }}
         >
           <View
@@ -1521,56 +1332,32 @@ export default function DashboardScreen() {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: 12,
+              marginBottom: 20,
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 10,
-                  backgroundColor: COLORS.actionPurpleBg,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Ionicons
-                  name="newspaper-outline"
-                  size={18}
-                  color={COLORS.actionPurpleIcon}
-                />
-              </View>
-              <View>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontFamily: "Poppins_700Bold",
-                    color: COLORS.textDark,
-                  }}
-                >
-                  News & Updates
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontFamily: "Poppins_400Regular",
-                    color: COLORS.textLight,
-                  }}
-                >
-                  Stay informed
-                </Text>
-              </View>
-            </View>
-            <TouchableOpacity>
+            <View>
               <Text
                 style={{
-                  fontSize: 13,
-                  fontFamily: "Poppins_600SemiBold",
-                  color: COLORS.primary,
+                  fontSize: 20,
+                  fontFamily: "PlusJakartaSans_800ExtraBold",
+                  color: COLORS.textDark,
                 }}
               >
-                View All &gt;
+                News & Updates
+              </Text>
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontFamily: "PlusJakartaSans_500Medium",
+                  color: COLORS.textLight,
+                }}
+              >
+                Stay informed
+              </Text>
+            </View>
+            <TouchableOpacity className="px-4 py-2 rounded-full bg-slate-100">
+              <Text className="text-slate-600 font-[PlusJakartaSans_700Bold] text-xs">
+                See All
               </Text>
             </TouchableOpacity>
           </View>
@@ -1579,38 +1366,38 @@ export default function DashboardScreen() {
             style={{
               paddingVertical: 12,
               borderBottomWidth: 1,
-              borderBottomColor: COLORS.border,
+              borderBottomColor: COLORS.slate[100],
             }}
           >
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                marginBottom: 4,
+                marginBottom: 8,
               }}
             >
               <View
                 style={{
-                  backgroundColor: COLORS.actionRedBg,
-                  paddingHorizontal: 8,
-                  paddingVertical: 2,
-                  borderRadius: 6,
+                  backgroundColor: COLORS.alertRed + "15",
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderRadius: 8,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 10,
-                    fontFamily: "Poppins_600SemiBold",
+                    fontFamily: "PlusJakartaSans_700Bold",
                     color: COLORS.alertRed,
                   }}
                 >
-                  Important
+                  IMPORTANT
                 </Text>
               </View>
               <Text
                 style={{
-                  fontSize: 11,
-                  fontFamily: "Poppins_400Regular",
+                  fontSize: 12,
+                  fontFamily: "PlusJakartaSans_500Medium",
                   color: COLORS.textLight,
                 }}
               >
@@ -1619,19 +1406,20 @@ export default function DashboardScreen() {
             </View>
             <Text
               style={{
-                fontSize: 14,
-                fontFamily: "Poppins_600SemiBold",
+                fontSize: 15,
+                fontFamily: "PlusJakartaSans_700Bold",
                 color: COLORS.textDark,
-                marginBottom: 4,
+                marginBottom: 6,
               }}
             >
               New GST Return Filing Guidelines
             </Text>
             <Text
               style={{
-                fontSize: 12,
-                fontFamily: "Poppins_400Regular",
+                fontSize: 13,
+                fontFamily: "PlusJakartaSans_500Medium",
                 color: COLORS.textGray,
+                lineHeight: 18,
               }}
               numberOfLines={2}
             >
@@ -1640,36 +1428,36 @@ export default function DashboardScreen() {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={{ paddingVertical: 12 }}>
+          <TouchableOpacity style={{ paddingTop: 16, paddingBottom: 8 }}>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                marginBottom: 4,
+                marginBottom: 8,
               }}
             >
               <View
                 style={{
-                  backgroundColor: COLORS.actionGreenBg,
-                  paddingHorizontal: 8,
-                  paddingVertical: 2,
-                  borderRadius: 6,
+                  backgroundColor: COLORS.success + "15",
+                  paddingHorizontal: 10,
+                  paddingVertical: 4,
+                  borderRadius: 8,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 10,
-                    fontFamily: "Poppins_600SemiBold",
-                    color: COLORS.actionGreenIcon,
+                    fontFamily: "PlusJakartaSans_700Bold",
+                    color: COLORS.success,
                   }}
                 >
-                  Feature
+                  FEATURE
                 </Text>
               </View>
               <Text
                 style={{
-                  fontSize: 11,
-                  fontFamily: "Poppins_400Regular",
+                  fontSize: 12,
+                  fontFamily: "PlusJakartaSans_500Medium",
                   color: COLORS.textLight,
                 }}
               >
@@ -1678,19 +1466,20 @@ export default function DashboardScreen() {
             </View>
             <Text
               style={{
-                fontSize: 14,
-                fontFamily: "Poppins_600SemiBold",
+                fontSize: 15,
+                fontFamily: "PlusJakartaSans_700Bold",
                 color: COLORS.textDark,
-                marginBottom: 4,
+                marginBottom: 6,
               }}
             >
               Introducing Free Logo Maker
             </Text>
             <Text
               style={{
-                fontSize: 12,
-                fontFamily: "Poppins_400Regular",
+                fontSize: 13,
+                fontFamily: "PlusJakartaSans_500Medium",
                 color: COLORS.textGray,
+                lineHeight: 18,
               }}
               numberOfLines={2}
             >
@@ -1712,12 +1501,16 @@ export default function DashboardScreen() {
           right: 0,
           backgroundColor: COLORS.white,
           borderTopWidth: 1,
-          borderTopColor: COLORS.border,
+          borderTopColor: COLORS.slate[100],
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-around",
           paddingVertical: 10,
           paddingBottom: bottomPadding + 10,
+          shadowColor: "#000",
+          shadowOpacity: 0.05,
+          shadowRadius: 10,
+          elevation: 10,
         }}
       >
         <TouchableOpacity style={{ alignItems: "center" }}>
@@ -1725,9 +1518,9 @@ export default function DashboardScreen() {
           <Text
             style={{
               fontSize: 11,
-              fontFamily: "Poppins_500Medium",
+              fontFamily: "PlusJakartaSans_700Bold",
               color: COLORS.primary,
-              marginTop: 2,
+              marginTop: 4,
             }}
           >
             Home
@@ -1742,9 +1535,9 @@ export default function DashboardScreen() {
           <Text
             style={{
               fontSize: 11,
-              fontFamily: "Poppins_500Medium",
+              fontFamily: "PlusJakartaSans_600SemiBold",
               color: COLORS.textLight,
-              marginTop: 2,
+              marginTop: 4,
             }}
           >
             Ledger
@@ -1753,20 +1546,23 @@ export default function DashboardScreen() {
 
         <TouchableOpacity
           onPress={() => router.push("/(dashboard)/action")}
-          style={{ alignItems: "center", marginTop: -24 }}
+          style={{ alignItems: "center", marginTop: -32 }}
         >
           <LinearGradient
-            colors={["#2ECC71", "#10B981"]}
+            colors={GRADIENTS.premium}
             style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
+              width: 64,
+              height: 64,
+              borderRadius: 32,
               alignItems: "center",
               justifyContent: "center",
-              shadowColor: "#10B981",
+              shadowColor: COLORS.primary,
               shadowOpacity: 0.4,
-              shadowRadius: 8,
-              elevation: 6,
+              shadowRadius: 12,
+              shadowOffset: { width: 0, height: 6 },
+              elevation: 8,
+              borderWidth: 4,
+              borderColor: COLORS.white,
             }}
           >
             <Ionicons name="add" size={32} color={COLORS.white} />
@@ -1781,9 +1577,9 @@ export default function DashboardScreen() {
           <Text
             style={{
               fontSize: 11,
-              fontFamily: "Poppins_500Medium",
+              fontFamily: "PlusJakartaSans_600SemiBold",
               color: COLORS.textLight,
-              marginTop: 2,
+              marginTop: 4,
             }}
           >
             Add
@@ -1794,13 +1590,13 @@ export default function DashboardScreen() {
           onPress={() => router.push("/(dashboard)/profile-pages/help-support")}
           style={{ alignItems: "center" }}
         >
-          <Ionicons name="ellipsis-horizontal" size={24} color={COLORS.textLight} />
+          <Ionicons name="grid-outline" size={24} color={COLORS.textLight} />
           <Text
             style={{
               fontSize: 11,
-              fontFamily: "Poppins_500Medium",
+              fontFamily: "PlusJakartaSans_600SemiBold",
               color: COLORS.textLight,
-              marginTop: 2,
+              marginTop: 4,
             }}
           >
             More

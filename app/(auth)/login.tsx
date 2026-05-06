@@ -87,7 +87,7 @@ export default function LoginScreen() {
 
       // Route based on user role
       if (user?.role === "admin") {
-        router.replace("/(admin)/dashboard");
+        router.replace("/dashboard");
       } else {
         router.replace("/(dashboard)/home");
       }

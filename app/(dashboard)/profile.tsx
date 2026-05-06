@@ -5,20 +5,35 @@ import { Image, ScrollView, Text, TouchableOpacity, View, Alert, ActivityIndicat
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "../../context/AuthContext";
 import { useSubscription } from "../../context/SubscriptionContext";
+import { LinearGradient } from "expo-linear-gradient";
 
-// Match other pages colors
 const COLORS = {
-  primary: "#1E4FA3",
-  secondary: "#2ECC71",
-  success: "#22c55e",
-  alertRed: "#ef4444",
-  alertAmber: "#FFC107",
-  lightGrey: "#F5F7FB",
+  primary: "#4F46E5",
+  primaryLight: "#EEF2FF",
+  secondary: "#10B981",
+  secondaryLight: "#ECFDF5",
+  accent: "#F59E0B",
+  accentLight: "#FFFBEB",
+  slate: {
+    50: "#F8FAFC",
+    100: "#F1F5F9",
+    200: "#E2E8F0",
+    300: "#CBD5E1",
+    400: "#94A3B8",
+    500: "#64748B",
+    600: "#475569",
+    700: "#334155",
+    800: "#1E293B",
+    900: "#0F172A",
+  },
+  success: "#10B981",
+  alertRed: "#EF4444",
+  alertAmber: "#F59E0B",
   white: "#FFFFFF",
-  textDark: "#1A1A1A",
-  textGray: "#666666",
-  textLight: "#9FA3B1",
-  border: "#E4E7EF",
+  textDark: "#0F172A",
+  textGray: "#475569",
+  textLight: "#94A3B8",
+  border: "#E2E8F0",
 };
 
 const StatBlock = ({
@@ -34,7 +49,7 @@ const StatBlock = ({
     <Text
       style={{
         fontSize: 28,
-        fontFamily: "Poppins_800ExtraBold",
+        fontFamily: "PlusJakartaSans_800ExtraBold",
         color: accent ?? COLORS.textDark,
       }}
     >
@@ -45,7 +60,7 @@ const StatBlock = ({
         fontSize: 10,
         letterSpacing: 0.5,
         color: COLORS.textLight,
-        fontFamily: "Poppins_600SemiBold",
+        fontFamily: "PlusJakartaSans_600SemiBold",
         marginTop: 4,
       }}
     >
@@ -70,15 +85,15 @@ const ProfileRow = ({
   isDanger?: boolean;
 }) => (
   <TouchableOpacity
-    style={{ paddingVertical: 12, flexDirection: "row", alignItems: "center" }}
+    style={{ paddingVertical: 14, flexDirection: "row", alignItems: "center" }}
     onPress={onPress}
     activeOpacity={0.7}
   >
     <View
       style={{
-        width: 40,
-        height: 40,
-        borderRadius: 12,
+        width: 44,
+        height: 44,
+        borderRadius: 14,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: iconBg,
@@ -86,15 +101,15 @@ const ProfileRow = ({
     >
       <Ionicons
         name={icon}
-        size={18}
-        color={isDanger ? COLORS.alertRed : "#06B6D4"}
+        size={20}
+        color={isDanger ? COLORS.alertRed : COLORS.primary}
       />
     </View>
-    <View style={{ marginLeft: 12, flex: 1 }}>
+    <View style={{ marginLeft: 14, flex: 1 }}>
       <Text
         style={{
-          fontSize: 15,
-          fontFamily: "Poppins_600SemiBold",
+          fontSize: 16,
+          fontFamily: "PlusJakartaSans_700Bold",
           color: isDanger ? COLORS.alertRed : COLORS.textDark,
         }}
       >
@@ -103,10 +118,10 @@ const ProfileRow = ({
       {!!subtitle && (
         <Text
           style={{
-            fontSize: 12,
+            fontSize: 13,
             color: COLORS.textLight,
             marginTop: 2,
-            fontFamily: "Poppins_400Regular",
+            fontFamily: "PlusJakartaSans_500Medium",
           }}
         >
           {subtitle}
@@ -114,7 +129,7 @@ const ProfileRow = ({
       )}
     </View>
     {!isDanger && (
-      <Ionicons name="chevron-forward" size={17} color={COLORS.textLight} />
+      <Ionicons name="chevron-forward" size={18} color={COLORS.slate[300]} />
     )}
   </TouchableOpacity>
 );
@@ -152,7 +167,7 @@ export default function ProfileScreen() {
 
   if (loading) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, justifyContent: "center", alignItems: "center" }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.slate[50], justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={COLORS.primary} />
       </SafeAreaView>
     );
@@ -160,8 +175,8 @@ export default function ProfileScreen() {
 
   if (!user) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ fontSize: 16, color: COLORS.textDark, fontFamily: "Poppins_600SemiBold" }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.slate[50], justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 16, color: COLORS.textDark, fontFamily: "PlusJakartaSans_600SemiBold" }}>
           Please log in to view your profile
         </Text>
       </SafeAreaView>
@@ -173,7 +188,7 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: COLORS.white }}
+      style={{ flex: 1, backgroundColor: COLORS.slate[50] }}
       edges={["top"]}
     >
       <Stack.Screen options={{ headerShown: false }} />
@@ -187,14 +202,12 @@ export default function ProfileScreen() {
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          borderBottomWidth: 1,
-          borderBottomColor: COLORS.border,
         }}
       >
         <Text
           style={{
             fontSize: 28,
-            fontFamily: "Poppins_700Bold",
+            fontFamily: "PlusJakartaSans_800ExtraBold",
             color: COLORS.textDark,
           }}
         >
@@ -202,17 +215,22 @@ export default function ProfileScreen() {
         </Text>
         <TouchableOpacity
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
+            width: 44,
+            height: 44,
+            borderRadius: 22,
+            backgroundColor: COLORS.white,
             alignItems: "center",
             justifyContent: "center",
+            shadowColor: "#000",
+            shadowOpacity: 0.05,
+            shadowRadius: 10,
+            elevation: 5,
           }}
           onPress={() => router.push("/(dashboard)/notifications")}
         >
           <Ionicons
             name="notifications-outline"
-            size={24}
+            size={22}
             color={COLORS.textDark}
           />
         </TouchableOpacity>
@@ -220,37 +238,46 @@ export default function ProfileScreen() {
 
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 20,
+          paddingHorizontal: 24,
           paddingBottom: 120,
-          paddingTop: 16,
+          paddingTop: 8,
         }}
         showsVerticalScrollIndicator={false}
       >
         {/* Profile Card */}
-        <View
+        <LinearGradient
+          colors={["#EEF2FF", "#FFFFFF"]}
           style={{
-            backgroundColor: "#EAF8FF",
-            borderRadius: 24,
+            borderRadius: 32,
             borderWidth: 1,
-            borderColor: "#DFECF5",
-            paddingHorizontal: 16,
-            paddingTop: 20,
-            paddingBottom: 16,
+            borderColor: COLORS.white,
+            paddingHorizontal: 20,
+            paddingTop: 24,
+            paddingBottom: 20,
+            shadowColor: COLORS.primary,
+            shadowOpacity: 0.05,
+            shadowRadius: 15,
+            shadowOffset: { width: 0, height: 8 },
+            elevation: 4,
           }}
         >
           <View style={{ alignItems: "center" }}>
             <View style={{ position: "relative" }}>
               <View
                 style={{
-                  width: 96,
-                  height: 96,
-                  borderRadius: 48,
-                  borderWidth: 2,
-                  borderColor: "#7DD3FC",
-                  backgroundColor: COLORS.white,
+                  width: 100,
+                  height: 100,
+                  borderRadius: 50,
+                  borderWidth: 4,
+                  borderColor: COLORS.white,
+                  backgroundColor: COLORS.slate[100],
                   alignItems: "center",
                   justifyContent: "center",
                   overflow: "hidden",
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 10,
+                  elevation: 5,
                 }}
               >
                 <Image
@@ -265,19 +292,19 @@ export default function ProfileScreen() {
                   position: "absolute",
                   right: -4,
                   bottom: 4,
-                  width: 24,
-                  height: 24,
-                  borderRadius: 12,
-                  backgroundColor: user.isEmailVerified ? "#06B6D4" : COLORS.alertAmber,
+                  width: 28,
+                  height: 28,
+                  borderRadius: 14,
+                  backgroundColor: user.isEmailVerified ? COLORS.success : COLORS.alertAmber,
                   alignItems: "center",
                   justifyContent: "center",
-                  borderWidth: 2,
+                  borderWidth: 3,
                   borderColor: COLORS.white,
                 }}
               >
                 <Ionicons 
                   name={user.isEmailVerified ? "checkmark" : "alert-circle"} 
-                  size={12} 
+                  size={14} 
                   color={COLORS.white} 
                 />
               </View>
@@ -286,9 +313,9 @@ export default function ProfileScreen() {
             <Text
               style={{
                 fontSize: 24,
-                fontFamily: "Poppins_700Bold",
+                fontFamily: "PlusJakartaSans_800ExtraBold",
                 color: COLORS.textDark,
-                marginTop: 12,
+                marginTop: 16,
               }}
             >
               {fullName}
@@ -302,9 +329,9 @@ export default function ProfileScreen() {
             >
               <Text
                 style={{
-                  fontSize: 13,
+                  fontSize: 14,
                   color: COLORS.textGray,
-                  fontFamily: "Poppins_500Medium",
+                  fontFamily: "PlusJakartaSans_600SemiBold",
                 }}
               >
                 {user.businessName || user.accountType.charAt(0).toUpperCase() + user.accountType.slice(1)}
@@ -312,18 +339,18 @@ export default function ProfileScreen() {
               {user.isEmailVerified && (
                 <Ionicons
                   name="checkmark-circle"
-                  size={12}
-                  color="#06B6D4"
-                  style={{ marginLeft: 4 }}
+                  size={14}
+                  color={COLORS.success}
+                  style={{ marginLeft: 6 }}
                 />
               )}
             </View>
             <Text
               style={{
-                fontSize: 11,
+                fontSize: 12,
                 color: COLORS.textLight,
-                marginTop: 2,
-                fontFamily: "Poppins_400Regular",
+                marginTop: 4,
+                fontFamily: "PlusJakartaSans_500Medium",
               }}
             >
               {user.email}
@@ -332,80 +359,84 @@ export default function ProfileScreen() {
 
           <View
             style={{
-              marginTop: 16,
+              marginTop: 20,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
               borderTopWidth: 1,
-              borderTopColor: "#D8E9F5",
-              paddingTop: 16,
+              borderTopColor: COLORS.slate[100],
+              paddingTop: 20,
             }}
           >
             <StatBlock value={profileCompletion} label="COMPLETE" />
             <View
-              style={{ height: 32, width: 1, backgroundColor: "#D6DEE8" }}
+              style={{ height: 40, width: 1, backgroundColor: COLORS.slate[200] }}
             />
-            <StatBlock value={user.accountType} label="TYPE" accent="#06B6D4" />
+            <StatBlock value={user.accountType.toUpperCase()} label="TYPE" accent={COLORS.primary} />
           </View>
-        </View>
+        </LinearGradient>
 
         {/* Account Settings Section */}
         <Text
           style={{
-            fontSize: 11,
+            fontSize: 12,
             color: COLORS.textLight,
-            fontFamily: "Poppins_700Bold",
+            fontFamily: "PlusJakartaSans_800ExtraBold",
             textTransform: "uppercase",
-            letterSpacing: 0.5,
-            marginTop: 24,
+            letterSpacing: 1,
+            marginTop: 32,
             marginBottom: 12,
-            paddingHorizontal: 4,
+            paddingHorizontal: 8,
           }}
         >
-          ACCOUNT SETTINGS
+          Account Settings
         </Text>
         <View
           style={{
             backgroundColor: COLORS.white,
-            borderRadius: 20,
+            borderRadius: 24,
             borderWidth: 1,
-            borderColor: COLORS.border,
-            paddingHorizontal: 12,
+            borderColor: COLORS.slate[100],
+            paddingHorizontal: 16,
+            shadowColor: "#000",
+            shadowOpacity: 0.02,
+            shadowRadius: 8,
+            elevation: 2,
           }}
         >
           <ProfileRow
             icon="person-outline"
-            iconBg="#E8F8FE"
+            iconBg={COLORS.primaryLight}
             title="Edit Profile"
             subtitle="Update your personal info"
             onPress={() =>
               router.push("/(dashboard)/profile-pages/edit-profile")
             }
           />
-          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
+          <View style={{ height: 1, backgroundColor: COLORS.slate[50] }} />
           <ProfileRow
             icon="business-outline"
-            iconBg="#E8F8FE"
+            iconBg={COLORS.primaryLight}
             title="Business Details"
             subtitle={user.accountType === "business" ? "Manage GST & company info" : "Set up business account"}
             onPress={() =>
               router.push("/(dashboard)/profile-pages/business-details")
             }
           />
-          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
+          <View style={{ height: 1, backgroundColor: COLORS.slate[50] }} />
           <ProfileRow
             icon="document-text-outline"
-            iconBg="#E8F8FE"
+            iconBg={COLORS.primaryLight}
             title="Documents"
             subtitle="Upload PAN, Aadhaar, GST"
             onPress={() =>
               router.push("/(dashboard)/profile-pages/documents")
             }
           />
-          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
+          <View style={{ height: 1, backgroundColor: COLORS.slate[50] }} />
           <ProfileRow
             icon="settings-outline"
-            iconBg="#E8F8FE"
+            iconBg={COLORS.primaryLight}
             title="Settings"
             subtitle="App preferences & security"
             onPress={() => router.push("/(dashboard)/profile-pages/settings")}
@@ -415,32 +446,35 @@ export default function ProfileScreen() {
         {/* Subscription & Premium Section */}
         <Text
           style={{
-            fontSize: 11,
+            fontSize: 12,
             color: COLORS.textLight,
-            fontFamily: "Poppins_700Bold",
+            fontFamily: "PlusJakartaSans_800ExtraBold",
             textTransform: "uppercase",
-            letterSpacing: 0.5,
-            marginTop: 24,
+            letterSpacing: 1,
+            marginTop: 32,
             marginBottom: 12,
-            paddingHorizontal: 4,
+            paddingHorizontal: 8,
           }}
         >
-          SUBSCRIPTION & PREMIUM
+          Subscription & Premium
         </Text>
         <View
           style={{
             backgroundColor: COLORS.white,
-            borderRadius: 20,
+            borderRadius: 24,
             borderWidth: 1,
-            borderColor: COLORS.border,
-            paddingHorizontal: 12,
+            borderColor: COLORS.slate[100],
+            paddingHorizontal: 16,
+            shadowColor: "#000",
+            shadowOpacity: 0.02,
+            shadowRadius: 8,
+            elevation: 2,
             overflow: "hidden",
           }}
         >
           <TouchableOpacity
             style={{
-              paddingVertical: 12,
-              paddingHorizontal: 8,
+              paddingVertical: 16,
               flexDirection: "row",
               alignItems: "center",
             }}
@@ -449,25 +483,25 @@ export default function ProfileScreen() {
           >
             <View
               style={{
-                width: 40,
-                height: 40,
-                borderRadius: 12,
+                width: 44,
+                height: 44,
+                borderRadius: 14,
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: hasActiveSubscription ? "#FEF3C7" : "#F3E8FF",
+                backgroundColor: hasActiveSubscription ? COLORS.accentLight : COLORS.primaryLight,
               }}
             >
               <Ionicons
                 name={hasActiveSubscription ? "star" : "star-outline"}
-                size={18}
-                color={hasActiveSubscription ? "#D97706" : "#8B5CF6"}
+                size={20}
+                color={hasActiveSubscription ? COLORS.accent : COLORS.primary}
               />
             </View>
-            <View style={{ marginLeft: 12, flex: 1 }}>
+            <View style={{ marginLeft: 14, flex: 1 }}>
               <Text
                 style={{
-                  fontSize: 15,
-                  fontFamily: "Poppins_600SemiBold",
+                  fontSize: 16,
+                  fontFamily: "PlusJakartaSans_700Bold",
                   color: COLORS.textDark,
                 }}
               >
@@ -475,10 +509,10 @@ export default function ProfileScreen() {
               </Text>
               <Text
                 style={{
-                  fontSize: 12,
+                  fontSize: 13,
                   color: COLORS.textLight,
                   marginTop: 2,
-                  fontFamily: "Poppins_400Regular",
+                  fontFamily: "PlusJakartaSans_500Medium",
                 }}
               >
                 {hasActiveSubscription
@@ -488,17 +522,17 @@ export default function ProfileScreen() {
             </View>
             <View
               style={{
-                backgroundColor: hasActiveSubscription ? "#FEF3C7" : "#F3E8FF",
-                paddingHorizontal: 12,
-                paddingVertical: 6,
-                borderRadius: 8,
+                backgroundColor: hasActiveSubscription ? COLORS.accentLight : COLORS.primaryLight,
+                paddingHorizontal: 14,
+                paddingVertical: 8,
+                borderRadius: 10,
               }}
             >
               <Text
                 style={{
-                  fontSize: 12,
-                  fontFamily: "Poppins_600SemiBold",
-                  color: hasActiveSubscription ? "#D97706" : "#8B5CF6",
+                  fontSize: 13,
+                  fontFamily: "PlusJakartaSans_700Bold",
+                  color: hasActiveSubscription ? COLORS.accent : COLORS.primary,
                 }}
               >
                 {hasActiveSubscription ? "Manage" : "Buy"}
@@ -510,30 +544,34 @@ export default function ProfileScreen() {
         {/* Service Requests Section */}
         <Text
           style={{
-            fontSize: 11,
+            fontSize: 12,
             color: COLORS.textLight,
-            fontFamily: "Poppins_700Bold",
+            fontFamily: "PlusJakartaSans_800ExtraBold",
             textTransform: "uppercase",
-            letterSpacing: 0.5,
-            marginTop: 24,
+            letterSpacing: 1,
+            marginTop: 32,
             marginBottom: 12,
-            paddingHorizontal: 4,
+            paddingHorizontal: 8,
           }}
         >
-          BUSINESS MANAGEMENT
+          Business Management
         </Text>
         <View
           style={{
             backgroundColor: COLORS.white,
-            borderRadius: 20,
+            borderRadius: 24,
             borderWidth: 1,
-            borderColor: COLORS.border,
-            paddingHorizontal: 12,
+            borderColor: COLORS.slate[100],
+            paddingHorizontal: 16,
+            shadowColor: "#000",
+            shadowOpacity: 0.02,
+            shadowRadius: 8,
+            elevation: 2,
           }}
         >
           <ProfileRow
             icon="briefcase-outline"
-            iconBg="#E8F8FE"
+            iconBg={COLORS.primaryLight}
             title="My Service Requests"
             subtitle="View pending, approved & completed"
             onPress={() =>
@@ -545,39 +583,43 @@ export default function ProfileScreen() {
         {/* Support Section */}
         <Text
           style={{
-            fontSize: 11,
+            fontSize: 12,
             color: COLORS.textLight,
-            fontFamily: "Poppins_700Bold",
+            fontFamily: "PlusJakartaSans_800ExtraBold",
             textTransform: "uppercase",
-            letterSpacing: 0.5,
-            marginTop: 24,
+            letterSpacing: 1,
+            marginTop: 32,
             marginBottom: 12,
-            paddingHorizontal: 4,
+            paddingHorizontal: 8,
           }}
         >
-          SUPPORT & MORE
+          Support & More
         </Text>
         <View
           style={{
             backgroundColor: COLORS.white,
-            borderRadius: 20,
+            borderRadius: 24,
             borderWidth: 1,
-            borderColor: COLORS.border,
-            paddingHorizontal: 12,
+            borderColor: COLORS.slate[100],
+            paddingHorizontal: 16,
+            shadowColor: "#000",
+            shadowOpacity: 0.02,
+            shadowRadius: 8,
+            elevation: 2,
           }}
         >
           <ProfileRow
             icon="help-circle-outline"
-            iconBg="#EEF5FF"
+            iconBg={COLORS.primaryLight}
             title="Help & Support"
             onPress={() =>
               router.push("/(dashboard)/profile-pages/help-support")
             }
           />
-          <View style={{ height: 1, backgroundColor: "#EEF2F7" }} />
+          <View style={{ height: 1, backgroundColor: COLORS.slate[50] }} />
           <ProfileRow
             icon="log-out-outline"
-            iconBg="#FFF1F2"
+            iconBg={COLORS.alertRed + "10"}
             title={loggingOut ? "Logging out..." : "Log Out"}
             isDanger
             onPress={handleLogout}
@@ -587,10 +629,10 @@ export default function ProfileScreen() {
         <Text
           style={{
             textAlign: "center",
-            fontSize: 10,
+            fontSize: 11,
             color: COLORS.textLight,
-            marginTop: 28,
-            fontFamily: "Poppins_400Regular",
+            marginTop: 32,
+            fontFamily: "PlusJakartaSans_500Medium",
           }}
         >
           VyaaparSaathi v2.4.0

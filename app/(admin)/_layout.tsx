@@ -1,217 +1,182 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Tabs, useRouter } from "expo-router";
+import { Tabs } from "expo-router";
 import React from "react";
-import { Platform, TouchableOpacity, View, Text } from "react-native";
+import { Platform, TouchableOpacity, useWindowDimensions, View } from "react-native";
 
 const COLORS = {
   primary: "#1E4FA3",
   primaryLight: "#E5F0FF",
-  secondary: "#2ECC71",
-  danger: "#ef4444",
-  warning: "#f59e0b",
   textLight: "#9FA3B1",
-  textDark: "#1A1A1A",
   white: "#FFFFFF",
-  border: "#E2E8F0",
-  lightGrey: "#F5F7FB",
+  background: "#F8FAFC",
 };
 
-// Center FAB Button for Offers/Notifications
-const CenterFABButton = ({ route = "offers" }) => {
-  const router = useRouter();
-  const isNotifications = route === "notifications";
-  
-  return (
-    <TouchableOpacity
-      onPress={() => router.push(`/(admin)/${route}`)}
-      activeOpacity={0.85}
+const TabIcon = ({ icon, color, focused, size }: { icon: string; color: string; focused: boolean; size: number }) => (
+  <View
+    style={{
+      alignItems: "center",
+      justifyContent: "center",
+      width: size,
+      height: size,
+    }}
+  >
+    <View
       style={{
-        top: -28,
+        width: size - 10,
+        height: size - 10,
+        borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: focused ? COLORS.primaryLight : "transparent",
       }}
     >
-      <View
-        style={{
-          width: 72,
-          height: 72,
-          borderRadius: 36,
-          backgroundColor: isNotifications ? COLORS.danger : COLORS.primary,
-          justifyContent: "center",
-          alignItems: "center",
-          elevation: 16,
-          shadowColor: isNotifications ? COLORS.danger : COLORS.primary,
-          shadowOffset: { width: 0, height: 10 },
-          shadowOpacity: 0.45,
-          shadowRadius: 18,
-          borderWidth: 5,
-          borderColor: COLORS.white,
-        }}
-      >
-        <Ionicons 
-          name={isNotifications ? "notifications" : "add-circle"} 
-          size={36} 
-          color={COLORS.white} 
-        />
-      </View>
-    </TouchableOpacity>
-  );
-};
+      <Ionicons name={icon as any} size={22} color={color} />
+    </View>
+  </View>
+);
 
 export default function AdminLayout() {
-  return (
-    <Tabs
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: true,
-        tabBarActiveTintColor: COLORS.primary,
-        tabBarInactiveTintColor: COLORS.textLight,
-        tabBarStyle: {
+  const { width } = useWindowDimensions();
+  const tabItemSize = Math.max(44, Math.min(58, Math.floor((width - 72) / 7)));
+  const fabContainerSize = tabItemSize + 24;
+
+  const CenterFABButton = (props: any) => (
+    <View
+      style={[props.style, {
+        width: fabContainerSize,
+        height: fabContainerSize,
+        justifyContent: "center",
+        alignItems: "center",
+      }]}
+    >
+      <TouchableOpacity
+        onPress={props.onPress}
+        activeOpacity={0.85}
+        style={{
           position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          elevation: 16,
-          backgroundColor: COLORS.white,
-          borderTopColor: COLORS.lightGrey,
-          borderTopWidth: 1,
-          height: Platform.OS === "ios" ? 100 : 85,
-          paddingBottom: Platform.OS === "ios" ? 32 : 16,
-          paddingTop: 8,
-          paddingHorizontal: 0,
-          shadowColor: "#000",
-          shadowOffset: { width: 0, height: -6 },
-          shadowOpacity: 0.15,
-          shadowRadius: 12,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontFamily: "Poppins_600SemiBold",
-          marginTop: 6,
-          letterSpacing: 0.3,
-        },
-        tabBarIconStyle: {
-          marginTop: 4,
-        },
-        tabBarItemStyle: {
+          top: -32,
+          width: 74,
+          height: 74,
+          borderRadius: 37,
           justifyContent: "center",
           alignItems: "center",
-          paddingVertical: 6,
-          paddingHorizontal: 2,
-        },
-      }}
-    >
-      {/* Left Side Navigation */}
-      <Tabs.Screen
-        name="dashboard"
-        options={{
-          title: "Dashboard",
-          tabBarIcon: ({ color, focused }) => (
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                borderRadius: 12,
-                backgroundColor: focused ? COLORS.primaryLight : "transparent",
-              }}
-            >
-              <Ionicons name="grid" size={22} color={color} />
-            </View>
-          ),
+          backgroundColor: COLORS.primary,
+          borderWidth: 4,
+          borderColor: COLORS.white,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 12 },
+          shadowOpacity: 0.18,
+          shadowRadius: 20,
+          elevation: 18,
+          zIndex: 20,
         }}
-      />
+      >
+        <Ionicons name="add" size={32} color={COLORS.white} />
+      </TouchableOpacity>
+    </View>
+  );
 
+  return (
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <Tabs
+        screenOptions={({ route }: { route: { name: string } }) => {
+          const visibleRoutes = ["subscription", "users", "action", "offers", "payment"];
+          const isHidden = !visibleRoutes.includes(route.name) || route.name.startsWith("requests/");
+          const isAction = route.name === "action";
+
+          return {
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarActiveTintColor: COLORS.primary,
+            tabBarInactiveTintColor: COLORS.textLight,
+            tabBarButton: isHidden ? () => null : isAction ? (props: any) => <CenterFABButton {...props} /> : undefined,
+            tabBarIcon: isAction ? () => null : undefined,
+            tabBarStyle: {
+              position: "absolute",
+              bottom: 16,
+              left: 14,
+              right: 14,
+              height: Platform.OS === "ios" ? 98 : 84,
+              borderRadius: 32,
+              backgroundColor: COLORS.white,
+              borderTopWidth: 0,
+              shadowColor: "#000",
+              shadowOffset: { width: 0, height: 10 },
+              shadowOpacity: 0.12,
+              shadowRadius: 24,
+              elevation: 16,
+              paddingTop: 12,
+              paddingBottom: Platform.OS === "ios" ? 22 : 14,
+              paddingHorizontal: 16,
+              justifyContent: "space-between",
+              alignItems: "center",
+            },
+            tabBarIconStyle: {
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+            },
+            tabBarItemStyle: {
+              width: tabItemSize,
+              justifyContent: "center",
+              alignItems: "center",
+              paddingVertical: 0,
+              paddingHorizontal: 0,
+            },
+          };
+        }}
+      >
       <Tabs.Screen
         name="subscription"
         options={{
-          title: "Plans",
+          title: "Subscription",
           tabBarIcon: ({ color, focused }) => (
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                borderRadius: 12,
-                backgroundColor: focused ? COLORS.primaryLight : "transparent",
-              }}
-            >
-              <Ionicons name="layers" size={22} color={color} />
-            </View>
+            <TabIcon icon="layers" color={color} focused={focused as boolean} size={tabItemSize} />
           ),
         }}
       />
-
       <Tabs.Screen
         name="users"
         options={{
           title: "Users",
           tabBarIcon: ({ color, focused }) => (
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                borderRadius: 12,
-                backgroundColor: focused ? COLORS.primaryLight : "transparent",
-              }}
-            >
-              <Ionicons name="people" size={22} color={color} />
-            </View>
+            <TabIcon icon="people" color={color} focused={focused as boolean} size={tabItemSize} />
           ),
         }}
       />
-
-      {/* CENTER FAB - Offers */}
       <Tabs.Screen
         name="action"
         options={{
-          title: "",
+          title: "Action",
           tabBarIcon: () => null,
-          tabBarLabel: () => null,
-          tabBarButton: () => <CenterFABButton route="offers" />,
         }}
       />
-
-      {/* Right Side Navigation */}
+      <Tabs.Screen
+        name="offers"
+        options={{
+          title: "Offers",
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon icon="pricetags" color={color} focused={focused as boolean} size={tabItemSize} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="payment"
         options={{
           title: "Payment",
           tabBarIcon: ({ color, focused }) => (
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                borderRadius: 12,
-                backgroundColor: focused ? COLORS.primaryLight : "transparent",
-              }}
-            >
-              <Ionicons name="card" size={22} color={color} />
-            </View>
+            <TabIcon icon="card" color={color} focused={focused as boolean} size={tabItemSize} />
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="requests"
-        options={{
-          title: "Requests",
-          tabBarIcon: ({ color, focused }) => (
-            <View
-              style={{
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                borderRadius: 12,
-                backgroundColor: focused ? COLORS.primaryLight : "transparent",
-              }}
-            >
-              <Ionicons name="arrow-forward-outline" size={22} color={color} />
-            </View>
-          ),
-        }}
-      />
-
-      {/* Hidden Screens */}
-      <Tabs.Screen name="offers" options={{ href: null }} />
-      <Tabs.Screen name="notifications" options={{ href: null }} />
+      {/* Hide unwanted admin page routes from the tab bar */}
+      <Tabs.Screen name="dashboard" options={{ tabBarButton: () => null }} />
+      <Tabs.Screen name="notifications" options={{ tabBarButton: () => null }} />
+      <Tabs.Screen name="subscription-new" options={{ tabBarButton: () => null }} />
+      <Tabs.Screen name="requests" options={{ tabBarButton: () => null }} />
+      <Tabs.Screen name="requests/[id]" options={{ tabBarButton: () => null }} />
     </Tabs>
+    </View>
   );
 }

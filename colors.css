@@ -1,17 +1,17 @@
 :root {
   /* Theme Colors */
-  --color-primary: #1E4FA3;
-  --color-secondary: #2ECC71;
+  --color-primary: #4F46E5;
+  --color-secondary: #10B981;
   
-  --color-gradient-start: #1E4FA3;
-  --color-gradient-end: #2ECC71;
+  --color-gradient-start: #4F46E5;
+  --color-gradient-end: #6366F1;
   
-  --color-background: #F5F7FB;
+  --color-background: #F8FAFC;
   --color-card-background: #FFFFFF;
-  --color-text: #1A1A1A;
+  --color-text: #0F172A;
 
   /* Status Colors */
-  --color-success: #22c55e;
-  --color-alert: #ef4444;
-  --color-light-grey: #F9FAFB;
+  --color-success: #10B981;
+  --color-alert: #EF4444;
+  --color-light-grey: #F1F5F9;
 }
